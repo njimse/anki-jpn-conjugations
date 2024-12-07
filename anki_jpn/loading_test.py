@@ -50,7 +50,7 @@ form_strings = {
 }
 
 
-def generate_notes(note):
+def generate_notes(model, deck, note):
     if 'ichidan-verb' in note.tags:
         verb_class = VerbClass.ICHIDAN
     elif 'godan-verb' in note.tags:
@@ -58,13 +58,17 @@ def generate_notes(note):
     else:
         verb_class = VerbClass.IRREGULAR
     expression, meaning, reading = note.values()
-    for formality in formality_strings.keys():
-        for tense in tense_strings.keys():
-            for polarity in polarity_strings.keys():
-                conjugation = generate_japanese_verb_by_str(expression, verb_class, formality, tense, polarity)
-                new_note = genanki.Note(model=new_model, fields=[conjugation, expression, meaning, reading, tense, formality, polarity])
+    if expression.endswith('る'):
+        for formality in formality_strings.keys():
+            for tense in tense_strings.keys():
+                for polarity in polarity_strings.keys():
+                    conjugation = generate_japanese_verb_by_str(expression, verb_class, formality, tense, polarity)
+                    new_note = genanki.Note(model=model, fields=[conjugation, expression, meaning, reading, tense, formality, polarity])
+                    deck.add_note(new_note)
+        for form in [BaseForm.TE]:
+            for formality in formality_strings.keys():
+                for polarity in polarity_strings.keys():
 
-    pass
 
 def main(args):
     deck = anki.collection.Collection(args.input)
