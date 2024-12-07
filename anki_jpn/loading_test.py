@@ -68,6 +68,7 @@ def generate_notes(model, deck, note):
         for form in [BaseForm.TE]:
             for formality in formality_strings.keys():
                 for polarity in polarity_strings.keys():
+                    pass
 
 
 def main(args):
