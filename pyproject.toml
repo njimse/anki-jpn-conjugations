@@ -3,6 +3,9 @@ requires = ["setuptools >= 61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
+authors = [
+    {name = "Nathan Imse", email = "njimse@gmail.com"}
+]
 name = "anki-jpn"
 description = "This is a set of tooling to allow for generating anki cards for learning/practicing Japanese"
 version = "0.0.1"
@@ -10,10 +13,10 @@ requires-python = ">=3.6,<3.10"
 readme = "README.md"
 dependencies = [
     "genanki",
-    "anki",
-    "japanese-verb-conjugator-v2"
+    "anki"
+]
+[project.optional-dependencies]
+test = [
+    "pytest"
 ]
 
-authors = [
-    {name = "Nathan Imse", email = "njimse@gmail.com"}
-]
