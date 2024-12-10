@@ -1,24 +1,176 @@
 import pytest
 
-from anki_jpn.verbs import conjugate_ichidan, conjugate_godan, Conjugation
+from anki_jpn.verbs import (
+    VerbClass,
+    polite_nonpast_positive,
+    polite_nonpast_negative,
+    polite_past_positive,
+    polite_past_negative,
+    polite_volitional,
+    te,
+    plain_nonpast_positive,
+    plain_nonpast_negative,
+    plain_past_positive,
+    plain_past_negative
+)
 
-ichidan_test_data = [
-    ("開ける", Conjugation.NON_PAST, "開けます"),
-    ("開ける", Conjugation.NON_PAST_NEGATIVE, "開けません")
+polite_nonpast_positive_data = [
+    ('来[く]る', VerbClass.IRREGULAR, '来[き]ます'),
+    ('連[つ]れて 来[く]る', VerbClass.IRREGULAR, '連[つ]れて 来[き]ます'),
+    ('する', VerbClass.IRREGULAR, 'します'),
+    ('行[い]く', VerbClass.GODAN, '行[い]きます'),
+    ('スポーツをする', VerbClass.IRREGULAR, 'スポーツをします'),
+    ('読[よ]む', VerbClass.GODAN, '読[よ]みます'),
+    ('買[か]う', VerbClass.GODAN, '買[か]います'),
+    ('話[はな]す', VerbClass.GODAN, '話[はな]します')
 ]
-@pytest.mark.parametrize("dict_form, tense, reference", ichidan_test_data)
-def test_ichidan_conjugation(dict_form, tense, reference):
-    result = conjugate_ichidan(dict_form, tense)
+@pytest.mark.parametrize("dict_form, verb_class, reference", polite_nonpast_positive_data)
+def test_polite_nonpast_positive(dict_form, verb_class, reference):
+    result = polite_nonpast_positive(dict_form, verb_class)
     assert result == reference
 
-
-godan_test_data = [
-    ("あそぶ", Conjugation.NON_PAST, "あそびます"),
-    ("あそぶ", Conjugation.NON_PAST_NEGATIVE, "あそびません"),
-    ("遊ぶ", Conjugation.NON_PAST, "遊びます"),
-    ("遊ぶ", Conjugation.NON_PAST_NEGATIVE, "遊びません")
+polite_nonpast_negative_data = [
+    ('来[く]る', VerbClass.IRREGULAR, '来[き]ません'),
+    ('連[つ]れて 来[く]る', VerbClass.IRREGULAR, '連[つ]れて 来[き]ません'),
+    ('する', VerbClass.IRREGULAR, 'しません'),
+    ('行[い]く', VerbClass.GODAN, '行[い]きません'),
+    ('スポーツをする', VerbClass.IRREGULAR, 'スポーツをしません'),
+    ('読[よ]む', VerbClass.GODAN, '読[よ]みません'),
+    ('買[か]う', VerbClass.GODAN, '買[か]いません'),
+    ('話[はな]す', VerbClass.GODAN, '話[はな]しません')
 ]
-@pytest.mark.parametrize("dict_form, tense, reference", godan_test_data)
-def test_godan_conjugation(dict_form, tense, reference):
-    result = conjugate_godan(dict_form, tense)
+@pytest.mark.parametrize("dict_form, verb_class, reference", polite_nonpast_negative_data)
+def test_polite_nonpast_negative(dict_form, verb_class, reference):
+    result = polite_nonpast_negative(dict_form, verb_class)
+    assert result == reference
+
+polite_past_positive_data = [
+    ('来[く]る', VerbClass.IRREGULAR, '来[き]ました'),
+    ('連[つ]れて 来[く]る', VerbClass.IRREGULAR, '連[つ]れて 来[き]ました'),
+    ('する', VerbClass.IRREGULAR, 'しました'),
+    ('行[い]く', VerbClass.GODAN, '行[い]きました'),
+    ('スポーツをする', VerbClass.IRREGULAR, 'スポーツをしました'),
+    ('読[よ]む', VerbClass.GODAN, '読[よ]みました'),
+    ('買[か]う', VerbClass.GODAN, '買[か]いました'),
+    ('話[はな]す', VerbClass.GODAN, '話[はな]しました')
+]
+@pytest.mark.parametrize("dict_form, verb_class, reference", polite_past_positive_data)
+def test_polite_past_positive(dict_form, verb_class, reference):
+    result = polite_past_positive(dict_form, verb_class)
+    assert result == reference
+
+polite_past_negative_data = [
+    ('来[く]る', VerbClass.IRREGULAR, '来[き]ませんでした'),
+    ('連[つ]れて 来[く]る', VerbClass.IRREGULAR, '連[つ]れて 来[き]ませんでした'),
+    ('する', VerbClass.IRREGULAR, 'しませんでした'),
+    ('行[い]く', VerbClass.GODAN, '行[い]きませんでした'),
+    ('スポーツをする', VerbClass.IRREGULAR, 'スポーツをしませんでした'),
+    ('読[よ]む', VerbClass.GODAN, '読[よ]みませんでした'),
+    ('買[か]う', VerbClass.GODAN, '買[か]いませんでした'),
+    ('話[はな]す', VerbClass.GODAN, '話[はな]しませんでした')
+]
+@pytest.mark.parametrize("dict_form, verb_class, reference", polite_past_negative_data)
+def test_polite_past_negative(dict_form, verb_class, reference):
+    result = polite_past_negative(dict_form, verb_class)
+    assert result == reference
+
+polite_volitional_data = [
+    ('来[く]る', VerbClass.IRREGULAR, '来[き]ましょう'),
+    ('連[つ]れて 来[く]る', VerbClass.IRREGULAR, '連[つ]れて 来[き]ましょう'),
+    ('する', VerbClass.IRREGULAR, 'しましょう'),
+    ('行[い]く', VerbClass.GODAN, '行[い]きましょう'),
+    ('スポーツをする', VerbClass.IRREGULAR, 'スポーツをしましょう'),
+    ('読[よ]む', VerbClass.GODAN, '読[よ]みましょう'),
+    ('買[か]う', VerbClass.GODAN, '買[か]いましょう'),
+    ('話[はな]す', VerbClass.GODAN, '話[はな]しましょう')
+]
+@pytest.mark.parametrize("dict_form, verb_class, reference", polite_volitional_data)
+def test_polite_volitional(dict_form, verb_class, reference):
+    result = polite_volitional(dict_form, verb_class)
+    assert result == reference
+
+te_data = [
+    ('来[く]る', VerbClass.IRREGULAR, '来[き]て'),
+    ('連[つ]れて 来[く]る', VerbClass.IRREGULAR, '連[つ]れて 来[き]て'),
+    ('する', VerbClass.IRREGULAR, 'して'),
+    ('行[い]く', VerbClass.GODAN, '行[い]って'),
+    ('書[か]く', VerbClass.GODAN, '書[か]いて'),
+    ('遊[あそ]ぶ', VerbClass.GODAN, '遊[あそ]んで'),
+    ('立[た]つ', VerbClass.GODAN, '立[た]って'),
+    ('スポーツをする', VerbClass.IRREGULAR, 'スポーツをして'),
+    ('読[よ]む', VerbClass.GODAN, '読[よ]んで'),
+    ('買[か]う', VerbClass.GODAN, '買[か]って'),
+    ('話[はな]す', VerbClass.GODAN, '話[はな]して'),
+    ('泳[およ]ぐ', VerbClass.GODAN, '泳[およ]いで'),
+    ('食[た]べる', VerbClass.ICHIDAN, '食[た]べて'),
+    ('起[お]きる', VerbClass.ICHIDAN, '起[お]きて'),
+    ('開[あ]ける', VerbClass.ICHIDAN, '開[あ]けて'),
+    ('借[か]りる', VerbClass.ICHIDAN, '借[か]りて')
+]
+@pytest.mark.parametrize("dict_form, verb_class, reference", te_data)
+def test_te(dict_form, verb_class, reference):
+    result = te(dict_form, verb_class)
+    assert result == reference
+
+# Plain forms
+plain_nonpast_positive_data = [
+    ('来[く]る', VerbClass.IRREGULAR, '来[く]る'),
+    ('連[つ]れて 来[く]る', VerbClass.IRREGULAR, '連[つ]れて 来[く]る'),
+    ('する', VerbClass.IRREGULAR, 'する'),
+    ('行[い]く', VerbClass.GODAN, '行[い]く'),
+    ('スポーツをする', VerbClass.IRREGULAR, 'スポーツをする'),
+    ('読[よ]む', VerbClass.GODAN, '読[よ]む'),
+    ('買[か]う', VerbClass.GODAN, '買[か]う'),
+    ('話[はな]す', VerbClass.GODAN, '話[はな]す')
+]
+@pytest.mark.parametrize("dict_form, verb_class, reference", plain_nonpast_positive_data)
+def test_plain_nonpast_positive(dict_form, verb_class, reference):
+    result = plain_nonpast_positive(dict_form, verb_class)
+    assert result == reference
+
+plain_nonpast_negative_data = [
+    ('来[く]る', VerbClass.IRREGULAR, '来[こ]ない'),
+    ('連[つ]れて 来[く]る', VerbClass.IRREGULAR, '連[つ]れて 来[こ]ない'),
+    ('する', VerbClass.IRREGULAR, 'しない'),
+    ('ある', VerbClass.IRREGULAR, 'ない'),
+    ('行[い]く', VerbClass.GODAN, '行[い]かない'),
+    ('スポーツをする', VerbClass.IRREGULAR, 'スポーツをしない'),
+    ('読[よ]む', VerbClass.GODAN, '読[よ]まない'),
+    ('買[か]う', VerbClass.GODAN, '買[か]わない'),
+    ('話[はな]す', VerbClass.GODAN, '話[はな]さない')
+]
+@pytest.mark.parametrize("dict_form, verb_class, reference", plain_nonpast_negative_data)
+def test_plain_nonpast_negative(dict_form, verb_class, reference):
+    result = plain_nonpast_negative(dict_form, verb_class)
+    assert result == reference
+
+plain_past_positive_data = [
+    ('来[く]る', VerbClass.IRREGULAR, '来[き]た'),
+    ('連[つ]れて 来[く]る', VerbClass.IRREGULAR, '連[つ]れて 来[き]た'),
+    ('する', VerbClass.IRREGULAR, 'した'),
+    ('行[い]く', VerbClass.GODAN, '行[い]った'),
+    ('スポーツをする', VerbClass.IRREGULAR, 'スポーツをした'),
+    ('読[よ]む', VerbClass.GODAN, '読[よ]んだ'),
+    ('買[か]う', VerbClass.GODAN, '買[か]った'),
+    ('泳[およ]ぐ', VerbClass.GODAN, '泳[およ]いだ'),
+    ('話[はな]す', VerbClass.GODAN, '話[はな]した')
+]
+@pytest.mark.parametrize("dict_form, verb_class, reference", plain_past_positive_data)
+def test_plain_past_positive(dict_form, verb_class, reference):
+    result = plain_past_positive(dict_form, verb_class)
+    assert result == reference
+
+plain_past_negative_data = [
+    ('来[く]る', VerbClass.IRREGULAR, '来[こ]なかった'),
+    ('連[つ]れて 来[く]る', VerbClass.IRREGULAR, '連[つ]れて 来[こ]なかった'),
+    ('する', VerbClass.IRREGULAR, 'しなかった'),
+    ('行[い]く', VerbClass.GODAN, '行[い]かなかった'),
+    ('スポーツをする', VerbClass.IRREGULAR, 'スポーツをしなかった'),
+    ('読[よ]む', VerbClass.GODAN, '読[よ]まなかった'),
+    ('買[か]う', VerbClass.GODAN, '買[か]わなかった'),
+    ('話[はな]す', VerbClass.GODAN, '話[はな]さなかった')
+]
+@pytest.mark.parametrize("dict_form, verb_class, reference", plain_past_negative_data)
+def test_plain_past_negative(dict_form, verb_class, reference):
+    result = plain_past_negative(dict_form, verb_class)
     assert result == reference
