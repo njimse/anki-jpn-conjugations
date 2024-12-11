@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Optional
+from typing import Optional, List, Tuple
 
 class Form(Enum):
     NON_PAST = 'non-past'
@@ -60,7 +60,7 @@ godan_te_mapping = {
     "す": "して",
 }
 
-def generate_forms(dictionary_form: str, verb_class: VerbClass):
+def generate_forms(dictionary_form: str, verb_class: VerbClass) -> List[Tuple[str, Form, Optional[Formality], Optional[Polarity]]]:
     results = []
     # Polite forms
     results.append([polite_nonpast_positive(dictionary_form, verb_class), Form.NON_PAST, Formality.POLITE, Polarity.POS])
@@ -77,6 +77,8 @@ def generate_forms(dictionary_form: str, verb_class: VerbClass):
 
     # formality-constant
     results.append([te(dictionary_form, verb_class), Form.TE, None, None])
+
+    return results
 
 def get_godan_stem(input, formality):
     if formality == Formality.POLITE:

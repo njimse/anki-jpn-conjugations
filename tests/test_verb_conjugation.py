@@ -2,6 +2,10 @@ import pytest
 
 from anki_jpn.verbs import (
     VerbClass,
+    Formality,
+    Polarity,
+    Form,
+    generate_forms,
     polite_nonpast_positive,
     polite_nonpast_negative,
     polite_past_positive,
@@ -174,3 +178,55 @@ plain_past_negative_data = [
 def test_plain_past_negative(dict_form, verb_class, reference):
     result = plain_past_negative(dict_form, verb_class)
     assert result == reference
+
+generate_forms_data = [
+    ('来[く]る', VerbClass.IRREGULAR, [
+        # Polite forms
+        ['来[き]ます', Form.NON_PAST, Formality.POLITE, Polarity.POS],
+        ['来[き]ません', Form.NON_PAST, Formality.POLITE, Polarity.NEG],
+        ['来[き]ました', Form.PAST, Formality.POLITE, Polarity.POS],
+        ['来[き]ませんでした', Form.PAST, Formality.POLITE, Polarity.NEG],
+        ['来[き]ましょう', Form.VOLITIONAL, Formality.POLITE, None],
+        # Plain forms
+        ['来[く]る', Form.NON_PAST, Formality.POLITE, Polarity.POS],
+        ['来[こ]ない', Form.NON_PAST, Formality.POLITE, Polarity.NEG],
+        ['来[き]た', Form.PAST, Formality.POLITE, Polarity.POS],
+        ['来[こ]なかった', Form.PAST, Formality.POLITE, Polarity.NEG],
+        # formality-constant
+        ['来[き]て', Form.TE, None, None],
+    ]),
+    ('食[た]べる', VerbClass.ICHIDAN, [
+        # Polite forms
+        ['食[た]べます', Form.NON_PAST, Formality.POLITE, Polarity.POS],
+        ['食[た]べません', Form.NON_PAST, Formality.POLITE, Polarity.NEG],
+        ['食[た]べました', Form.PAST, Formality.POLITE, Polarity.POS],
+        ['食[た]べませんでした', Form.PAST, Formality.POLITE, Polarity.NEG],
+        ['食[た]べましょう', Form.VOLITIONAL, Formality.POLITE, None],
+        # Plain forms
+        ['食[た]べる', Form.NON_PAST, Formality.POLITE, Polarity.POS],
+        ['食[た]べない', Form.NON_PAST, Formality.POLITE, Polarity.NEG],
+        ['食[た]べた', Form.PAST, Formality.POLITE, Polarity.POS],
+        ['食[た]べなかった', Form.PAST, Formality.POLITE, Polarity.NEG],
+        # formality-constant
+        ['食[た]べて', Form.TE, None, None],
+    ]),
+    ('切[き]る', VerbClass.GODAN, [
+        # Polite forms
+        ['切[き]ります', Form.NON_PAST, Formality.POLITE, Polarity.POS],
+        ['切[き]りません', Form.NON_PAST, Formality.POLITE, Polarity.NEG],
+        ['切[き]りました', Form.PAST, Formality.POLITE, Polarity.POS],
+        ['切[き]りませんでした', Form.PAST, Formality.POLITE, Polarity.NEG],
+        ['切[き]りましょう', Form.VOLITIONAL, Formality.POLITE, None],
+        # Plain forms
+        ['切[き]る', Form.NON_PAST, Formality.POLITE, Polarity.POS],
+        ['切[き]らない', Form.NON_PAST, Formality.POLITE, Polarity.NEG],
+        ['切[き]った', Form.PAST, Formality.POLITE, Polarity.POS],
+        ['切[き]らなかった', Form.PAST, Formality.POLITE, Polarity.NEG],
+        # formality-constant
+        ['切[き]って', Form.TE, None, None],
+    ])
+]
+@pytest.mark.parametrize("dict_form, verb_class, reference", generate_forms_data)
+def test_generate_forms(dict_form, verb_class, reference):
+    forms = generate_forms(dict_form, verb_class)
+    assert forms == reference
