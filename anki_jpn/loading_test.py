@@ -92,44 +92,48 @@ def main(args):
 
     ichidan_verb_ids = random.sample(deck.find_cards("tag:ichidan-verb"), k=5)
     godan_verb_ids = random.sample(deck.find_cards("tag:godan-verb"), k=5)
+    irregular_verb_ids = random.sample(deck.find_cards("tag:irregular-verb"), k=5)
 
-    for card_id in ichidan_verb_ids:
-        expression, meaning, reading = deck.get_card(card_id).note().values()
-        if not expression.endswith('る'):
-            continue
-        import pdb; pdb.set_trace()
-        if '<!--' in reading:
-            reading = reading.split('<!-- accent_start')[0]
+    for card_id in itertools.chain(ichidan_verb_ids, godan_verb_ids, irregular_verb_ids):
+        note = deck.get_card(card_id).note()
+        generate_notes(new_model, new_deck, note)
+
+    #     expression, meaning, reading = deck.get_card(card_id).note().values()
+    #     if not expression.endswith('る'):
+    #         continue
+    #     import pdb; pdb.set_trace()
+    #     if '<!--' in reading:
+    #         reading = reading.split('<!-- accent_start')[0]
             
-        tense = "non-past"
-        posneg = "positive"
-        formality = "polite"
-        conjugation = conjugate_ichidan(expression, Conjugation.NON_PAST)
-        new_note = genanki.Note(model=new_model, fields=[expression, meaning, reading, tense, formality, posneg, conjugation])
-        new_deck.add_note(new_note)
+    #     tense = "non-past"
+    #     posneg = "positive"
+    #     formality = "polite"
+    #     conjugation = conjugate_ichidan(expression, Conjugation.NON_PAST)
+    #     new_note = genanki.Note(model=new_model, fields=[expression, meaning, reading, tense, formality, posneg, conjugation])
+    #     new_deck.add_note(new_note)
 
-        posneg = "negative"
-        conjugation = conjugate_ichidan(expression, Conjugation.NON_PAST_NEGATIVE)
-        new_note = genanki.Note(model=new_model, fields=[expression, meaning, reading, tense, formality, posneg, conjugation])
-        new_deck.add_note(new_note)
+    #     posneg = "negative"
+    #     conjugation = conjugate_ichidan(expression, Conjugation.NON_PAST_NEGATIVE)
+    #     new_note = genanki.Note(model=new_model, fields=[expression, meaning, reading, tense, formality, posneg, conjugation])
+    #     new_deck.add_note(new_note)
 
-    for card_id in godan_verb_ids:
-        expression, meaning, reading = deck.get_card(card_id).note().values()
-        if not expression.endswith('る'):
-            continue
-        if '<!-- accent_start' in reading:
-            reading = reading.split('<!-- accent_start')[0]
-        tense = "non-past"
-        posneg = "positive"
-        formality = "polite"
-        conjugation = conjugate_godan(expression, Conjugation.NON_PAST)
-        new_note = genanki.Note(model=new_model, fields=[expression, meaning, reading, tense, formality, posneg, conjugation])
-        new_deck.add_note(new_note)
+    # for card_id in godan_verb_ids:
+    #     expression, meaning, reading = deck.get_card(card_id).note().values()
+    #     if not expression.endswith('る'):
+    #         continue
+    #     if '<!-- accent_start' in reading:
+    #         reading = reading.split('<!-- accent_start')[0]
+    #     tense = "non-past"
+    #     posneg = "positive"
+    #     formality = "polite"
+    #     conjugation = conjugate_godan(expression, Conjugation.NON_PAST)
+    #     new_note = genanki.Note(model=new_model, fields=[expression, meaning, reading, tense, formality, posneg, conjugation])
+    #     new_deck.add_note(new_note)
 
-        posneg = "negative"
-        conjugation = conjugate_godan(expression, Conjugation.NON_PAST_NEGATIVE)
-        new_note = genanki.Note(model=new_model, fields=[expression, meaning, reading, tense, formality, posneg, conjugation])
-        new_deck.add_note(new_note)
+    #     posneg = "negative"
+    #     conjugation = conjugate_godan(expression, Conjugation.NON_PAST_NEGATIVE)
+    #     new_note = genanki.Note(model=new_model, fields=[expression, meaning, reading, tense, formality, posneg, conjugation])
+    #     new_deck.add_note(new_note)
         
     # ichidan_verbs = [deck.get_card(id).note().values()[0] for id in ichidan_verb_ids]
 
@@ -168,6 +172,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--input')
     parser.add_argument('-o', '--output')
+    parser.add_argument('--irregular', default='irregular-verb')
+    parser.add_argument('--ichidan', default='ichidan-verb')
+    parser.add_argument('--godan', default='godan-verb')
+    parser.add_argument('--na-adj', dest='na_adj', default='na-adjective')
+    parser.add_argument('--i-adj', dest='i_adj', default='i-adjective')
     args = parser.parse_args()
 
     main(args)
