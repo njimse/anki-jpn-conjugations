@@ -3,7 +3,9 @@ from typing import Optional, List, Tuple
 
 class Form(Enum):
     NON_PAST = 'non-past'
+    NON_PAST_NEG = 'negative'
     PAST = 'past'
+    PAST_NEG = 'past negative'
     TE = 'te'
     VOLITIONAL = 'volitional'
 
@@ -60,23 +62,23 @@ godan_te_mapping = {
     "す": "して",
 }
 
-def generate_forms(dictionary_form: str, verb_class: VerbClass) -> List[Tuple[str, Form, Optional[Formality], Optional[Polarity]]]:
+def generate_forms(dictionary_form: str, verb_class: VerbClass) -> List[Tuple[str, Form, Optional[Formality]]]:
     results = []
     # Polite forms
-    results.append([polite_nonpast_positive(dictionary_form, verb_class), Form.NON_PAST, Formality.POLITE, Polarity.POS])
-    results.append([polite_nonpast_negative(dictionary_form, verb_class), Form.NON_PAST, Formality.POLITE, Polarity.NEG])
-    results.append([polite_past_positive(dictionary_form, verb_class), Form.PAST, Formality.POLITE, Polarity.POS])
-    results.append([polite_past_negative(dictionary_form, verb_class), Form.PAST, Formality.POLITE, Polarity.NEG])
-    results.append([polite_volitional(dictionary_form, verb_class), Form.VOLITIONAL, Formality.POLITE, None])
+    results.append([polite_nonpast_positive(dictionary_form, verb_class), Form.NON_PAST, Formality.POLITE])
+    results.append([polite_nonpast_negative(dictionary_form, verb_class), Form.NON_PAST_NEG, Formality.POLITE])
+    results.append([polite_past_positive(dictionary_form, verb_class), Form.PAST, Formality.POLITE])
+    results.append([polite_past_negative(dictionary_form, verb_class), Form.PAST_NEG, Formality.POLITE])
+    results.append([polite_volitional(dictionary_form, verb_class), Form.VOLITIONAL, Formality.POLITE])
 
     # Plain forms
-    results.append([plain_nonpast_positive(dictionary_form, verb_class), Form.NON_PAST, Formality.POLITE, Polarity.POS])
-    results.append([plain_nonpast_negative(dictionary_form, verb_class), Form.NON_PAST, Formality.POLITE, Polarity.NEG])
-    results.append([plain_past_positive(dictionary_form, verb_class), Form.PAST, Formality.POLITE, Polarity.POS])
-    results.append([plain_past_negative(dictionary_form, verb_class), Form.PAST, Formality.POLITE, Polarity.NEG])
+    results.append([plain_nonpast_positive(dictionary_form, verb_class), Form.NON_PAST, Formality.PLAIN])
+    results.append([plain_nonpast_negative(dictionary_form, verb_class), Form.NON_PAST_NEG, Formality.PLAIN])
+    results.append([plain_past_positive(dictionary_form, verb_class), Form.PAST, Formality.PLAIN])
+    results.append([plain_past_negative(dictionary_form, verb_class), Form.PAST_NEG, Formality.PLAIN])
 
     # formality-constant
-    results.append([te(dictionary_form, verb_class), Form.TE, None, None])
+    results.append([te(dictionary_form, verb_class), Form.TE, None])
 
     return results
 

@@ -20,3 +20,5 @@ test = [
     "pytest"
 ]
 
+[project.scripts]
+anki-jpn = "anki_jpn.cli:main_cli"
