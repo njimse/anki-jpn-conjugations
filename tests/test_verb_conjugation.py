@@ -182,48 +182,48 @@ def test_plain_past_negative(dict_form, verb_class, reference):
 generate_forms_data = [
     ('来[く]る', VerbClass.IRREGULAR, [
         # Polite forms
-        ['来[き]ます', Form.NON_PAST, Formality.POLITE, Polarity.POS],
-        ['来[き]ません', Form.NON_PAST, Formality.POLITE, Polarity.NEG],
-        ['来[き]ました', Form.PAST, Formality.POLITE, Polarity.POS],
-        ['来[き]ませんでした', Form.PAST, Formality.POLITE, Polarity.NEG],
-        ['来[き]ましょう', Form.VOLITIONAL, Formality.POLITE, None],
+        ['来[き]ます', Form.NON_PAST, Formality.POLITE],
+        ['来[き]ません', Form.NON_PAST_NEG, Formality.POLITE],
+        ['来[き]ました', Form.PAST, Formality.POLITE],
+        ['来[き]ませんでした', Form.PAST_NEG, Formality.POLITE],
+        ['来[き]ましょう', Form.VOLITIONAL, Formality.POLITE],
         # Plain forms
-        ['来[く]る', Form.NON_PAST, Formality.POLITE, Polarity.POS],
-        ['来[こ]ない', Form.NON_PAST, Formality.POLITE, Polarity.NEG],
-        ['来[き]た', Form.PAST, Formality.POLITE, Polarity.POS],
-        ['来[こ]なかった', Form.PAST, Formality.POLITE, Polarity.NEG],
+        ['来[く]る', Form.NON_PAST, Formality.PLAIN],
+        ['来[こ]ない', Form.NON_PAST_NEG, Formality.PLAIN],
+        ['来[き]た', Form.PAST, Formality.PLAIN],
+        ['来[こ]なかった', Form.PAST_NEG, Formality.PLAIN],
         # formality-constant
-        ['来[き]て', Form.TE, None, None],
+        ['来[き]て', Form.TE, None],
     ]),
     ('食[た]べる', VerbClass.ICHIDAN, [
         # Polite forms
-        ['食[た]べます', Form.NON_PAST, Formality.POLITE, Polarity.POS],
-        ['食[た]べません', Form.NON_PAST, Formality.POLITE, Polarity.NEG],
-        ['食[た]べました', Form.PAST, Formality.POLITE, Polarity.POS],
-        ['食[た]べませんでした', Form.PAST, Formality.POLITE, Polarity.NEG],
-        ['食[た]べましょう', Form.VOLITIONAL, Formality.POLITE, None],
+        ['食[た]べます', Form.NON_PAST, Formality.POLITE],
+        ['食[た]べません', Form.NON_PAST_NEG, Formality.POLITE],
+        ['食[た]べました', Form.PAST, Formality.POLITE],
+        ['食[た]べませんでした', Form.PAST_NEG, Formality.POLITE],
+        ['食[た]べましょう', Form.VOLITIONAL, Formality.POLITE],
         # Plain forms
-        ['食[た]べる', Form.NON_PAST, Formality.POLITE, Polarity.POS],
-        ['食[た]べない', Form.NON_PAST, Formality.POLITE, Polarity.NEG],
-        ['食[た]べた', Form.PAST, Formality.POLITE, Polarity.POS],
-        ['食[た]べなかった', Form.PAST, Formality.POLITE, Polarity.NEG],
+        ['食[た]べる', Form.NON_PAST, Formality.PLAIN],
+        ['食[た]べない', Form.NON_PAST_NEG, Formality.PLAIN],
+        ['食[た]べた', Form.PAST, Formality.PLAIN],
+        ['食[た]べなかった', Form.PAST_NEG, Formality.PLAIN],
         # formality-constant
-        ['食[た]べて', Form.TE, None, None],
+        ['食[た]べて', Form.TE, None],
     ]),
     ('切[き]る', VerbClass.GODAN, [
         # Polite forms
-        ['切[き]ります', Form.NON_PAST, Formality.POLITE, Polarity.POS],
-        ['切[き]りません', Form.NON_PAST, Formality.POLITE, Polarity.NEG],
-        ['切[き]りました', Form.PAST, Formality.POLITE, Polarity.POS],
-        ['切[き]りませんでした', Form.PAST, Formality.POLITE, Polarity.NEG],
-        ['切[き]りましょう', Form.VOLITIONAL, Formality.POLITE, None],
+        ['切[き]ります', Form.NON_PAST, Formality.POLITE],
+        ['切[き]りません', Form.NON_PAST_NEG, Formality.POLITE],
+        ['切[き]りました', Form.PAST, Formality.POLITE],
+        ['切[き]りませんでした', Form.PAST_NEG, Formality.POLITE],
+        ['切[き]りましょう', Form.VOLITIONAL, Formality.POLITE],
         # Plain forms
-        ['切[き]る', Form.NON_PAST, Formality.POLITE, Polarity.POS],
-        ['切[き]らない', Form.NON_PAST, Formality.POLITE, Polarity.NEG],
-        ['切[き]った', Form.PAST, Formality.POLITE, Polarity.POS],
-        ['切[き]らなかった', Form.PAST, Formality.POLITE, Polarity.NEG],
+        ['切[き]る', Form.NON_PAST, Formality.PLAIN],
+        ['切[き]らない', Form.NON_PAST_NEG, Formality.PLAIN],
+        ['切[き]った', Form.PAST, Formality.PLAIN],
+        ['切[き]らなかった', Form.PAST_NEG, Formality.PLAIN],
         # formality-constant
-        ['切[き]って', Form.TE, None, None],
+        ['切[き]って', Form.TE, None],
     ])
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", generate_forms_data)
