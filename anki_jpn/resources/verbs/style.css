@@ -1,0 +1,29 @@
+.card {
+    font-family: arial;
+    font-size: 25px;
+    text-align: center;
+    color: black;
+    background-color: white;
+  }
+  .jp { font-size: 40px }
+  .win .jp { font-family: "MS Mincho", "ＭＳ 明朝"; }
+  .mac .jp { font-family: "Hiragino Mincho Pro", "ヒラギノ明朝 Pro"; }
+  .linux .jp { font-family: "Kochi Mincho", "東風明朝"; }
+  .mobile .jp { font-family: "Hiragino Mincho ProN"; font-size: 30px }
+  table {
+  border: 1px solid black;
+  border-collapse: collapse;
+  }
+  td {
+  border: 1px solid black;
+  }
+  table td{
+  padding: 10px;
+  }
+  .ending {color: red}
+  .nightMode .ending {color: red}
+  .nightMode table tr td {border: 1px solid white}
+  .polite {color: #4DB01C}
+  .plain {color: #2A6DEC}
+  .nightMode .polite {color: #4DB01C}
+  .nightMode .plain {color: #2A6DEC}
