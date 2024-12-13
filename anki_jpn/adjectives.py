@@ -1,4 +1,24 @@
-from anki_jpn.enums import AdjectiveClass
+from typing import List, Tuple, Optional
+from anki_jpn.enums import AdjectiveClass, Form, Formality
+
+def generate_adjective_forms(dictionary_form: str, verb_class: AdjectiveClass) -> List[Tuple[str, Form, Optional[Formality]]]:
+    results = []
+    # Polite forms
+    results.append([polite_nonpast_positive(dictionary_form, verb_class), Form.NON_PAST, Formality.POLITE])
+    results.append([polite_nonpast_negative(dictionary_form, verb_class), Form.NON_PAST_NEG, Formality.POLITE])
+    results.append([polite_past_positive(dictionary_form, verb_class), Form.PAST, Formality.POLITE])
+    results.append([polite_past_negative(dictionary_form, verb_class), Form.PAST_NEG, Formality.POLITE])
+
+    # Plain forms
+    results.append([plain_nonpast_positive(dictionary_form, verb_class), Form.NON_PAST, Formality.PLAIN])
+    results.append([plain_nonpast_negative(dictionary_form, verb_class), Form.NON_PAST_NEG, Formality.PLAIN])
+    results.append([plain_past_positive(dictionary_form, verb_class), Form.PAST, Formality.PLAIN])
+    results.append([plain_past_negative(dictionary_form, verb_class), Form.PAST_NEG, Formality.PLAIN])
+
+    # formality-constant
+    results.append([te(dictionary_form, verb_class), Form.TE, None])
+
+    return results
 
 def polite_nonpast_positive(dictionary_form: str, adj_class: AdjectiveClass):
     stem = dictionary_form[:-1]

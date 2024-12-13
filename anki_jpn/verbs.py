@@ -42,7 +42,7 @@ godan_te_mapping = {
     "す": "して",
 }
 
-def generate_forms(dictionary_form: str, verb_class: VerbClass) -> List[Tuple[str, Form, Optional[Formality]]]:
+def generate_verb_forms(dictionary_form: str, verb_class: VerbClass) -> List[Tuple[str, Form, Optional[Formality]]]:
     results = []
     # Polite forms
     results.append([polite_nonpast_positive(dictionary_form, verb_class), Form.NON_PAST, Formality.POLITE])
