@@ -8,7 +8,11 @@ from anki_jpn.adjectives import (
     polite_nonpast_negative,
     polite_past_positive,
     polite_past_negative,
-    te
+    te,
+    plain_nonpast_positive,
+    plain_nonpast_negative,
+    plain_past_positive,
+    plain_past_negative,
 )
 
 polite_nonpast_positive_data = [
@@ -79,4 +83,61 @@ te_data = [
 @pytest.mark.parametrize("dict_form, adj_class, reference", te_data)
 def test_te(dict_form, adj_class, reference):
     result = te(dict_form, adj_class)
+    assert result == reference
+
+# Plain forms
+plain_nonpast_positive_data = [
+    ('元気な', AdjectiveClass.NA, '元気だ'),
+    ('元気[げんき]な', AdjectiveClass.NA, '元気[げんき]だ'),
+    ('暇[ひま]な', AdjectiveClass.NA, '暇[ひま]だ'),
+    ('暇な', AdjectiveClass.NA, '暇だ'),
+    ('美味[おい]しい', AdjectiveClass.I, '美味[おい]しい'),
+    ('美味しい', AdjectiveClass.I, '美味しい'),
+    ('早[はや]い', AdjectiveClass.I, '早[はや]い')
+]
+@pytest.mark.parametrize("dict_form, adj_class, reference", plain_nonpast_positive_data)
+def test_plain_nonpast_positive(dict_form, adj_class, reference):
+    result = plain_nonpast_positive(dict_form, adj_class)
+    assert result == reference
+
+plain_nonpast_negative_data = [
+    ('元気な', AdjectiveClass.NA, '元気じゃない'),
+    ('元気[げんき]な', AdjectiveClass.NA, '元気[げんき]じゃない'),
+    ('暇[ひま]な', AdjectiveClass.NA, '暇[ひま]じゃない'),
+    ('暇な', AdjectiveClass.NA, '暇じゃない'),
+    ('美味[おい]しい', AdjectiveClass.I, '美味[おい]しくない'),
+    ('美味しい', AdjectiveClass.I, '美味しくない'),
+    ('早[はや]い', AdjectiveClass.I, '早[はや]くない')
+]
+@pytest.mark.parametrize("dict_form, adj_class, reference", plain_nonpast_negative_data)
+def test_plain_nonpast_negative(dict_form, adj_class, reference):
+    result = plain_nonpast_negative(dict_form, adj_class)
+    assert result == reference
+
+plain_past_positive_data = [
+    ('元気な', AdjectiveClass.NA, '元気だった'),
+    ('元気[げんき]な', AdjectiveClass.NA, '元気[げんき]だった'),
+    ('暇[ひま]な', AdjectiveClass.NA, '暇[ひま]だった'),
+    ('暇な', AdjectiveClass.NA, '暇だった'),
+    ('美味[おい]しい', AdjectiveClass.I, '美味[おい]しかった'),
+    ('美味しい', AdjectiveClass.I, '美味しかった'),
+    ('早[はや]い', AdjectiveClass.I, '早[はや]かった')
+]
+@pytest.mark.parametrize("dict_form, adj_class, reference", plain_past_positive_data)
+def test_plain_past_positive(dict_form, adj_class, reference):
+    result = plain_past_positive(dict_form, adj_class)
+    assert result == reference
+
+plain_past_negative_data = [
+    ('元気な', AdjectiveClass.NA, '元気じゃなかった'),
+    ('元気[げんき]な', AdjectiveClass.NA, '元気[げんき]じゃなかった'),
+    ('暇[ひま]な', AdjectiveClass.NA, '暇[ひま]じゃなかった'),
+    ('暇な', AdjectiveClass.NA, '暇じゃなかった'),
+    ('美味[おい]しい', AdjectiveClass.I, '美味[おい]しくなかった'),
+    ('美味しい', AdjectiveClass.I, '美味しくなかった'),
+    ('早[はや]い', AdjectiveClass.I, '早[はや]くなかった')
+]
+@pytest.mark.parametrize("dict_form, adj_class, reference", plain_past_negative_data)
+def test_plain_past_negative(dict_form, adj_class, reference):
+    result = plain_past_negative(dict_form, adj_class)
     assert result == reference

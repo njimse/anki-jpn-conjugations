@@ -44,3 +44,39 @@ def te(dictionary_form: str, adj_class: AdjectiveClass):
         ending = 'くて'
     completion = stem + ending
     return completion
+
+def plain_nonpast_positive(dictionary_form: str, adj_class: AdjectiveClass):
+    stem = dictionary_form[:-1]
+    if adj_class == AdjectiveClass.NA:
+        ending = 'だ'
+    else:
+        ending = 'い'
+    completion = stem + ending
+    return completion
+
+def plain_nonpast_negative(dictionary_form: str, adj_class: AdjectiveClass):
+    stem = dictionary_form[:-1]
+    if adj_class == AdjectiveClass.NA:
+        ending = 'じゃない'
+    else:
+        ending = 'くない'
+    completion = stem + ending
+    return completion
+
+def plain_past_positive(dictionary_form: str, adj_class: AdjectiveClass):
+    stem = dictionary_form[:-1]
+    if adj_class == AdjectiveClass.NA:
+        ending = 'だった'
+    else:
+        ending = 'かった'
+    completion = stem + ending
+    return completion
+
+def plain_past_negative(dictionary_form: str, adj_class: AdjectiveClass):
+    stem = dictionary_form[:-1]
+    if adj_class == AdjectiveClass.NA:
+        ending = 'じゃなかった'
+    else:
+        ending = 'くなかった'
+    completion = stem + ending
+    return completion
