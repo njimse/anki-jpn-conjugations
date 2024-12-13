@@ -1,26 +1,6 @@
-from enum import Enum
 from typing import Optional, List, Tuple
+from anki_jpn.enums import Form, Formality, VerbClass
 
-class Form(Enum):
-    NON_PAST = 'non-past'
-    NON_PAST_NEG = 'negative'
-    PAST = 'past'
-    PAST_NEG = 'past negative'
-    TE = 'te'
-    VOLITIONAL = 'volitional'
-
-class Polarity(Enum):
-    POS = 'positive'
-    NEG = 'negative'
-
-class Formality(Enum):
-    POLITE = 'polite'
-    PLAIN = 'plain'
-
-class VerbClass(Enum):
-    GODAN = 'godan'
-    ICHIDAN = 'ichidan'
-    IRREGULAR = 'irregular'
 
 godan_stem_mapping = {
     "う": "い",

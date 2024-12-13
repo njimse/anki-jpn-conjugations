@@ -1,10 +1,10 @@
 import pytest
-
-from anki_jpn.verbs import (
+from anki_jpn.enums import (
     VerbClass,
     Formality,
-    Polarity,
     Form,
+)
+from anki_jpn.verbs import (
     generate_forms,
     polite_nonpast_positive,
     polite_nonpast_negative,
