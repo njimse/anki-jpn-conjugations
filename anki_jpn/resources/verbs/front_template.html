@@ -1,0 +1,13 @@
+<br><table align="center"><tr><td colspan=2><div class=jp>{{expression}}</div></td></tr><tr><td align="right">Formality</td><td align="left"><div id=formality>{{formality}}</div></td></tr><tr><td align="right">Form</td><td align="left">{{form}}</td></tr></table>
+
+<script>
+var x = "{{formality}}";
+if (x === "polite")
+{ 
+  document.getElementById("formality").className = "polite";
+}
+else
+{ 
+  document.getElementById("formality").className = "plain";
+}
+</script>

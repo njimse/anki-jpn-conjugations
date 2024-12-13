@@ -1,37 +1,15 @@
 import os
 import copy
 import argparse
+from importlib import resources as impresources
+
 import anki.collection
 import genanki
 
+import anki_jpn.resources.verbs
 from anki_jpn.verbs import generate_forms, godan_stem_mapping, VerbClass
 from anki_jpn.util import delta_split
-
-CARD_CSS = """.card {
-  font-family: arial;
-  font-size: 25px;
-  text-align: center;
-  color: black;
-  background-color: white;
-}
-.jp { font-size: 40px }
-.win .jp { font-family: "MS Mincho", "ＭＳ 明朝"; }
-.mac .jp { font-family: "Hiragino Mincho Pro", "ヒラギノ明朝 Pro"; }
-.linux .jp { font-family: "Kochi Mincho", "東風明朝"; }
-.mobile .jp { font-family: "Hiragino Mincho ProN"; }
-table {
-border: 1px solid black;
-border-collapse: collapse;
-}
-td {
-border: 1px solid black;
-}
-table td{
-padding: 10px;
-}
-.ending {color: red}
-.nightMode .ending {color: red}
-.nightMode table tr td {border: 1px solid white}"""
+import anki_jpn.resources
 
 def generate_verb_notes(model, deck, note, verb_class):
     expression, meaning, reading = note.values()
@@ -59,7 +37,16 @@ def main(args):
 
     deck = anki.collection.Collection(args.input)
 
-    new_model = genanki.Model(args.model_id, args.model_name, css=CARD_CSS)
+    css_file = impresources.files(anki_jpn.resources.verbs)/'style.css'
+    with css_file.open("rt") as f:
+        card_css = f.read()
+    verb_front_template_file = impresources.files(anki_jpn.resources.verbs)/'front_template.html'
+    verb_back_template_file = impresources.files(anki_jpn.resources.verbs)/'back_template.html'
+    with verb_front_template_file.open('rt') as f:
+        verb_front_template = f.read()
+    with verb_back_template_file.open('rt') as f:
+        verb_back_template = f.read()
+    new_model = genanki.Model(args.model_id, args.model_name, css=card_css)
     new_model.set_fields([{"name": "expression"},
                           {"name": "meaning"},
                           {"name": "reading"},
@@ -70,8 +57,8 @@ def main(args):
                           ])
     new_model.set_templates([
         {"name": "JapaneseConjugation",
-         "qfmt": '<br><table align="center"><tr><td colspan=2><div class=jp>{{expression}}</div></td></tr><tr><td align="right">Formality</td><td align="left">{{formality}}</td></tr><tr><td align="right">Form</td><td align="left">{{form}}</td></tr></table>',
-         "afmt": "{{FrontSide}}<br><div class=jp>{{furigana:conjugation base}}<span class=ending>{{furigana:conjugation ending}}</span></div><br>{{meaning}}<br>"}
+         "qfmt": verb_front_template,
+         "afmt": verb_back_template}
     ])
     new_deck = genanki.Deck(args.deck_id, args.deck_name)
 
