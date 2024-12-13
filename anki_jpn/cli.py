@@ -7,7 +7,7 @@ import anki.collection
 import genanki
 
 import anki_jpn.resources.verbs
-from anki_jpn.verbs import generate_forms, godan_stem_mapping, VerbClass
+from anki_jpn.verbs import generate_verb_forms, godan_stem_mapping, VerbClass
 from anki_jpn.util import delta_split
 import anki_jpn.resources
 
@@ -15,7 +15,7 @@ def generate_verb_notes(model, deck, note, verb_class):
     expression, meaning, reading = note.values()
     reading = reading.split('<')[0].strip()
     if expression[-1] in godan_stem_mapping.keys():
-        known_forms = generate_forms(reading, verb_class)
+        known_forms = generate_verb_forms(reading, verb_class)
         for conjugation, form, formality in known_forms:
             conj_base, conj_ending = delta_split(reading, conjugation)
             formality_str = formality.value if formality is not None else ''

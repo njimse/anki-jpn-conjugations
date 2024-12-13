@@ -1,9 +1,12 @@
 import pytest
 
 from anki_jpn.enums import (
-    AdjectiveClass
+    AdjectiveClass,
+    Form,
+    Formality
 )
 from anki_jpn.adjectives import (
+    generate_adjective_forms,
     polite_nonpast_positive,
     polite_nonpast_negative,
     polite_past_positive,
@@ -141,3 +144,38 @@ plain_past_negative_data = [
 def test_plain_past_negative(dict_form, adj_class, reference):
     result = plain_past_negative(dict_form, adj_class)
     assert result == reference
+
+generate_adjective_forms_data = [
+    ('嫌[きら]いな', AdjectiveClass.NA, [
+        # Polite forms
+        ['嫌[きら]いです', Form.NON_PAST, Formality.POLITE],
+        ['嫌[きら]いじゃないです', Form.NON_PAST_NEG, Formality.POLITE],
+        ['嫌[きら]いでした', Form.PAST, Formality.POLITE],
+        ['嫌[きら]いじゃなかったです', Form.PAST_NEG, Formality.POLITE],
+        # Plain forms
+        ['嫌[きら]いだ', Form.NON_PAST, Formality.PLAIN],
+        ['嫌[きら]いじゃない', Form.NON_PAST_NEG, Formality.PLAIN],
+        ['嫌[きら]いだった', Form.PAST, Formality.PLAIN],
+        ['嫌[きら]いじゃなかった', Form.PAST_NEG, Formality.PLAIN],
+        # formality-constant
+        ['嫌[きら]いで', Form.TE, None],
+    ]),
+    ('暖[あたた]かい', AdjectiveClass.I, [
+        # Polite forms
+        ['暖[あたた]かいです', Form.NON_PAST, Formality.POLITE],
+        ['暖[あたた]かくないです', Form.NON_PAST_NEG, Formality.POLITE],
+        ['暖[あたた]かかったです', Form.PAST, Formality.POLITE],
+        ['暖[あたた]かくなかったです', Form.PAST_NEG, Formality.POLITE],
+        # Plain forms
+        ['暖[あたた]かい', Form.NON_PAST, Formality.PLAIN],
+        ['暖[あたた]かくない', Form.NON_PAST_NEG, Formality.PLAIN],
+        ['暖[あたた]かかった', Form.PAST, Formality.PLAIN],
+        ['暖[あたた]かくなかった', Form.PAST_NEG, Formality.PLAIN],
+        # formality-constant
+        ['暖[あたた]かくて', Form.TE, None],
+    ])
+]
+@pytest.mark.parametrize("dict_form, adj_class, reference", generate_adjective_forms_data)
+def test_generate_adjective_forms(dict_form, adj_class, reference):
+    forms = generate_adjective_forms(dict_form, adj_class)
+    assert forms == reference

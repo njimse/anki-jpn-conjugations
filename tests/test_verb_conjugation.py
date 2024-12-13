@@ -5,7 +5,7 @@ from anki_jpn.enums import (
     Form,
 )
 from anki_jpn.verbs import (
-    generate_forms,
+    generate_verb_forms,
     polite_nonpast_positive,
     polite_nonpast_negative,
     polite_past_positive,
@@ -179,7 +179,7 @@ def test_plain_past_negative(dict_form, verb_class, reference):
     result = plain_past_negative(dict_form, verb_class)
     assert result == reference
 
-generate_forms_data = [
+generate_verb_forms_data = [
     ('来[く]る', VerbClass.IRREGULAR, [
         # Polite forms
         ['来[き]ます', Form.NON_PAST, Formality.POLITE],
@@ -226,7 +226,7 @@ generate_forms_data = [
         ['切[き]って', Form.TE, None],
     ])
 ]
-@pytest.mark.parametrize("dict_form, verb_class, reference", generate_forms_data)
-def test_generate_forms(dict_form, verb_class, reference):
-    forms = generate_forms(dict_form, verb_class)
+@pytest.mark.parametrize("dict_form, verb_class, reference", generate_verb_forms_data)
+def test_generate_verb_forms(dict_form, verb_class, reference):
+    forms = generate_verb_forms(dict_form, verb_class)
     assert forms == reference
