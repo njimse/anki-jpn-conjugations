@@ -20,17 +20,24 @@ def generate_adjective_forms(dictionary_form: str, verb_class: AdjectiveClass) -
 
     return results
 
+def get_stem(dictionary_form: str) -> str:
+    if dictionary_form.endswith('いい'):
+        stem = dictionary_form[:-2] + 'よ'
+    else:
+        stem = dictionary_form[:-1]
+    return stem
+
 def polite_nonpast_positive(dictionary_form: str, adj_class: AdjectiveClass):
-    stem = dictionary_form[:-1]
     if adj_class == AdjectiveClass.NA:
         ending = 'です'
+        completion = dictionary_form[:-1] + ending
     else:
-        ending = 'いです'
-    completion = stem + ending
+        ending = 'です'
+        completion = dictionary_form + ending
     return completion
 
 def polite_nonpast_negative(dictionary_form: str, adj_class: AdjectiveClass):
-    stem = dictionary_form[:-1]
+    stem = get_stem(dictionary_form)
     if adj_class == AdjectiveClass.NA:
         ending = 'じゃないです'
     else:
@@ -39,7 +46,7 @@ def polite_nonpast_negative(dictionary_form: str, adj_class: AdjectiveClass):
     return completion
 
 def polite_past_positive(dictionary_form: str, adj_class: AdjectiveClass):
-    stem = dictionary_form[:-1]
+    stem = get_stem(dictionary_form)
     if adj_class == AdjectiveClass.NA:
         ending = 'でした'
     else:
@@ -48,7 +55,7 @@ def polite_past_positive(dictionary_form: str, adj_class: AdjectiveClass):
     return completion
 
 def polite_past_negative(dictionary_form: str, adj_class: AdjectiveClass):
-    stem = dictionary_form[:-1]
+    stem = get_stem(dictionary_form)
     if adj_class == AdjectiveClass.NA:
         ending = 'じゃなかったです'
     else:
@@ -57,7 +64,7 @@ def polite_past_negative(dictionary_form: str, adj_class: AdjectiveClass):
     return completion
 
 def te(dictionary_form: str, adj_class: AdjectiveClass):
-    stem = dictionary_form[:-1]
+    stem = get_stem(dictionary_form)
     if adj_class == AdjectiveClass.NA:
         ending = 'で'
     else:
@@ -75,7 +82,7 @@ def plain_nonpast_positive(dictionary_form: str, adj_class: AdjectiveClass):
     return completion
 
 def plain_nonpast_negative(dictionary_form: str, adj_class: AdjectiveClass):
-    stem = dictionary_form[:-1]
+    stem = get_stem(dictionary_form)
     if adj_class == AdjectiveClass.NA:
         ending = 'じゃない'
     else:
@@ -84,7 +91,7 @@ def plain_nonpast_negative(dictionary_form: str, adj_class: AdjectiveClass):
     return completion
 
 def plain_past_positive(dictionary_form: str, adj_class: AdjectiveClass):
-    stem = dictionary_form[:-1]
+    stem = get_stem(dictionary_form)
     if adj_class == AdjectiveClass.NA:
         ending = 'だった'
     else:
@@ -93,7 +100,7 @@ def plain_past_positive(dictionary_form: str, adj_class: AdjectiveClass):
     return completion
 
 def plain_past_negative(dictionary_form: str, adj_class: AdjectiveClass):
-    stem = dictionary_form[:-1]
+    stem = get_stem(dictionary_form)
     if adj_class == AdjectiveClass.NA:
         ending = 'じゃなかった'
     else:
