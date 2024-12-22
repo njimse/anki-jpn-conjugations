@@ -1,11 +1,11 @@
 import pytest
-from importlib import resources as impresources
+import importlib.resources
 import js2py
 import anki_jpn.resources
 
-insert_ending_spans_file = impresources.files(anki_jpn.resources)/'insert_ending_spans.js'
-with insert_ending_spans_file.open('rt') as f:
-    insert_ending_spans_text = f.read()
+insert_ending_spans_text = importlib.resources.read_text(anki_jpn.resources, 'insert_ending_spans.js')
+# with insert_ending_spans_file.open('rt') as f:
+#     insert_ending_spans_text = f.read()
 insert_ending_spans = js2py.eval_js(insert_ending_spans_text)
 insert_ending_spans_data = [
     ('foo', 'foobar', 'foo<span class=ending>bar</span>'),

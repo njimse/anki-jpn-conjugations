@@ -19,18 +19,10 @@ def resolve_placeholders(template: str, formality: Optional[Formality] = None, f
     return result
 
 def get_model(model_id: int, model_name: str, model_type: ModelType = ModelType.VERB) -> genanki.Model:
-    css_file = importlib.resources.files(anki_jpn_resources)/'style.css'
-    with css_file.open("rt") as f:
-        card_css = f.read()
-    front_template_file = importlib.resources.files(anki_jpn_resources)/'front_template.html'
-    with front_template_file.open("rt") as f:
-        front_template = f.read()
-    back_template_file = importlib.resources.files(anki_jpn_resources)/'back_template.html'
-    with back_template_file.open("rt") as f:
-        back_template = f.read()
-    insert_ending_spans_file = importlib.resources.files(anki_jpn_resources)/'insert_ending_spans.js'
-    with insert_ending_spans_file.open("rt") as f:
-        insert_ending_spans_text = f.read()
+    card_css = importlib.resources.read_text(anki_jpn_resources, 'style.css')
+    front_template = importlib.resources.read_text(anki_jpn_resources, 'front_template.html')
+    back_template = importlib.resources.read_text(anki_jpn_resources, 'back_template.html')
+    insert_ending_spans_text = importlib.resources.read_text(anki_jpn_resources, 'insert_ending_spans.js')
     back_template = back_template.replace('INSERT_ENDING_SPANS_FUNCTION', insert_ending_spans_text)
     new_model = genanki.Model(model_id, model_name, css=card_css)
     base_fields = [
