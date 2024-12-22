@@ -6,31 +6,31 @@ from importlib import resources as impresources
 import anki.collection
 import genanki
 
-import anki_jpn.resources.verbs
-from anki_jpn.enums import VerbClass, AdjectiveClass
+from anki_jpn.enums import VerbClass, AdjectiveClass, ModelType, VERB_COMBOS, ADJECTIVE_COMBOS
 from anki_jpn.verbs import generate_verb_forms, godan_stem_mapping
 from anki_jpn.adjectives import generate_adjective_forms
-from anki_jpn.util import delta_split
-import anki_jpn.resources
+from anki_jpn.models import get_model
 
 def generate_notes(model, deck, note, pos_class, generation_func):
-    expression, meaning, reading = note.values()
+    expression, meaning, reading = note.values()[:3]
     reading = reading.split('<')[0].strip()
+    base_fields = [expression, meaning, reading]
+    if isinstance(pos_class, VerbClass):
+        combo_list = VERB_COMBOS
+    else:
+        combo_list = ADJECTIVE_COMBOS
+    base_fields.extend(['']*len(combo_list))
     if isinstance(pos_class, VerbClass) and expression[-1] in godan_stem_mapping.keys() or \
         isinstance(pos_class, AdjectiveClass) and (expression.endswith('い') or expression.endswith('な')):
 
+        note_fields = copy.deepcopy(base_fields)
         known_forms = generation_func(reading, pos_class)
+
         for conjugation, form, formality in known_forms:
-            conj_base, conj_ending = delta_split(reading, conjugation)
-            formality_str = formality.value if formality is not None else ''
-            all_tags = copy.deepcopy(note.tags)
-            if formality_str:
-                all_tags.append(formality_str)
-            all_tags.append(form.value.replace(' ', '-'))
-            new_note = genanki.Note(model=model, fields=[
-                expression, meaning, reading, formality_str, form.value, conj_base, conj_ending
-            ], tags=all_tags)
-            deck.add_note(new_note)
+            note_fields[3 + combo_list.index((formality, form))] = conjugation
+
+        new_note = genanki.Note(model=model, fields=note_fields, tags=note.tags)
+        deck.add_note(new_note)
 
 def main(args):
 
@@ -43,29 +43,9 @@ def main(args):
 
     deck = anki.collection.Collection(args.input)
 
-    css_file = impresources.files(anki_jpn.resources)/'style.css'
-    with css_file.open("rt") as f:
-        card_css = f.read()
-    front_template_file = impresources.files(anki_jpn.resources)/'front_template.html'
-    back_template_file = impresources.files(anki_jpn.resources)/'back_template.html'
-    with front_template_file.open('rt') as f:
-        front_template = f.read()
-    with back_template_file.open('rt') as f:
-        back_template = f.read()
-    new_model = genanki.Model(args.model_id, args.model_name, css=card_css)
-    new_model.set_fields([{"name": "expression"},
-                          {"name": "meaning"},
-                          {"name": "reading"},
-                          {"name": "formality"},
-                          {"name": "form"},
-                          {"name": "conjugation base"},
-                          {"name": "conjugation ending"}
-                          ])
-    new_model.set_templates([
-        {"name": "JapaneseConjugation",
-         "qfmt": front_template,
-         "afmt": back_template}
-    ])
+    verb_model = get_model(args.verb_model_id, args.verb_model_name, model_type=ModelType.VERB)
+    adj_model = get_model(args.adj_model_id, args.adj_model_name, model_type=ModelType.ADJECTIVE)
+    
     verb_deck = genanki.Deck(args.verb_deck_id, args.verb_deck_name)
     adj_deck = genanki.Deck(args.adj_deck_id, args.adj_deck_name)
 
@@ -73,13 +53,13 @@ def main(args):
         verb_ids = deck.find_notes(f"tag:{verb_tag}")
         for note_id in verb_ids:
             note = deck.get_note(note_id)
-            generate_notes(new_model, verb_deck, note, verb_tag2class[verb_tag], generate_verb_forms)
+            generate_notes(verb_model, verb_deck, note, verb_tag2class[verb_tag], generate_verb_forms)
 
     for adj_tag in [args.i_adj, args.na_adj]:
         adj_ids = deck.find_notes(f"tag:{adj_tag}")
         for note_id in adj_ids:
             note = deck.get_note(note_id)
-            generate_notes(new_model, adj_deck, note, adj_tag2class[adj_tag], generate_adjective_forms)
+            generate_notes(adj_model, adj_deck, note, adj_tag2class[adj_tag], generate_adjective_forms)
 
     outdir = os.path.dirname(os.path.abspath(args.output))
     if not os.path.isdir(outdir):
@@ -92,11 +72,13 @@ def main_cli():
     parser.add_argument('-i', '--input')
     parser.add_argument('-o', '--output')
 
-    parser.add_argument('--model-id', dest='model_id', default=1942314097)
-    parser.add_argument('--model-name', dest='model_name', default='Japanese Conjugations')
+    parser.add_argument('--verb-model-id', dest='verb_model_id', default=1942314097)
+    parser.add_argument('--verb-model-name', dest='verb_model_name', default='Japanese Verb Conjugations (Recognition)')
+    parser.add_argument('--adj-model-id', dest='adj_model_id', default=1942314098)
+    parser.add_argument('--adj-model-name', dest='adj_model_name', default='Japanese Adjective Conjugations (Recognition)')
     parser.add_argument('--verb-deck-id', dest='verb_deck_id', default=1632732671)
     parser.add_argument('--verb-deck-name', dest='verb_deck_name', default="Japanese Verb Conjugations")
-    parser.add_argument('--adj-deck-id', dest='adj_deck_id', default=1632732672)
+    parser.add_argument('--adj-deck-id', dest='adj_deck_id', default=1632732681)
     parser.add_argument('--adj-deck-name', dest='adj_deck_name', default="Japanese Adjective Conjugations")
 
     parser.add_argument('--irregular', default='irregular-verb')

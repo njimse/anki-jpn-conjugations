@@ -1,1 +1,8 @@
-{{FrontSide}}<br><div class=jp>{{furigana:conjugation base}}<span class=ending>{{furigana:conjugation ending}}</span></div><br>{{meaning}}<br>
+{{FrontSide}}<hr class="answer"><span class=jp id=conj></span><hr>{{meaning}}<br>
+
+<script>
+INSERT_ENDING_SPANS_FUNCTION
+
+var new_conjugation = insert_ending_spans("{{furigana:reading}}", "{{furigana:FIELD_NAME}}");
+document.getElementById("conj").innerHTML = new_conjugation;
+</script>
