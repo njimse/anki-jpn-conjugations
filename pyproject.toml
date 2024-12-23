@@ -26,4 +26,4 @@ test = [
 anki-jpn = "anki_jpn.cli:main_cli"
 
 [tool.setuptools.package-data]
-anki_jpn = ["*.html", "*.css"]
+anki_jpn = ["*.html", "*.css", "*.js"]
