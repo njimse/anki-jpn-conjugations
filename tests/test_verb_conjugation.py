@@ -1,3 +1,4 @@
+"""Unit tests for the verb conjugation functions"""
 import pytest
 from anki_jpn.enums import (
     VerbClass,
@@ -30,6 +31,7 @@ polite_nonpast_positive_data = [
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", polite_nonpast_positive_data)
 def test_polite_nonpast_positive(dict_form, verb_class, reference):
+    """test the Polite Non-Past conjugation"""
     result = polite_nonpast_positive(dict_form, verb_class)
     assert result == reference
 
@@ -45,6 +47,7 @@ polite_nonpast_negative_data = [
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", polite_nonpast_negative_data)
 def test_polite_nonpast_negative(dict_form, verb_class, reference):
+    """test the Polite Non-Past Negative conjugation"""
     result = polite_nonpast_negative(dict_form, verb_class)
     assert result == reference
 
@@ -60,6 +63,7 @@ polite_past_positive_data = [
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", polite_past_positive_data)
 def test_polite_past_positive(dict_form, verb_class, reference):
+    """test the Polite Past conjugation"""
     result = polite_past_positive(dict_form, verb_class)
     assert result == reference
 
@@ -75,6 +79,7 @@ polite_past_negative_data = [
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", polite_past_negative_data)
 def test_polite_past_negative(dict_form, verb_class, reference):
+    """test the Polite Past Negative conjugation"""
     result = polite_past_negative(dict_form, verb_class)
     assert result == reference
 
@@ -90,6 +95,7 @@ polite_volitional_data = [
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", polite_volitional_data)
 def test_polite_volitional(dict_form, verb_class, reference):
+    """test the Polite Volitional conjugation"""
     result = polite_volitional(dict_form, verb_class)
     assert result == reference
 
@@ -113,6 +119,7 @@ te_data = [
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", te_data)
 def test_te(dict_form, verb_class, reference):
+    """test the Te conjugation"""
     result = te(dict_form, verb_class)
     assert result == reference
 
@@ -129,6 +136,7 @@ plain_nonpast_positive_data = [
 ]
 @pytest.mark.parametrize("dict_form, reference", plain_nonpast_positive_data)
 def test_plain_nonpast_positive(dict_form, reference):
+    """test the Plain Non-Past conjugation"""
     result = plain_nonpast_positive(dict_form)
     assert result == reference
 
@@ -145,6 +153,7 @@ plain_nonpast_negative_data = [
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", plain_nonpast_negative_data)
 def test_plain_nonpast_negative(dict_form, verb_class, reference):
+    """test the Plain Non-Past Negative conjugation"""
     result = plain_nonpast_negative(dict_form, verb_class)
     assert result == reference
 
@@ -161,6 +170,7 @@ plain_past_positive_data = [
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", plain_past_positive_data)
 def test_plain_past_positive(dict_form, verb_class, reference):
+    """test the Plain Past conjugation"""
     result = plain_past_positive(dict_form, verb_class)
     assert result == reference
 
@@ -176,6 +186,7 @@ plain_past_negative_data = [
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", plain_past_negative_data)
 def test_plain_past_negative(dict_form, verb_class, reference):
+    """test the Plain Past Negative conjugation"""
     result = plain_past_negative(dict_form, verb_class)
     assert result == reference
 
@@ -228,5 +239,6 @@ generate_verb_forms_data = [
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", generate_verb_forms_data)
 def test_generate_verb_forms(dict_form, verb_class, reference):
+    """test the generate_verb_forms() method"""
     forms = generate_verb_forms(dict_form, verb_class)
     assert forms == reference
