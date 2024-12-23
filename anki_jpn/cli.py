@@ -1,3 +1,4 @@
+"""Command Line Interface (CLI) methods"""
 import os
 import copy
 import argparse
@@ -10,7 +11,8 @@ from anki_jpn.verbs import generate_verb_forms, godan_stem_mapping
 from anki_jpn.adjectives import generate_adjective_forms
 from anki_jpn.models import get_model
 
-def generate_notes(model, deck, note, pos_class, generation_func):
+def generate_note(model, deck, note, pos_class, generation_func): # pylint: disable=R0914
+    """Generate new note for the specified input note"""
     expression, meaning, reading = note.values()[:3]
     reading = reading.split('<')[0].strip()
     base_fields = [expression, meaning, reading]
@@ -19,10 +21,12 @@ def generate_notes(model, deck, note, pos_class, generation_func):
     else:
         combo_list = ADJECTIVE_COMBOS
     base_fields.extend(['']*len(combo_list))
-    if isinstance(pos_class, VerbClass) and expression[-1] in godan_stem_mapping.keys() or \
-        isinstance(pos_class, AdjectiveClass) and \
-            (expression.endswith('い') or expression.endswith('な')):
-
+    if isinstance(pos_class, VerbClass) and expression[-1] in list(godan_stem_mapping.keys()): # pylint: disable=C0201
+        pass
+    elif isinstance(pos_class, AdjectiveClass) and \
+        (expression.endswith('い') or expression.endswith('な')):
+        pass
+    else:
         note_fields = copy.deepcopy(base_fields)
         known_forms = generation_func(reading, pos_class)
 
@@ -33,6 +37,7 @@ def generate_notes(model, deck, note, pos_class, generation_func):
         deck.add_note(new_note)
 
 def main(args):
+    """Main function for generating verb and adjective conjugation decks"""
 
     # create a mapping from the verb tags to the corresponding VerbClass
     verb_tag2class = {args.ichidan: VerbClass.ICHIDAN,
@@ -41,7 +46,7 @@ def main(args):
     adj_tag2class = {args.i_adj: AdjectiveClass.I,
                      args.na_adj: AdjectiveClass.NA}
 
-    deck = anki.collection.Collection(args.input)
+    deck = anki.collection.Collection(args.input) # pylint: disable=E1101
 
     verb_model = get_model(args.verb_model_id, args.verb_model_name, model_type=ModelType.VERB)
     adj_model = get_model(args.adj_model_id, args.adj_model_name, model_type=ModelType.ADJECTIVE)
@@ -53,14 +58,14 @@ def main(args):
         verb_ids = deck.find_notes(f"tag:{verb_tag}")
         for note_id in verb_ids:
             note = deck.get_note(note_id)
-            generate_notes(verb_model, verb_deck, note,
+            generate_note(verb_model, verb_deck, note,
                            verb_tag2class[verb_tag], generate_verb_forms)
 
     for adj_tag in [args.i_adj, args.na_adj]:
         adj_ids = deck.find_notes(f"tag:{adj_tag}")
         for note_id in adj_ids:
             note = deck.get_note(note_id)
-            generate_notes(adj_model, adj_deck, note,
+            generate_note(adj_model, adj_deck, note,
                            adj_tag2class[adj_tag], generate_adjective_forms)
 
     outdir = os.path.dirname(os.path.abspath(args.output))
@@ -69,7 +74,7 @@ def main(args):
     genanki.Package([verb_deck, adj_deck]).write_to_file(args.output)
 
 def main_cli():
-
+    """Console script for generating verb and adjective decks"""
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--input')
     parser.add_argument('-o', '--output')
