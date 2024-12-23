@@ -1,7 +1,6 @@
 import os
 import copy
 import argparse
-from importlib import resources as impresources
 
 import anki.collection
 import genanki
@@ -21,7 +20,8 @@ def generate_notes(model, deck, note, pos_class, generation_func):
         combo_list = ADJECTIVE_COMBOS
     base_fields.extend(['']*len(combo_list))
     if isinstance(pos_class, VerbClass) and expression[-1] in godan_stem_mapping.keys() or \
-        isinstance(pos_class, AdjectiveClass) and (expression.endswith('い') or expression.endswith('な')):
+        isinstance(pos_class, AdjectiveClass) and \
+            (expression.endswith('い') or expression.endswith('な')):
 
         note_fields = copy.deepcopy(base_fields)
         known_forms = generation_func(reading, pos_class)
@@ -45,7 +45,7 @@ def main(args):
 
     verb_model = get_model(args.verb_model_id, args.verb_model_name, model_type=ModelType.VERB)
     adj_model = get_model(args.adj_model_id, args.adj_model_name, model_type=ModelType.ADJECTIVE)
-    
+
     verb_deck = genanki.Deck(args.verb_deck_id, args.verb_deck_name)
     adj_deck = genanki.Deck(args.adj_deck_id, args.adj_deck_name)
 
@@ -53,13 +53,15 @@ def main(args):
         verb_ids = deck.find_notes(f"tag:{verb_tag}")
         for note_id in verb_ids:
             note = deck.get_note(note_id)
-            generate_notes(verb_model, verb_deck, note, verb_tag2class[verb_tag], generate_verb_forms)
+            generate_notes(verb_model, verb_deck, note,
+                           verb_tag2class[verb_tag], generate_verb_forms)
 
     for adj_tag in [args.i_adj, args.na_adj]:
         adj_ids = deck.find_notes(f"tag:{adj_tag}")
         for note_id in adj_ids:
             note = deck.get_note(note_id)
-            generate_notes(adj_model, adj_deck, note, adj_tag2class[adj_tag], generate_adjective_forms)
+            generate_notes(adj_model, adj_deck, note,
+                           adj_tag2class[adj_tag], generate_adjective_forms)
 
     outdir = os.path.dirname(os.path.abspath(args.output))
     if not os.path.isdir(outdir):
@@ -73,13 +75,17 @@ def main_cli():
     parser.add_argument('-o', '--output')
 
     parser.add_argument('--verb-model-id', dest='verb_model_id', default=1942314097)
-    parser.add_argument('--verb-model-name', dest='verb_model_name', default='Japanese Verb Conjugations (Recognition)')
+    parser.add_argument('--verb-model-name', dest='verb_model_name',
+                        default='Japanese Verb Conjugations (Recognition)')
     parser.add_argument('--adj-model-id', dest='adj_model_id', default=1942314098)
-    parser.add_argument('--adj-model-name', dest='adj_model_name', default='Japanese Adjective Conjugations (Recognition)')
+    parser.add_argument('--adj-model-name', dest='adj_model_name',
+                        default='Japanese Adjective Conjugations (Recognition)')
     parser.add_argument('--verb-deck-id', dest='verb_deck_id', default=1632732671)
-    parser.add_argument('--verb-deck-name', dest='verb_deck_name', default="Japanese Verb Conjugations")
+    parser.add_argument('--verb-deck-name', dest='verb_deck_name',
+                        default="Japanese Verb Conjugations")
     parser.add_argument('--adj-deck-id', dest='adj_deck_id', default=1632732681)
-    parser.add_argument('--adj-deck-name', dest='adj_deck_name', default="Japanese Adjective Conjugations")
+    parser.add_argument('--adj-deck-name', dest='adj_deck_name',
+                        default="Japanese Adjective Conjugations")
 
     parser.add_argument('--irregular', default='irregular-verb')
     parser.add_argument('--ichidan', default='ichidan-verb')

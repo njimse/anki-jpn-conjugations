@@ -18,7 +18,8 @@ dependencies = [
 [project.optional-dependencies]
 test = [
     "pytest",
-    "js2py"
+    "js2py",
+    "pylint"
 ]
 
 [project.scripts]

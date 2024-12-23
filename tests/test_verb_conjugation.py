@@ -118,18 +118,18 @@ def test_te(dict_form, verb_class, reference):
 
 # Plain forms
 plain_nonpast_positive_data = [
-    ('来[く]る', VerbClass.IRREGULAR, '来[く]る'),
-    ('連[つ]れて 来[く]る', VerbClass.IRREGULAR, '連[つ]れて 来[く]る'),
-    ('する', VerbClass.IRREGULAR, 'する'),
-    ('行[い]く', VerbClass.GODAN, '行[い]く'),
-    ('スポーツをする', VerbClass.IRREGULAR, 'スポーツをする'),
-    ('読[よ]む', VerbClass.GODAN, '読[よ]む'),
-    ('買[か]う', VerbClass.GODAN, '買[か]う'),
-    ('話[はな]す', VerbClass.GODAN, '話[はな]す')
+    ('来[く]る', '来[く]る'),
+    ('連[つ]れて 来[く]る', '連[つ]れて 来[く]る'),
+    ('する', 'する'),
+    ('行[い]く', '行[い]く'),
+    ('スポーツをする', 'スポーツをする'),
+    ('読[よ]む', '読[よ]む'),
+    ('買[か]う', '買[か]う'),
+    ('話[はな]す', '話[はな]す')
 ]
-@pytest.mark.parametrize("dict_form, verb_class, reference", plain_nonpast_positive_data)
-def test_plain_nonpast_positive(dict_form, verb_class, reference):
-    result = plain_nonpast_positive(dict_form, verb_class)
+@pytest.mark.parametrize("dict_form, reference", plain_nonpast_positive_data)
+def test_plain_nonpast_positive(dict_form, reference):
+    result = plain_nonpast_positive(dict_form)
     assert result == reference
 
 plain_nonpast_negative_data = [
