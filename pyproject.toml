@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools >= 61.0"]
+requires = ["setuptools==65"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -25,5 +25,7 @@ test = [
 [project.scripts]
 anki-jpn = "anki_jpn.cli:main_cli"
 
+[tool.setuptools]
+packages = ["anki_jpn"]
 [tool.setuptools.package-data]
 anki_jpn = ["*.html", "*.css", "*.js"]
