@@ -2,15 +2,16 @@
 from typing import List, Dict, Optional, Tuple, Union
 import importlib.resources
 
-import genanki
+import anki.collection
+import anki.models
 
 import anki_jpn.resources as anki_jpn_resources
-from anki_jpn.enums import Form, Formality, ModelType, VERB_COMBOS, ADJECTIVE_COMBOS
+from anki_jpn.enums import Form, Formality, VERB_COMBOS, ADJECTIVE_COMBOS
 
 def _resolve_placeholders(template: str, formality: Optional[Formality] = None,
                           form: Optional[Form] = None, field_name: Optional[str] = None) -> str:
     """Resolve the placeholders in the card template definitions
-    
+
     Parameters
     ----------
     template : str
@@ -21,7 +22,7 @@ def _resolve_placeholders(template: str, formality: Optional[Formality] = None,
         Form name for the conjugation relevant to the card
     field_name : str | None
         Name of the Note/Model field containing the conjugation relevant to the card
-    
+
     Returns
     -------
     str
@@ -37,55 +38,91 @@ def _resolve_placeholders(template: str, formality: Optional[Formality] = None,
         result = result.replace('FIELD_NAME', field_name)
     return result
 
-def get_model(model_id: int, model_name: str, model_type: ModelType = ModelType.VERB)\
-    -> genanki.Model:
-    """Get a model for tracking conjugations
-    
+def add_verb_conjugation_model(col: anki.collection.Collection) -> anki.models.NotetypeDict:
+    """Add the Note type for a Japanese Verb Conjugation
+
     Parameters
     ----------
-    model_id : int
-        Integer ID for the model to be created
-    model_name : str
-        Name for the model to be created
-    model_type : ModelType
-        Type of the model to be created
-    
+    col : anki.collection.Collection
+        Collection to which the Note type should be added
+
     Returns
     -------
-    genanki.Model
-        Model object for defining a Note type
+    anki.models.NotetypeDict
+        Dictionary representing information for the Japanese Verb Conjugation Note type
     """
 
-    card_css = importlib.resources.read_text(anki_jpn_resources, 'style.css')
-    front_template = importlib.resources.read_text(anki_jpn_resources, 'front_template.html')
-    back_template = importlib.resources.read_text(anki_jpn_resources, 'back_template.html')
-    insert_ending_spans_text = importlib.resources.read_text(anki_jpn_resources,
-                                                             'insert_ending_spans.js')
-    back_template = back_template.replace('INSERT_ENDING_SPANS_FUNCTION', insert_ending_spans_text)
-    new_model = genanki.Model(model_id, model_name, css=card_css)
-    base_fields = [
-        {"name": "expression"},
-        {"name": "meaning"},
-        {"name": "reading"}
-    ]
-    if model_type == ModelType.VERB:
-        combos = VERB_COMBOS
-    else:
-        combos = ADJECTIVE_COMBOS
-    _set_fields_and_templates(new_model, base_fields, front_template, back_template, combos)
+    return _get_model(col, "Japanese Verb Conjugation", VERB_COMBOS)
 
-    return new_model
+def add_adjective_conjugation_model(col: anki.collection.Collection) -> anki.models.NotetypeDict:
+    """Add the Note type for a Japanese Adjective Conjugation
 
-def _set_fields_and_templates(
-        model: genanki.Model, base_fields: List[Dict[str, str]], front_template: str,
-        back_template: str, combos: List[Tuple[Union[Formality,None], Form]]) -> None:
-    """Configure the fields and templates for a Model
-    
     Parameters
     ----------
-    model : genanki.Model
-        Model to be updated with fields and card templates. NOTE: this method modifies
-        the model in-place!
+    col : anki.collection.Collection
+        Collection to which the Note type should be added
+
+    Returns
+    -------
+    anki.models.NotetypeDict
+        Dictionary representing information for the Japanese Adjective Conjugation Note type
+    """
+
+    return _get_model(col, "Japanese Adjective Conjugation", ADJECTIVE_COMBOS)
+
+def _get_model(col: anki.collection.Collection, model_name: str,
+               combos: List[Tuple[Formality, Form]]) -> anki.models.NotetypeDict:
+    """Get a model for tracking conjugations
+
+    Parameters
+    ----------
+    col : anki.collection.Collection
+        Anki Collection
+    model_name : str
+        Name for the model to be created
+    combos : List[Tuple[Formality, Form]]
+        List of combos, used to define which conjugation fields should be added
+
+    Returns
+    -------
+    anki.models.NotetypeDict
+        Dictionary representing information for the new Note type
+    """
+
+    card_css = importlib.resources.read_text(anki_jpn_resources, 'style.css') # pylint: disable=W4902
+    front_template = importlib.resources.read_text(anki_jpn_resources, 'front_template.html') # pylint: disable=W4902
+    back_template = importlib.resources.read_text(anki_jpn_resources, 'back_template.html') # pylint: disable=W4902
+    insert_ending_spans_text = importlib.resources.read_text(anki_jpn_resources,  # pylint: disable=W4902
+                                                             'insert_ending_spans.js')
+    back_template = back_template.replace('INSERT_ENDING_SPANS_FUNCTION', insert_ending_spans_text)
+
+    new_model = col.models.new(model_name)
+    new_model['css'] = card_css
+    base_fields = [
+        "Expression",
+        "Meaning",
+        "Reading"
+    ]
+    all_fields, all_templates = get_fields_and_templates(base_fields, front_template,
+                                                         back_template, combos)
+    for field_name in all_fields:
+        field_dict = col.models.new_field(field_name)
+        col.models.add_field(new_model, field_dict)
+    for template in all_templates:
+        template_dict = col.models.new_template(template['name'])
+        template_dict['qfmt'] = template['qfmt']
+        template_dict['afmt'] = template['afmt']
+        col.models.add_template(new_model, template_dict)
+    return new_model
+
+def get_fields_and_templates(
+        base_fields: List[Dict[str, str]], front_template: str,
+        back_template: str, combos: List[Tuple[Union[Formality,None], Form]])\
+             -> Tuple[List[str], List[Dict[str, str]]]:
+    """Configure the fields and templates for a Model
+
+    Parameters
+    ----------
     base_fields : List[Dict[str, str]]
         Base list of fields which will be extended with more fields appropriate to the
         model type.
@@ -95,6 +132,11 @@ def _set_fields_and_templates(
         Card template for the back of a card (including placeholders)
     combos : List[Tuple[Formality|None, Form]]
         List of Formality+Form combinations for which fields and cards should be generated
+
+    Returns
+    -------
+    Tuple[List[str], List[Dict[str, str]]]
+        Returns a tuple of the list of field names and a list of templates for cards
     """
 
     fields = []
@@ -106,7 +148,7 @@ def _set_fields_and_templates(
             formatted_name = form.value.title()
         else:
             formatted_name = f"{formality.value} {form.value}".title()
-        fields.append({"name": formatted_name})
+        fields.append(formatted_name)
         templates.append(
             {
                 "name": formatted_name,
@@ -114,5 +156,4 @@ def _set_fields_and_templates(
                 "afmt": _resolve_placeholders(back_template, field_name=formatted_name)
             }
         )
-    model.set_fields(fields)
-    model.set_templates(templates)
+    return fields, templates

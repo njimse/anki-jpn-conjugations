@@ -41,6 +41,7 @@ godan_te_mapping = {
     "ぐ": "いで",
     "す": "して",
 }
+GODAN_STEM_ENDINGS = set(godan_stem_mapping.keys())
 
 def generate_verb_forms(dictionary_form: str, verb_class: VerbClass)\
     -> List[Tuple[str, Form, Optional[Formality]]]:
