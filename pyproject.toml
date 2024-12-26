@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools==65"]
+requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -9,10 +9,9 @@ authors = [
 name = "anki-jpn"
 description = "This is a set of tooling to allow for generating anki cards for learning/practicing Japanese"
 version = "0.1.0"
-requires-python = "==3.8.*"
+requires-python = ">=3.8,<3.10"
 readme = "README.md"
 dependencies = [
-    "genanki==0.13.1",
     "anki"
 ]
 [project.optional-dependencies]

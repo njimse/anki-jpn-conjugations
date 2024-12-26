@@ -2,8 +2,7 @@
 from typing import List, Dict, Optional, Tuple, Union
 import importlib.resources
 
-import genanki
-
+import anki.collection
 import anki_jpn.resources as anki_jpn_resources
 from anki_jpn.enums import Form, Formality, ModelType, VERB_COMBOS, ADJECTIVE_COMBOS
 
@@ -37,14 +36,20 @@ def _resolve_placeholders(template: str, formality: Optional[Formality] = None,
         result = result.replace('FIELD_NAME', field_name)
     return result
 
-def get_model(model_id: int, model_name: str, model_type: ModelType = ModelType.VERB)\
-    -> genanki.Model:
+def add_verb_conjugation_model(col: anki.collection.Collection):
+    return _get_model(col, "Japanese Verb Conjugation", VERB_COMBOS)
+
+def add_adjective_conjugation_model(col: anki.collection.Collection):
+    return _get_model(col, "Japanese Adjective Conjugation", ADJECTIVE_COMBOS)
+
+def _get_model(col: anki.collection.Collection, model_name: str, combos: List[Tuple[Formality, Form]])\
+    -> int:
     """Get a model for tracking conjugations
     
     Parameters
     ----------
-    model_id : int
-        Integer ID for the model to be created
+    col : anki.collection.Collection
+        Anki Collection
     model_name : str
         Name for the model to be created
     model_type : ModelType
@@ -52,8 +57,8 @@ def get_model(model_id: int, model_name: str, model_type: ModelType = ModelType.
     
     Returns
     -------
-    genanki.Model
-        Model object for defining a Note type
+    int
+        model ID
     """
 
     card_css = importlib.resources.read_text(anki_jpn_resources, 'style.css')
@@ -62,23 +67,28 @@ def get_model(model_id: int, model_name: str, model_type: ModelType = ModelType.
     insert_ending_spans_text = importlib.resources.read_text(anki_jpn_resources,
                                                              'insert_ending_spans.js')
     back_template = back_template.replace('INSERT_ENDING_SPANS_FUNCTION', insert_ending_spans_text)
-    new_model = genanki.Model(model_id, model_name, css=card_css)
+    
+    new_model = col.models.new(model_name)
+    new_model['css'] = card_css
     base_fields = [
-        {"name": "expression"},
-        {"name": "meaning"},
-        {"name": "reading"}
+        "Expression",
+        "Meaning",
+        "Reading"
     ]
-    if model_type == ModelType.VERB:
-        combos = VERB_COMBOS
-    else:
-        combos = ADJECTIVE_COMBOS
-    _set_fields_and_templates(new_model, base_fields, front_template, back_template, combos)
-
+    all_fields, all_templates = get_fields_and_templates(base_fields, front_template, back_template, combos)
+    for field_name in all_fields:
+        field_dict = col.models.new_field(field_name)
+        col.models.add_field(new_model, field_dict)
+    for template in all_templates:
+        template_dict = col.models.new_template(template['name'])
+        template_dict['qfmt'] = template['qfmt']
+        template_dict['afmt'] = template['afmt']
+        col.models.add_template(new_model, template_dict)
     return new_model
 
-def _set_fields_and_templates(
-        model: genanki.Model, base_fields: List[Dict[str, str]], front_template: str,
-        back_template: str, combos: List[Tuple[Union[Formality,None], Form]]) -> None:
+def get_fields_and_templates(
+        base_fields: List[Dict[str, str]], front_template: str,
+        back_template: str, combos: List[Tuple[Union[Formality,None], Form]]) -> Tuple[Dict[str, str], List[Dict[str, str]]]:
     """Configure the fields and templates for a Model
     
     Parameters
@@ -106,7 +116,7 @@ def _set_fields_and_templates(
             formatted_name = form.value.title()
         else:
             formatted_name = f"{formality.value} {form.value}".title()
-        fields.append({"name": formatted_name})
+        fields.append(formatted_name)
         templates.append(
             {
                 "name": formatted_name,
@@ -114,5 +124,4 @@ def _set_fields_and_templates(
                 "afmt": _resolve_placeholders(back_template, field_name=formatted_name)
             }
         )
-    model.set_fields(fields)
-    model.set_templates(templates)
+    return fields, templates
