@@ -1,7 +1,7 @@
 init: clean
 	python3.9 -m venv env
 	env/bin/pip install -U pip setuptools
-	env/bin/pip install -e .
+	env/bin/pip install -e .[test]
 	echo "to activate default venv:\n\tsource env/bin/activate"
 
 clean:
