@@ -8,6 +8,9 @@ import anki.models
 import anki_jpn.resources as anki_jpn_resources
 from anki_jpn.enums import Form, Formality, VERB_COMBOS, ADJECTIVE_COMBOS
 
+VERB_MODEL_NAME = "Japanese Verb Conjugation"
+ADJECTIVE_MODEL_NAME = "Japanese Adjective Conjugation"
+
 def _resolve_placeholders(template: str, formality: Optional[Formality] = None,
                           form: Optional[Form] = None, field_name: Optional[str] = None) -> str:
     """Resolve the placeholders in the card template definitions
@@ -52,7 +55,7 @@ def add_verb_conjugation_model(col: anki.collection.Collection) -> anki.models.N
         Dictionary representing information for the Japanese Verb Conjugation Note type
     """
 
-    return _get_model(col, "Japanese Verb Conjugation", VERB_COMBOS)
+    return _get_model(col, VERB_MODEL_NAME, VERB_COMBOS)
 
 def add_adjective_conjugation_model(col: anki.collection.Collection) -> anki.models.NotetypeDict:
     """Add the Note type for a Japanese Adjective Conjugation
@@ -68,7 +71,7 @@ def add_adjective_conjugation_model(col: anki.collection.Collection) -> anki.mod
         Dictionary representing information for the Japanese Adjective Conjugation Note type
     """
 
-    return _get_model(col, "Japanese Adjective Conjugation", ADJECTIVE_COMBOS)
+    return _get_model(col, ADJECTIVE_MODEL_NAME, ADJECTIVE_COMBOS)
 
 def _get_model(col: anki.collection.Collection, model_name: str,
                combos: List[Tuple[Formality, Form]]) -> anki.models.NotetypeDict:
