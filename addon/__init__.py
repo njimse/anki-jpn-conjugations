@@ -55,7 +55,7 @@ def _adjective_update(target_deck_id, target_deck_name):
     source_deck_id, source_deck_name = select_deck("Which deck should be used as the source content?")
     i_tag = select_tag("Which tag is used for i-adjectivess?")
     na_tag = select_tag("Which tag is used for na-adjectives?")
-    i_notes = mw.col.find_notes(f'tag:{i_tag} f"deck:{source_deck_name}"')
+    i_notes = mw.col.find_notes(f'tag:{i_tag} "deck:{source_deck_name}"')
     na_notes = mw.col.find_notes(f'tag:{na_tag} "deck:{source_deck_name}"')
     model_infos = {}
     for note_id in itertools.chain(i_notes, na_notes):
@@ -74,9 +74,9 @@ def _verb_update(target_deck_id, target_deck_name):
     ichidan_tag = select_tag("Which tag is used for ichidan verbs?")
     godan_tag = select_tag("Which tag is used for godan verbs?")
     irregular_tag = select_tag("Which tag is used for irregular verbs?")
-    ichidan_notes = mw.col.find_notes(f'tag:{ichidan_tag} f"deck:{source_deck_name}"')
+    ichidan_notes = mw.col.find_notes(f'tag:{ichidan_tag} "deck:{source_deck_name}"')
     godan_notes = mw.col.find_notes(f'tag:{godan_tag} "deck:{source_deck_name}"')
-    irregular_notes = mw.col.find_notes(f'tag:{irregular_tag} f"deck:{source_deck_name}"')
+    irregular_notes = mw.col.find_notes(f'tag:{irregular_tag} "deck:{source_deck_name}"')
     model_infos = {}
     for note_id in itertools.chain(ichidan_notes, godan_notes, irregular_notes):
         note = mw.col.get_note(note_id)
