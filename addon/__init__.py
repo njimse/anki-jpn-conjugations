@@ -9,7 +9,6 @@ from aqt.utils import showInfo, qconnect, getText, chooseList
 from aqt.qt import *
 
 from anki.decks import DeckManager
-from anki.models import ModelManager
 from anki.tags import TagManager
 import anki.stdmodels
 
@@ -88,17 +87,6 @@ def _verb_update(target_deck_id, target_deck_name):
                 'example': note
             }
     get_field_mapping(model_infos)
-
-#     for model_id, model_details in model_infos.items():
-#           exp_idx = model_details['expression_index']
-#           mean_idx = model_details['meaning_index']
-#           read_idx = model_details['reading_index']
-#           s = f"""Note Type: {model_details['name']}
-#   Expression: {model_details['fields'][exp_idx]} ({model_details['example'].fields[exp_idx]})
-#   Meaning: {model_details['fields'][mean_idx]} ({model_details['example'].fields[mean_idx]})
-#   Reading: {model_details['fields'][read_idx]} ({model_details['example'].fields[read_idx]})
-#   """
-#           showInfo(s)
 
 def create_verb_deck():
     deck_id, deck_name = create_deck(deck_name[0])

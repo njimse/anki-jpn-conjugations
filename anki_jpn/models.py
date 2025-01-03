@@ -11,6 +11,13 @@ from anki_jpn.enums import Form, Formality, VERB_COMBOS, ADJECTIVE_COMBOS
 VERB_MODEL_NAME = "Japanese Verb Conjugation"
 ADJECTIVE_MODEL_NAME = "Japanese Adjective Conjugation"
 
+def combo_to_field_name(form: Form, formality: Union[Formality, None]) -> str:
+    if formality is None:
+        formatted_name = form.value.title()
+    else:
+        formatted_name = f"{formality.value} {form.value}".title()
+    return formatted_name
+
 def _resolve_placeholders(template: str, formality: Optional[Formality] = None,
                           form: Optional[Form] = None, field_name: Optional[str] = None) -> str:
     """Resolve the placeholders in the card template definitions
@@ -147,10 +154,7 @@ def get_fields_and_templates(
     templates = []
 
     for formality, form in combos:
-        if formality is None:
-            formatted_name = form.value.title()
-        else:
-            formatted_name = f"{formality.value} {form.value}".title()
+        formatted_name = combo_to_field_name(form, formality)
         fields.append(formatted_name)
         templates.append(
             {

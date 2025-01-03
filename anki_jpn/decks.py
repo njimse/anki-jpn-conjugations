@@ -2,38 +2,43 @@ import anki.notes
 from typing import List, Tuple, Optional
 
 from anki_jpn.enums import Form, Formality
+from anki_jpn.models import combo_to_field_name
 
 class DeckUpdater:
 
     def __init__(self, col, deck_id, model, combo_list, field_map):
         self._col = col
         self._deck_id = deck_id
+        self._deck_name = self._col.decks.get(did=self._deck_id)['name']
         self._model = model
+        self._model_field_map = self._col.models.field_map(self._model)
         self._combo_list = combo_list
-        self._field_map = field_map
+        self._source_field_map = field_map
 
     def add_note_to_deck(self, source_note, conjugations):
-        new_note = anki.notes.Note(self._col, self._model)
-        self._rollover_note(source_note, new_note)
-        self._expand_note(new_note, conjugations)
-        self._col.add_note(new_note, self._deck_id)
+        expression = source_note.fields[self._source_field_map['expression']]
+        meaning = source_note.fields[self._source_field_map['meaning']]
+        reading = source_note.fields[self._source_field_map['reading']]
 
-    def _rollover_note(self, old_note: anki.notes.Note, new_note: anki.notes.Note) -> None:
-        """Copy relevant fields from an old note into a new note
+        query = f'"Expression:{expression}" "Meaning:{meaning}" "Reading:{reading}" "deck:{self._deck_name}"'
+        existing_notes = self._col.find_notes(query)
+        if existing_notes:
+            note = self._col.get_note(existing_notes[0])
+        else:
+            note = anki.notes.Note(self._col, self._model)
+            note.fields[self._model_field_map['Expression'][0]] = expression
+            note.fields[self._model_field_map['Meaning'][0]] = meaning
+            note.fields[self._model_field_map['Reading'][0]] = reading
 
-        Parameters
-        ----------
-        old_note : anki.notes.Note
-            Old note from which information will be copied
-        new_note : anki.notes.Note
-            New note where information will be added
-        """
+        for t in source_note.tags:
+            note.add_tag(t)
 
-        new_note.fields = [
-            old_note.fields[self._field_map['expression']],
-            old_note.fields[self._field_map['meaning']],
-            old_note.fields[self._field_map['reading']]
-        ]
+        self._expand_note(note, conjugations)
+        
+        if existing_notes:
+            self._col.update_note(note)
+        else:
+            self._col.add_note(note, self._deck_id)
 
     def _expand_note(self, note: anki.notes.Note,
                     forms: List[Tuple[str, Optional[Formality], Form]]) -> None:
@@ -43,18 +48,12 @@ class DeckUpdater:
         ----------
         note : anki.notes.Note
             Note to be expanded with conjugations
-        combo_list : List[Tuple[Optional[Formality], Form]]
-            List of combos. The expectation is that the combo_list follows the same order as the fields
-            that are expected for the target Note type
         forms : List[Tuple[str, Optional[Formality], Form]]
             List of conjugations and their corresponding formality and form information.
         """
 
-        note_fields = ['']*len(self._combo_list)
-
         for conjugation, form, formality in forms:
-            note_fields[self._combo_list.index((formality, form))] = conjugation
-
-        note.fields.extend(note_fields)
-        for t in note.tags:
-            note.add_tag(t)
+            field_name = combo_to_field_name(form, formality)
+            if field_name in self._model_field_map:
+                field_index = self._model_field_map[field_name][0]
+                note.fields[field_index] = conjugation
