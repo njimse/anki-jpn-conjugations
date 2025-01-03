@@ -4,7 +4,7 @@ import pytest
 import js2py
 import anki_jpn.resources
 
-insert_ending_spans_text = importlib.resources.read_text(anki_jpn.resources,
+insert_ending_spans_text = importlib.resources.read_text(anki_jpn.resources, # pylint: disable=W4902
                                                          'insert_ending_spans.js')
 insert_ending_spans = js2py.eval_js(insert_ending_spans_text)
 insert_ending_spans_data = [

@@ -9,7 +9,6 @@ from aqt.utils import showInfo, qconnect, getText, chooseList
 from aqt.qt import *
 
 from anki.decks import DeckManager
-from anki.models import ModelManager
 from anki.tags import TagManager
 import anki.stdmodels
 
@@ -55,7 +54,7 @@ def _adjective_update(target_deck_id, target_deck_name):
     source_deck_id, source_deck_name = select_deck("Which deck should be used as the source content?")
     i_tag = select_tag("Which tag is used for i-adjectivess?")
     na_tag = select_tag("Which tag is used for na-adjectives?")
-    i_notes = mw.col.find_notes(f'tag:{i_tag} f"deck:{source_deck_name}"')
+    i_notes = mw.col.find_notes(f'tag:{i_tag} "deck:{source_deck_name}"')
     na_notes = mw.col.find_notes(f'tag:{na_tag} "deck:{source_deck_name}"')
     model_infos = {}
     for note_id in itertools.chain(i_notes, na_notes):
@@ -74,9 +73,9 @@ def _verb_update(target_deck_id, target_deck_name):
     ichidan_tag = select_tag("Which tag is used for ichidan verbs?")
     godan_tag = select_tag("Which tag is used for godan verbs?")
     irregular_tag = select_tag("Which tag is used for irregular verbs?")
-    ichidan_notes = mw.col.find_notes(f'tag:{ichidan_tag} f"deck:{source_deck_name}"')
+    ichidan_notes = mw.col.find_notes(f'tag:{ichidan_tag} "deck:{source_deck_name}"')
     godan_notes = mw.col.find_notes(f'tag:{godan_tag} "deck:{source_deck_name}"')
-    irregular_notes = mw.col.find_notes(f'tag:{irregular_tag} f"deck:{source_deck_name}"')
+    irregular_notes = mw.col.find_notes(f'tag:{irregular_tag} "deck:{source_deck_name}"')
     model_infos = {}
     for note_id in itertools.chain(ichidan_notes, godan_notes, irregular_notes):
         note = mw.col.get_note(note_id)
@@ -88,17 +87,6 @@ def _verb_update(target_deck_id, target_deck_name):
                 'example': note
             }
     get_field_mapping(model_infos)
-
-#     for model_id, model_details in model_infos.items():
-#           exp_idx = model_details['expression_index']
-#           mean_idx = model_details['meaning_index']
-#           read_idx = model_details['reading_index']
-#           s = f"""Note Type: {model_details['name']}
-#   Expression: {model_details['fields'][exp_idx]} ({model_details['example'].fields[exp_idx]})
-#   Meaning: {model_details['fields'][mean_idx]} ({model_details['example'].fields[mean_idx]})
-#   Reading: {model_details['fields'][read_idx]} ({model_details['example'].fields[read_idx]})
-#   """
-#           showInfo(s)
 
 def create_verb_deck():
     deck_id, deck_name = create_deck(deck_name[0])
