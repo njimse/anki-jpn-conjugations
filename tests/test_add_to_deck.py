@@ -15,7 +15,7 @@ SOURCE_DECK = 'source'
 
 @pytest.fixture(name="anki_col")
 def fixture_anki_col():
-    fd, fn = tempfile.mkstemp()
+    fd, fn = tempfile.mkstemp(suffix=".anki2")
     os.close(fd)
     col = anki.collection.Collection(fn)
     col.decks.add_normal_deck_with_name(SOURCE_DECK)
