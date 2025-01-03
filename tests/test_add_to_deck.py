@@ -8,7 +8,7 @@ import anki.collection
 from anki_jpn.verbs import generate_verb_forms, VerbClass
 from anki_jpn.enums import VERB_COMBOS
 from anki_jpn.decks import DeckUpdater
-from anki_jpn.models import add_verb_conjugation_model, add_adjective_conjugation_model, ADJECTIVE_MODEL_NAME, VERB_MODEL_NAME
+from anki_jpn.models import add_verb_conjugation_model, VERB_MODEL_NAME
 
 TARGET_DECK = 'target'
 SOURCE_DECK = 'source'
