@@ -12,6 +12,15 @@ VERB_MODEL_NAME = "Japanese Verb Conjugation"
 ADJECTIVE_MODEL_NAME = "Japanese Adjective Conjugation"
 
 def combo_to_field_name(form: Form, formality: Union[Formality, None]) -> str:
+    """Using the form and formality, generate a formatted name suitable for labeling a field
+
+    Parameters
+    ----------
+    form : Form
+        Form name for the conjugation
+    formality : Formality
+        Formality level of the conjugation
+    """
     if formality is None:
         formatted_name = form.value.title()
     else:
