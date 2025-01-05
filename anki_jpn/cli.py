@@ -10,10 +10,13 @@ import anki.stdmodels
 import anki.notes
 import anki.exporting
 
-from anki_jpn.enums import Formality, Form, VerbClass, AdjectiveClass, VERB_COMBOS, ADJECTIVE_COMBOS
+from anki_jpn.enums import Formality, Form, VerbClass, AdjectiveClass
 from anki_jpn.verbs import generate_verb_forms, GODAN_STEM_ENDINGS
 from anki_jpn.adjectives import generate_adjective_forms
-from anki_jpn.models import add_adjective_conjugation_model, add_verb_conjugation_model
+from anki_jpn.models import (
+    add_or_update_verb_model, add_or_update_adjective_model,
+    VERB_COMBOS, ADJECTIVE_COMBOS
+)
 
 
 
@@ -125,11 +128,10 @@ def main(args): # pylint: disable=R0914
     new_collection_file = os.path.join(temp_dir_name, "collection.anki2")
 
     new_col = anki.collection.Collection(new_collection_file)
-    verb_model = add_verb_conjugation_model(new_col)
-    new_col.models.add(verb_model)
-    adj_model = add_adjective_conjugation_model(new_col)
-    new_col.models.add(adj_model)
-
+    add_or_update_verb_model(new_col.models, "Verb Conjugations")
+    add_or_update_adjective_model(new_col.models, "Adjective Conjugations")
+    verb_model = new_col.models.by_name("Verb Conjugations")
+    adj_model = new_col.models.by_name("Adjective Conjugations")
     verb_deck_id = new_col.decks.id(args.verb_deck_name, create=True)
     adj_deck_id = new_col.decks.id(args.adj_deck_name, create=True)
 

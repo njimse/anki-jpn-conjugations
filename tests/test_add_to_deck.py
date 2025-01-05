@@ -8,10 +8,11 @@ import pytest
 import anki.collection
 from anki_jpn.verbs import generate_verb_forms, VerbClass
 from anki_jpn.decks import DeckUpdater
-from anki_jpn.models import combo_to_field_name, add_verb_conjugation_model, VERB_MODEL_NAME
+from anki_jpn.models import combo_to_field_name, add_or_update_verb_model
 
 TARGET_DECK = 'target'
 SOURCE_DECK = 'source'
+VERB_MODEL_NAME = 'verb model'
 
 @pytest.fixture(name="anki_col")
 def fixture_anki_col():
@@ -22,8 +23,7 @@ def fixture_anki_col():
     col = anki.collection.Collection(fn)
     col.decks.add_normal_deck_with_name(SOURCE_DECK)
     col.decks.add_normal_deck_with_name(TARGET_DECK)
-    model = add_verb_conjugation_model(col)
-    col.models.add(model)
+    add_or_update_verb_model(col.models, VERB_MODEL_NAME)
     yield col
     col.close()
     os.unlink(fn)
@@ -42,8 +42,7 @@ def fixture_verb_model(anki_col):
 @pytest.fixture(name="deck_updater")
 def fixture_deck_updater(anki_col, target_deck_id, verb_model):
     """Fixture for getting the DeckUpdater to be tested"""
-    updater = DeckUpdater(anki_col, target_deck_id, verb_model,
-                          {'expression': 4, 'meaning': 1, 'reading': 2})
+    updater = DeckUpdater(anki_col, target_deck_id, verb_model)
     return updater
 
 class MockNote: # pylint: disable=R0903
@@ -62,8 +61,9 @@ def _compose_ref_field_values(field_map, expression, meaning, reading, conjugati
 
     for conj, form, formality in conjugations:
         field_name = combo_to_field_name(form, formality)
-        field_index = field_map[field_name][0]
-        ref_values[field_index] = conj
+        if field_name in field_map:
+            field_index = field_map[field_name][0]
+            ref_values[field_index] = conj
 
     return ref_values
 
@@ -72,7 +72,8 @@ def test_add_new_note_to_deck(anki_col, verb_model, deck_updater):
     base_note = MockNote('食べる', 'to eat', '食[た]べる')
     conjugations = generate_verb_forms(base_note.fields[2], VerbClass.ICHIDAN)
     query = f'"Expression:食べる" "Meaning:to eat" "Reading:食[た]べる" "deck:{TARGET_DECK}"'
-    deck_updater.add_note_to_deck(base_note, conjugations)
+    deck_updater.add_note_to_deck(
+        base_note, {'expression_index': 4, 'meaning_index': 1, 'reading_index': 2}, conjugations)
 
     result_note_ids = anki_col.find_notes(query)
     assert len(result_note_ids) == 1
@@ -93,7 +94,9 @@ def test_update_note_in_deck(anki_col, verb_model, deck_updater):
     query = f'"Expression:食べる" "Meaning:to eat" "Reading:食[た]べる" "deck:{TARGET_DECK}"'
 
     # First, add the note using a limited set of conjugations
-    deck_updater.add_note_to_deck(base_note, limited_conjugations)
+    deck_updater.add_note_to_deck(
+        base_note, {'expression_index': 4, 'meaning_index': 1, 'reading_index': 2},
+        limited_conjugations)
 
     initial_result_note_ids = anki_col.find_notes(query)
     assert len(initial_result_note_ids) == 1
@@ -104,7 +107,9 @@ def test_update_note_in_deck(anki_col, verb_model, deck_updater):
         assert note.fields[index] == ref_value
 
     # Now add the same word but with the full (and correct) set of conjugations
-    deck_updater.add_note_to_deck(base_note, full_conjugations)
+    deck_updater.add_note_to_deck(
+        base_note, {'expression_index': 4, 'meaning_index': 1, 'reading_index': 2},
+        full_conjugations)
     update_result_note_ids = anki_col.find_notes(query)
     # we should still only get a single result
     assert len(update_result_note_ids) == 1
