@@ -10,20 +10,23 @@ from aqt.qt import *
 
 from anki.decks import DeckManager
 from anki.tags import TagManager
-import anki.stdmodels
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from anki_jpn.models import (
     VERB_MODEL_NAME, ADJECTIVE_MODEL_NAME,
-    add_adjective_conjugation_model, add_verb_conjugation_model
-) 
+    add_or_update_verb_model
+)
+from anki_jpn.enums import VerbClass, AdjectiveClass
+from anki_jpn.verbs import generate_verb_forms
+from anki_jpn.adjectives import generate_adjective_forms
+from anki_jpn.decks import DeckUpdater
 
 def create_deck():
     deck_name = getText("What would you like to name the new deck?")
     if deck_name[0]:
         dm = DeckManager(mw.col)
-        return dm.add_normal_deck_with_name(deck_name[0]), deck_name[0]
+        return dm.add_normal_deck_with_name(deck_name[0]).id, deck_name[0]
 
 def select_deck(msg):
     dm = DeckManager(mw.col)
@@ -67,6 +70,17 @@ def _adjective_update(target_deck_id, target_deck_name):
                 'example': note
             }
     get_field_mapping(model_infos)
+    add_or_update_verb_model(mw.col.models, ADJECTIVE_MODEL_NAME)
+    dest_model = mw.col.models.by_name(ADJECTIVE_MODEL_NAME)
+    deck_updater = DeckUpdater(mw.col, target_deck_id, dest_model)
+    for verb_type, note_id_list in [(AdjectiveClass.I, i_notes), (AdjectiveClass.NA, na_notes)]:
+        for note_id in note_id_list:
+            note = mw.col.get_note(note_id)
+            m_info = model_infos[note.mid]
+            note_reading = note.fields[m_info['reading_index']].split('<')[0].strip()
+            conjugations = generate_verb_forms(note_reading, verb_type)
+            deck_updater.add_note_to_deck(note, m_info, conjugations)
+
 
 def _verb_update(target_deck_id, target_deck_name):
     source_deck_id, source_deck_name = select_deck("Which deck should be used as the source content?")
@@ -87,13 +101,24 @@ def _verb_update(target_deck_id, target_deck_name):
                 'example': note
             }
     get_field_mapping(model_infos)
+    add_or_update_verb_model(mw.col.models, VERB_MODEL_NAME)
+    dest_model = mw.col.models.by_name(VERB_MODEL_NAME)
+    deck_updater = DeckUpdater(mw.col, target_deck_id, dest_model)
+    for verb_type, note_id_list in [(VerbClass.ICHIDAN, ichidan_notes), (VerbClass.GODAN, godan_notes), (VerbClass.IRREGULAR, irregular_notes)]:
+        for note_id in note_id_list:
+            note = mw.col.get_note(note_id)
+            m_info = model_infos[note.mid]
+            note_reading = note.fields[m_info['reading_index']].split('<')[0].strip()
+            conjugations = generate_verb_forms(note_reading, verb_type)
+            deck_updater.add_note_to_deck(note, m_info, conjugations)
+
 
 def create_verb_deck():
-    deck_id, deck_name = create_deck(deck_name[0])
+    deck_id, deck_name = create_deck()
     _verb_update(deck_id, deck_name)
 
 def create_adjective_deck():
-    deck_id, deck_name = create_deck(deck_name[0])
+    deck_id, deck_name = create_deck()
     _adjective_update(deck_id, deck_name)
     
 def update_verb_deck():
@@ -119,7 +144,3 @@ update_adjective_deck_action.triggered.connect(update_adjective_deck)
 
 # Add the menu button to the "Tools" menu
 mw.form.menuTools.addMenu(conj_menu)
-
-# Ensure that we have the models in our collection
-anki.stdmodels.models.append((VERB_MODEL_NAME, add_verb_conjugation_model))
-anki.stdmodels.models.append((ADJECTIVE_MODEL_NAME, add_adjective_conjugation_model))

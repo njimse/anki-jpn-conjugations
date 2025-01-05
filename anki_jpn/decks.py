@@ -23,16 +23,14 @@ class DeckUpdater: # pylint: disable=R0903
         Mapping of relevant field names to indices for the source notes
     """
 
-    def __init__(self, col: anki.collection.Collection, deck_id: int, model: NotetypeDict,
-                 field_map: Dict[str, int]):
+    def __init__(self, col: anki.collection.Collection, deck_id: int, model: NotetypeDict):
         self._col = col
         self._deck_id = deck_id
         self._deck_name = self._col.decks.get(did=self._deck_id)['name']
         self._model = model
         self._model_field_map = self._col.models.field_map(self._model)
-        self._source_field_map = field_map
 
-    def add_note_to_deck(self, source_note: anki.notes.Note,
+    def add_note_to_deck(self, source_note: anki.notes.Note, source_field_map: Dict[str, int],
                          conjugations: List[Tuple[str, Form, Optional[Formality]]]) -> None:
         """Add a note to a deck, updating an existing note if a match is found
 
@@ -44,9 +42,9 @@ class DeckUpdater: # pylint: disable=R0903
             List of conjugations and their corresponding formality and form information.
         """
 
-        expression = source_note.fields[self._source_field_map['expression']]
-        meaning = source_note.fields[self._source_field_map['meaning']]
-        reading = source_note.fields[self._source_field_map['reading']]
+        expression = source_note.fields[source_field_map['expression_index']]
+        meaning = source_note.fields[source_field_map['meaning_index']]
+        reading = source_note.fields[source_field_map['reading_index']].split('<')[0].strip()
 
         query = f'"Expression:{expression}" "Meaning:{meaning}"' + \
             f' "Reading:{reading}" "deck:{self._deck_name}"'
