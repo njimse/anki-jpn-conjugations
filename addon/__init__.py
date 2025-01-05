@@ -48,6 +48,8 @@ def customChooseList(msg, choices, startrow=0):
     """ Copy of https://github.com/ankitects/anki/blob/main/
         qt/aqt/utils.py but with a cancel button and title
         parameter added.
+
+    solution copied from https://github.com/IllDepence/anki_add_pitch_plugin/
     """
 
     parent = mw.app.activeWindow()
