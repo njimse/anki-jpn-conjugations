@@ -4,7 +4,7 @@ import itertools
 # import the main window object (mw) from aqt
 from aqt import mw
 # import the "show info" tool from utils.py
-from aqt.utils import getText, Qt
+from aqt.utils import showInfo, getText, Qt
 # import all of the Qt GUI library
 from aqt.qt import *
 
@@ -15,12 +15,15 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from anki_jpn.models import (
     VERB_MODEL_NAME, ADJECTIVE_MODEL_NAME,
-    add_or_update_verb_model
+    add_or_update_verb_model, add_or_update_adjective_model
 )
-from anki_jpn.enums import VerbClass, AdjectiveClass
+from anki_jpn.enums import VerbClass, AdjectiveClass, ModelType
 from anki_jpn.verbs import generate_verb_forms
 from anki_jpn.adjectives import generate_adjective_forms
-from anki_jpn.decks import DeckUpdater
+from anki_jpn.decks import DeckUpdater, DeckSearcher
+from anki_jpn.config import ConfigManager
+
+config = ConfigManager(mw.addonManager.getConfig(__name__))
 
 def get_qt_version():
     """ Return the version of Qt used by Anki.
@@ -110,6 +113,21 @@ def select_tag(msg):
     tag_name = all_tags[tag_choice]
     return tag_name
 
+def get_relevant_model_fields(model_name):
+    field_names = [f['name'] for f in mw.col.models.by_name(model_name)['flds']]
+    expression_index = customChooseList(f"For the '{model_name}' note type, Which field contains the expression?", field_names)
+    if expression_index is None:
+        return None, None, None
+    meaning_index = customChooseList(f"For the '{model_name}' note type, Which field contains the meaning?", field_names)
+    if meaning_index is None:
+        return None, None, None
+    reading_index = customChooseList(f"For the '{model_name}' note type, Which field contains the reading?", field_names)
+    if reading_index is None:
+        return None, None, None
+    
+    return field_names[expression_index], field_names[meaning_index], field_names[reading_index]
+
+
 def get_field_mapping(model_info):
     for model_details in model_info.values():
         example_list = [f'{field_name}: {field_example}' for field_name, field_example in zip(model_details['fields'], model_details['example'].fields)]
@@ -130,38 +148,41 @@ def _adjective_update(target_deck_id, target_deck_name):
     source_deck_id, source_deck_name = select_deck("Which deck should be used as the source content?")
     if source_deck_id is None:
         return
-    i_tag = select_tag("Which tag is used for i-adjectivess?")
-    if i_tag is None:
-        return
-    na_tag = select_tag("Which tag is used for na-adjectives?")
-    if na_tag is None:
-        return
-    i_notes = mw.col.find_notes(f'tag:{i_tag} "deck:{source_deck_name}"')
-    na_notes = mw.col.find_notes(f'tag:{na_tag} "deck:{source_deck_name}"')
-    model_infos = {}
-    for note_id in itertools.chain(i_notes, na_notes):
-        note = mw.col.get_note(note_id)
-        if note.mid not in model_infos:
-            model = mw.col.models.get(note.mid)
-            model_infos[note.mid] = {
-                'fields': [f['name'] for f in model['flds']],
-                'name': model['name'],
-                'example': note
-            }
-    get_field_mapping(model_infos)
-    for m_info in model_infos.values():
-        if any(fi not in m_info for fi in ('expression_index', 'meaning_index', 'reading_index')):
+    
+    if config.adjective_tags_empty(source_deck_name):
+        i_tag = select_tag("Which tag is used for i-adjectives?")
+        config.add_tag(source_deck_name, i_tag, AdjectiveClass.I)
+        na_tag = select_tag("Which tag is used for na-adjectives?")
+        config.add_tag(source_deck_name, na_tag, AdjectiveClass.NA)
+        general_tag = select_tag("Which tag is used for adjectives in general?")
+        config.add_tag(source_deck_name, general_tag, AdjectiveClass.GENERAL)
+
+        if config.adjective_tags_empty(source_deck_name):
+            showInfo("At least one tag must be specified for i-adjectives, na-adjectives, or general adjectives")
             return
-    add_or_update_verb_model(mw.col.models, ADJECTIVE_MODEL_NAME)
+
+        mw.addonManager.writeConfig(__name__, config.dump())
+
+    add_or_update_adjective_model(mw.col.models, ADJECTIVE_MODEL_NAME)
     dest_model = mw.col.models.by_name(ADJECTIVE_MODEL_NAME)
-    deck_updater = DeckUpdater(mw.col, target_deck_id, dest_model)
-    for verb_type, note_id_list in [(AdjectiveClass.I, i_notes), (AdjectiveClass.NA, na_notes)]:
+    deck_updater = DeckUpdater(mw.col, target_deck_id, dest_model, ModelType.ADJECTIVE, config)
+
+    deck_searcher = DeckSearcher(mw.col, source_deck_id)
+    note_ids, relevant_models = deck_searcher.find_adjectives(config)
+    
+    for model_name in relevant_models:
+        if config.model_fields_empty(model_name):
+            relevant_fields = get_relevant_model_fields(model_name)
+            if any(not f for f in relevant_fields):
+                showInfo("Expression, meaning, and reading fields must be specified for all relevant note types")
+            config.add_model_fields(model_name, *relevant_fields)
+
+    mw.addonManager.writeConfig(__name__, config.dump())
+
+    for adj_type, note_id_list in note_ids.items():
         for note_id in note_id_list:
             note = mw.col.get_note(note_id)
-            m_info = model_infos[note.mid]
-            note_reading = note.fields[m_info['reading_index']].split('<')[0].strip()
-            conjugations = generate_verb_forms(note_reading, verb_type)
-            deck_updater.add_note_to_deck(note, m_info, conjugations)
+            deck_updater.add_note_to_deck(note, adj_type)
 
 
 def _verb_update(target_deck_id, target_deck_name):
