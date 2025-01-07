@@ -193,4 +193,7 @@ class ConfigManager:
 
         if model_name is None:
             raise ValueError("Model name must be provided as a string. Found None.")
-        return self._cfg['note_types'].get(model_name, {})
+        if model_name in self._cfg['note_types']:
+            fields = self._cfg['note_types'][model_name]
+            return fields['expression'], fields['meaning'], fields['reading']
+        return None, None, None
