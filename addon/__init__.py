@@ -88,12 +88,6 @@ def customChooseList(msg, choices, startrow=0):
         return None  # can't be False b/c False == 0
     return c.currentRow()
 
-def create_deck():
-    deck_name = getText("What would you like to name the new deck?")
-    if deck_name[0]:
-        dm = DeckManager(mw.col)
-        return dm.add_normal_deck_with_name(deck_name[0]).id, deck_name[0]
-
 def select_deck(msg):
     dm = DeckManager(mw.col)
     all_decks = [d.name for d in dm.all_names_and_ids(skip_empty_default=True)]
@@ -128,23 +122,10 @@ def get_relevant_model_fields(model_name):
     return field_names[expression_index], field_names[meaning_index], field_names[reading_index]
 
 
-def get_field_mapping(model_info):
-    for model_details in model_info.values():
-        example_list = [f'{field_name}: {field_example}' for field_name, field_example in zip(model_details['fields'], model_details['example'].fields)]
-        expression_index = customChooseList(f"For the '{model_details['name']}' note type, Which field contains the expression?", example_list)
-        if expression_index is None:
-            return
-        meaning_index = customChooseList(f"For the '{model_details['name']}' note type, Which field contains the meaning?", example_list)
-        if meaning_index is None:
-            return
-        reading_index = customChooseList(f"For the '{model_details['name']}' note type, Which field contains the reading?", example_list)
-        if reading_index is None:
-            return
-        model_details["expression_index"] = expression_index
-        model_details["meaning_index"] = meaning_index
-        model_details["reading_index"] = reading_index
-
-def _adjective_update(target_deck_id, target_deck_name):
+def update_adjectives():
+    target_deck_id, target_deck_name = select_deck("Which deck would you like to update?")
+    if target_deck_id is None:
+        return
     source_deck_id, source_deck_name = select_deck("Which deck should be used as the source content?")
     if source_deck_id is None:
         return
@@ -184,81 +165,65 @@ def _adjective_update(target_deck_id, target_deck_name):
             note = mw.col.get_note(note_id)
             deck_updater.add_note_to_deck(note, adj_type)
 
+    new_notes, modified_notes = deck_updater.summary()
+    showInfo(f"Added {new_notes} new note(s)\nModified {modified_notes} note(s)")
 
-def _verb_update(target_deck_id, target_deck_name):
+def update_verbs():
+    target_deck_id, target_deck_name = select_deck("Which deck would you like to update?")
+    if target_deck_id is None:
+        return
     source_deck_id, source_deck_name = select_deck("Which deck should be used as the source content?")
     if source_deck_id is None:
         return
-    ichidan_tag = select_tag("Which tag is used for ichidan verbs?")
-    if ichidan_tag is None:
-        return
-    godan_tag = select_tag("Which tag is used for godan verbs?")
-    if godan_tag is None:
-        return
-    irregular_tag = select_tag("Which tag is used for irregular verbs?")
-    if irregular_tag is None:
-        return
-    ichidan_notes = mw.col.find_notes(f'tag:{ichidan_tag} "deck:{source_deck_name}"')
-    godan_notes = mw.col.find_notes(f'tag:{godan_tag} "deck:{source_deck_name}"')
-    irregular_notes = mw.col.find_notes(f'tag:{irregular_tag} "deck:{source_deck_name}"')
-    model_infos = {}
-    for note_id in itertools.chain(ichidan_notes, godan_notes, irregular_notes):
-        note = mw.col.get_note(note_id)
-        if note.mid not in model_infos:
-            model = mw.col.models.get(note.mid)
-            model_infos[note.mid] = {
-                'fields': [f['name'] for f in model['flds']],
-                'name': model['name'],
-                'example': note
-            }
-    get_field_mapping(model_infos)
-    for m_info in model_infos.values():
-        if any(fi not in m_info for fi in ('expression_index', 'meaning_index', 'reading_index')):
+    
+    if config.verb_tags_empty(source_deck_name):
+        ichidan_tag = select_tag("Which tag is used for ichidan verbs?")
+        config.add_tag(source_deck_name, ichidan_tag, VerbClass.ICHIDAN)
+        godan_tag = select_tag("Which tag is used for godan verbs?")
+        config.add_tag(source_deck_name, godan_tag, VerbClass.GODAN)
+        irregular_tag = select_tag("Which tag is used for irregular verbs?")
+        config.add_tag(source_deck_name, irregular_tag, VerbClass.IRREGULAR)
+        general_tag = select_tag("Which tag is used for verbs in general?")
+        config.add_tag(source_deck_name, general_tag, VerbClass.GENERAL)
+
+        if config.verb_tags_empty(source_deck_name):
+            showInfo("At least one tag must be specified for ichidan, godan, irregular, or general adjectives")
             return
+
+        mw.addonManager.writeConfig(__name__, config.dump())
+
     add_or_update_verb_model(mw.col.models, VERB_MODEL_NAME)
     dest_model = mw.col.models.by_name(VERB_MODEL_NAME)
-    deck_updater = DeckUpdater(mw.col, target_deck_id, dest_model)
-    for verb_type, note_id_list in [(VerbClass.ICHIDAN, ichidan_notes), (VerbClass.GODAN, godan_notes), (VerbClass.IRREGULAR, irregular_notes)]:
+    deck_updater = DeckUpdater(mw.col, target_deck_id, dest_model, ModelType.VERB, config)
+
+    deck_searcher = DeckSearcher(mw.col, source_deck_id)
+    note_ids, relevant_models = deck_searcher.find_verbs(config)
+
+    for model_name in relevant_models:
+        if config.model_fields_empty(model_name):
+            relevant_fields = get_relevant_model_fields(model_name)
+            if any(not f for f in relevant_fields):
+                showInfo("Expression, meaning, and reading fields must be specified for all relevant note types")
+            config.add_model_fields(model_name, *relevant_fields)
+
+    mw.addonManager.writeConfig(__name__, config.dump())
+
+    for verb_type, note_id_list in note_ids.items():
         for note_id in note_id_list:
             note = mw.col.get_note(note_id)
-            m_info = model_infos[note.mid]
-            note_reading = note.fields[m_info['reading_index']].split('<')[0].strip()
-            conjugations = generate_verb_forms(note_reading, verb_type)
-            deck_updater.add_note_to_deck(note, m_info, conjugations)
+            deck_updater.add_note_to_deck(note, verb_type)
 
-
-def create_verb_deck():
-    deck_id, deck_name = create_deck()
-    _verb_update(deck_id, deck_name)
-
-def create_adjective_deck():
-    deck_id, deck_name = create_deck()
-    _adjective_update(deck_id, deck_name)
-    
-def update_verb_deck():
-    deck_id, deck_name = select_deck("Which deck would you like to update?")
-    if deck_id is None:
-        return
-    _verb_update(deck_id, deck_name)
-
-def update_adjective_deck():
-    deck_id, deck_name = select_deck("Which deck would you like to update?")
-    if deck_id is None:
-        return
-    _adjective_update(deck_id, deck_name)
+    new_notes, modified_notes = deck_updater.summary()
+    showInfo(f"Added {new_notes} new note(s)\nModified {modified_notes} note(s)")
 
 # Create the menu items
 conj_menu = QMenu("Conjugation Decks", mw)
-create_verb_deck_action = conj_menu.addAction("Create Verb Conjugation Deck")
-create_adjective_deck_action = conj_menu.addAction("Create Adjective Conjugation Deck")
-update_verb_deck_action = conj_menu.addAction("Update Verb Conjugation Deck")
-update_adjective_deck_action = conj_menu.addAction("Update Adjective Conjugation Deck")
+update_verb_deck_action = conj_menu.addAction("Update Verb Conjugations")
+update_adjective_deck_action = conj_menu.addAction("Update Adjective Conjugations")
 
 # Add the triggers
-create_verb_deck_action.triggered.connect(create_verb_deck)
-create_adjective_deck_action.triggered.connect(create_adjective_deck)
-update_verb_deck_action.triggered.connect(update_verb_deck)
-update_adjective_deck_action.triggered.connect(update_adjective_deck)
+update_verb_deck_action.triggered.connect(update_verbs)
+update_adjective_deck_action.triggered.connect(update_adjectives)
 
 # Add the menu button to the "Tools" menu
 mw.form.menuTools.addMenu(conj_menu)

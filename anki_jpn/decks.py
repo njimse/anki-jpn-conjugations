@@ -39,7 +39,18 @@ class DeckUpdater: # pylint: disable=R0903
 
         self._new = 0
         self._modified = 0
-        self._unchanged = 0
+
+    def summary(self) -> Tuple[int, int]:
+        """Return the number of new and modified notes handled by this updater
+
+        Returns
+        -------
+        Tuple[int, int]
+            Two integers. The first integer is the number of new notes created
+            by this object. The second is the number of existing notes with
+            any changes to the fields.
+        """
+        return self._new, self._modified
 
     def add_note_to_deck(self, source_note: anki.notes.Note,
                          word_type: Union[VerbClass, AdjectiveClass]) -> None:
@@ -84,8 +95,6 @@ class DeckUpdater: # pylint: disable=R0903
         if existing_notes:
             if existing_fields != note.fields:
                 self._modified += 1
-            else:
-                self._unchanged += 1
             self._col.update_note(note)
         else:
             self._new += 1
@@ -110,17 +119,81 @@ class DeckUpdater: # pylint: disable=R0903
                 note.fields[field_index] = conjugation
 
 class DeckSearcher:
-    """Class for searching a source deck for relevant notes and models"""
+    """Class for searching a source deck for relevant notes and models
+    
+    Parameters
+    ----------
+    col : anki.collection.Collection
+        Anki collection where we will search for notes
+    deck_id : int
+        ID of the source deck to be searched for relevant notes
+    model_id : int
+        ID of the model that will be used for the conjugation cards. Notes
+        matching this model ID will *not* be returned by this object.
+    """
 
-    def __init__(self, col: anki.collection.Collection, deck_id: int):
+    def __init__(self, col: anki.collection.Collection, deck_id: int, model_id: int):
         self._col = col
         self._deck_id = deck_id
         self._deck_name = self._col.decks.get(did=self._deck_id)['name']
+        self._model_id = model_id
+        self._model_name = self._col.models.get(model_id)['name']
 
     def find_verbs(self, config: ConfigManager) -> Tuple[Dict[VerbClass, List[int]], List[str]]:
+        """Find all of the verbs in the source deck that match the specified tags
+        
+        Parameters
+        ----------
+        config : ConfigManager
+            Settings for the Addon, including which tags should be used for identifying
+            different kinds of verbs
+
+        Returns
+        -------
+        Tuple[Dict[VerbClass, List[int]], List[str]]
+            Returns two elements. The first element is a dictionary mapping verb classes to lists
+            of all notes IDs detected of that type. The second element is a list of model or note
+            type names that were seen across all of the relevant verb notes.
+        """
         results = {}
+        relevant_model_names = set()
+        notes, model_names = self.find_notes(config.get_tags(self._deck_name, VerbClass.ICHIDAN))
+        if notes:
+            results[VerbClass.ICHIDAN] = notes
+            relevant_model_names.update(model_names)
+        notes, model_names = self.find_notes(config.get_tags(self._deck_name, VerbClass.GODAN))
+        if notes:
+            results[VerbClass.GODAN] = notes
+            relevant_model_names.update(model_names)
+        notes, model_names = self.find_notes(config.get_tags(self._deck_name, VerbClass.IRREGULAR))
+        if notes:
+            results[VerbClass.IRREGULAR] = notes
+            relevant_model_names.update(model_names)
+        notes, model_names = self.find_notes(config.get_tags(self._deck_name, VerbClass.GENERAL))
+        if notes:
+            results[VerbClass.GENERAL] = notes
+            relevant_model_names.update(model_names)
+
+        return results, list(relevant_model_names)
     
-    def find_adjectives(self, config: ConfigManager) -> Tuple[Dict[AdjectiveClass, List[int]], List[str]]:
+    def find_adjectives(self, config: ConfigManager) \
+        -> Tuple[Dict[AdjectiveClass, List[int]], List[str]]:
+        """Find all of the adjectives in the source deck that match the specified tags
+        
+        Parameters
+        ----------
+        config : ConfigManager
+            Settings for the Addon, including which tags should be used for identifying
+            different kinds of adjectives
+
+        Returns
+        -------
+        Tuple[Dict[VerbClass, List[int]], List[str]]
+            Returns two elements. The first element is a dictionary mapping adjectives
+            classes to lists of all note IDs detected of that type. The second element is a
+            list of model or note type names that were seen across all of the relevant
+            adjectives notes.
+        """
         results = {}
         relevant_model_names = set()
         notes, model_names = self.find_notes(config.get_tags(self._deck_name, AdjectiveClass.I))
@@ -138,15 +211,28 @@ class DeckSearcher:
 
         return results, list(relevant_model_names)
 
-
     def find_notes(self, tags: List[str]) -> Tuple[List[int], List[str]]:
+        """Find all notes in the source deck with at least one of the specified tags
+
+        Parameters
+        ----------
+        tags : List[str]
+            Tags to be used to find relevant notes in the source deck
+
+        Returns
+        -------
+        Tuple[List[int], List[str]]
+            Two elements. The first element is a list of note IDs with at least one
+            of the specified tags. The second element is a list of model names that were
+            seen across the identified notes.
+        """
         if len(tags) == 0:
             return [], []
         elif len(tags) > 1:
             tag_query = "(" + " OR ".join(f"tag:{tag_str}" for tag_str in tags) + ")"
         else:
             tag_query = f"tag:{tags[0]}"
-        query = f'{tag_query} "deck:{self._deck_name}"'
+        query = f'{tag_query} "deck:{self._deck_name}" "-note:{self._model_name}"'
         note_ids = self._col.find_notes(query)
 
         model_ids = set()
