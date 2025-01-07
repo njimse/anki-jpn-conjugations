@@ -6,7 +6,7 @@ import anki.notes
 import anki.collection
 from anki.models import NotetypeDict
 
-from anki_jpn.enums import Form, Formality, VerbClass, AdjectiveClass, ModelType
+from anki_jpn.enums import Form, Formality, VerbClass, AdjectiveClass
 from anki_jpn.models import combo_to_field_name
 from anki_jpn.verbs import generate_verb_forms
 from anki_jpn.adjectives import generate_adjective_forms
@@ -19,26 +19,23 @@ class DeckUpdater: # pylint: disable=R0903
     ----------
     col : anki.collection.Collection
         Collection to which the target deck belongs
-    deck_id : int
+    target_deck_id : int
         ID of the deck where notes will be added/updated
     model : NotetypeDict
         Model (a.k.a. Note Type) to be used for any new cards
-    field_map : Dict[str, int]
-        Mapping of relevant field names to indices for the source notes
+    config : ConfigManager
+        Addon configurations, including which fields are relevant for source models
     """
 
     def __init__(self, col: anki.collection.Collection, deck_id: int, model: NotetypeDict,
-                 model_type: ModelType, config: ConfigManager):
+                 config: ConfigManager):
         self._col = col
-        self._deck_id = deck_id
-        self._deck_name = self._col.decks.get(did=self._deck_id)['name']
-        self._model = model
-        self._model_type = model_type
-        self._model_field_map = self._col.models.field_map(self._model)
+        self._deck = self._col.decks.get(did=deck_id)
+        self._model_id = model['id']
+        self._model_field_map = self._col.models.field_map(model)
         self._cfg = config
 
-        self._new = 0
-        self._modified = 0
+        self._changes = [0, 0]
 
     def summary(self) -> Tuple[int, int]:
         """Return the number of new and modified notes handled by this updater
@@ -50,7 +47,7 @@ class DeckUpdater: # pylint: disable=R0903
             by this object. The second is the number of existing notes with
             any changes to the fields.
         """
-        return self._new, self._modified
+        return self._changes
 
     def add_note_to_deck(self, source_note: anki.notes.Note,
                          word_type: Union[VerbClass, AdjectiveClass]) -> None:
@@ -60,24 +57,26 @@ class DeckUpdater: # pylint: disable=R0903
         ----------
         source_note: anki.notes.Note
             Source note which is being used to generate the conjugation note
+        word_type : Union[VerbClass, AdjectiveClass]
+            Indicates what kind of word the source_note is.
         """
 
         source_model = self._col.models.get(source_note.mid)
-        source_model_fields = self._col.models.field_map(source_model)
+        source_fields = self._col.models.field_map(source_model)
         relevant_fields = self._cfg.get_model_fields(source_model['name'])
 
-        expression = source_note.fields[source_model_fields[relevant_fields['expression']][0]]
-        meaning = source_note.fields[source_model_fields[relevant_fields['meaning']][0]]
-        reading = source_note.fields[source_model_fields[relevant_fields['reading']][0]].split('<')[0].strip()
+        expression = source_note.fields[source_fields[relevant_fields[0]][0]]
+        meaning = source_note.fields[source_fields[relevant_fields[1]][0]]
+        reading = source_note.fields[source_fields[relevant_fields[2]][0]].split('<')[0].strip()
 
         query = f'"Expression:{expression}" "Meaning:{meaning}"' + \
-            f' "Reading:{reading}" "deck:{self._deck_name}" mid:{self._model["id"]}'
+            f' "Reading:{reading}" "deck:{self._deck["name"]}" mid:{self._model_id}'
         existing_notes = self._col.find_notes(query)
         if existing_notes:
             note = self._col.get_note(existing_notes[0])
             existing_fields = deepcopy(note.fields)
         else:
-            note = anki.notes.Note(self._col, self._model)
+            note = anki.notes.Note(self._col, self._col.models.get(self._model_id))
             note.fields[self._model_field_map['Expression'][0]] = expression
             note.fields[self._model_field_map['Meaning'][0]] = meaning
             note.fields[self._model_field_map['Reading'][0]] = reading
@@ -85,20 +84,20 @@ class DeckUpdater: # pylint: disable=R0903
         for t in source_note.tags:
             note.add_tag(t)
 
-        if self._model_type == ModelType.ADJECTIVE:
+        if word_type in AdjectiveClass:
             conjugations = generate_adjective_forms(reading, word_type)
-        else: # ModelType.VERB
+        else: # AdjectiveClass
             conjugations = generate_verb_forms(reading, word_type)
 
         self._expand_note(note, conjugations)
 
         if existing_notes:
             if existing_fields != note.fields:
-                self._modified += 1
+                self._changes[1] += 1
             self._col.update_note(note)
         else:
-            self._new += 1
-            self._col.add_note(note, self._deck_id)
+            self._changes[0] += 1
+            self._col.add_note(note, self._deck["id"])
 
     def _expand_note(self, note: anki.notes.Note,
                     forms: List[Tuple[str, Optional[Formality], Form]]) -> None:
@@ -120,7 +119,7 @@ class DeckUpdater: # pylint: disable=R0903
 
 class DeckSearcher:
     """Class for searching a source deck for relevant notes and models
-    
+
     Parameters
     ----------
     col : anki.collection.Collection
@@ -141,7 +140,7 @@ class DeckSearcher:
 
     def find_verbs(self, config: ConfigManager) -> Tuple[Dict[VerbClass, List[int]], List[str]]:
         """Find all of the verbs in the source deck that match the specified tags
-        
+
         Parameters
         ----------
         config : ConfigManager
@@ -155,6 +154,7 @@ class DeckSearcher:
             of all notes IDs detected of that type. The second element is a list of model or note
             type names that were seen across all of the relevant verb notes.
         """
+
         results = {}
         relevant_model_names = set()
         notes, model_names = self.find_notes(config.get_tags(self._deck_name, VerbClass.ICHIDAN))
@@ -175,11 +175,11 @@ class DeckSearcher:
             relevant_model_names.update(model_names)
 
         return results, list(relevant_model_names)
-    
+
     def find_adjectives(self, config: ConfigManager) \
         -> Tuple[Dict[AdjectiveClass, List[int]], List[str]]:
         """Find all of the adjectives in the source deck that match the specified tags
-        
+
         Parameters
         ----------
         config : ConfigManager
@@ -194,6 +194,7 @@ class DeckSearcher:
             list of model or note type names that were seen across all of the relevant
             adjectives notes.
         """
+
         results = {}
         relevant_model_names = set()
         notes, model_names = self.find_notes(config.get_tags(self._deck_name, AdjectiveClass.I))
@@ -204,7 +205,8 @@ class DeckSearcher:
         if notes:
             results[AdjectiveClass.NA] = notes
             relevant_model_names.update(model_names)
-        notes, model_names = self.find_notes(config.get_tags(self._deck_name, AdjectiveClass.GENERAL))
+        notes, model_names = self.find_notes(
+            config.get_tags(self._deck_name, AdjectiveClass.GENERAL))
         if notes:
             results[AdjectiveClass.GENERAL] = notes
             relevant_model_names.update(model_names)
@@ -226,9 +228,11 @@ class DeckSearcher:
             of the specified tags. The second element is a list of model names that were
             seen across the identified notes.
         """
+
         if len(tags) == 0:
             return [], []
-        elif len(tags) > 1:
+
+        if len(tags) > 1:
             tag_query = "(" + " OR ".join(f"tag:{tag_str}" for tag_str in tags) + ")"
         else:
             tag_query = f"tag:{tags[0]}"
