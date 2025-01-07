@@ -1,6 +1,5 @@
 """Tests focused on the updating of target decks with new notes"""
 import os
-import copy
 import tempfile
 
 import pytest
@@ -55,6 +54,7 @@ def fixture_verb_model(anki_col):
 
 @pytest.fixture(name="config_manager")
 def fixture_config_manager():
+    """Fixture for getting a ConfigManager object"""
     cfg = {
         "note_types": {
             SOURCE_MODEL_NAME: {
