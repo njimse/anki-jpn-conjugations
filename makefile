@@ -13,11 +13,6 @@ clean:
 test:
 	env/bin/pytest tests
 
-clone_cached_property:
-	mkdir -p dependencies
-	git clone git@github.com:pydanny/cached-property.git dependencies/cached_property
-	pushd dependencies/cached_property
-
 update_addon:
 	rm -rf myaddon/*
 	cp -r anki_jpn myaddon/

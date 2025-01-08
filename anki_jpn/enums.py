@@ -20,11 +20,13 @@ class VerbClass(Enum):
     GODAN = 'godan'
     ICHIDAN = 'ichidan'
     IRREGULAR = 'irregular'
+    GENERAL = 'general-verb'
 
 class AdjectiveClass(Enum):
     """Enumeration of known adjective types"""
     NA = 'na-adjective'
     I = 'i-adjective'
+    GENERAL = 'general-adjective'
 
 class ModelType(Enum):
     """enumeration of model (a.k.a. Note) types"""
