@@ -17,7 +17,7 @@ ADJ_MODEL_NAME = 'adj model'
 SIMPLE_MODEL_NAME = 'simple model'
 REALLY_SIMPLE_MODEL_NAME = "super simple model"
 
-def add_notes(col):
+def _add_notes(col):
     """Add notes to an otherwise empty collection"""
     note = anki.notes.Note(col, col.models.by_name(SIMPLE_MODEL_NAME))
     note.fields = ["First Note", '食べる', '食[た]べる', "LHL", 'to eat']
@@ -96,6 +96,8 @@ def fixture_anki_col():
 
     add_or_update_verb_model(col.models, VERB_MODEL_NAME)
     add_or_update_adjective_model(col.models, ADJ_MODEL_NAME)
+
+    _add_notes(col)
 
     yield col
     col.close()
