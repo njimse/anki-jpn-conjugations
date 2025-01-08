@@ -137,7 +137,8 @@ class DeckSearcher:
         self._deck_name = self._col.decks.get(did=self._deck_id)['name']
         self._cfg = config
 
-    def find_verbs(self, conjugation_model_name: str) -> Tuple[Dict[VerbClass, List[int]], List[str]]:
+    def find_verbs(self, conjugation_model_name: str) \
+        -> Tuple[Dict[VerbClass, List[int]], List[str]]:
         """Find all of the verbs in the source deck that match the specified tags
 
         Parameters
@@ -178,7 +179,8 @@ class DeckSearcher:
 
         return results, list(relevant_model_names)
 
-    def find_adjectives(self, conjugation_model_name: str) -> Tuple[Dict[AdjectiveClass, List[int]], List[str]]:
+    def find_adjectives(self, conjugation_model_name: str) \
+        -> Tuple[Dict[AdjectiveClass, List[int]], List[str]]:
         """Find all of the adjectives in the source deck that match the specified tags
 
         Parameters
@@ -215,7 +217,8 @@ class DeckSearcher:
 
         return results, list(relevant_model_names)
 
-    def find_notes(self, tags: List[str], conjugation_model_name: str) -> Tuple[List[int], List[str]]:
+    def find_notes(self, tags: List[str], conjugation_model_name: str) \
+        -> Tuple[List[int], List[str]]:
         """Find all notes in the source deck with at least one of the specified tags
 
         Parameters

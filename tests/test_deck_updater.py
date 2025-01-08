@@ -31,7 +31,7 @@ def fixture_anki_col():
         field_dict = col.models.new_field(field_name)
         col.models.add_field(basic_model, field_dict)
     col.models.add_template(basic_model, {
-        "name": "Simple",
+        "name": "Simple Card Template",
         "qfmt": "{{exp}}",
         "afmt": "{{rdng}}<br>{{pitch}}<br>{{translation}}"
     })

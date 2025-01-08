@@ -35,7 +35,7 @@ class ConfigManager:
 
     def verb_model_name(self) -> str:
         """Retrieve the name of the verb conjugation model
-        
+
         Returns
         -------
         str
@@ -43,10 +43,10 @@ class ConfigManager:
         """
 
         return self._cfg.get('verb_conjugation_note_type', "Japanese Verb Conjugation")
-    
+
     def adjective_model_name(self) -> str:
         """Retrieve the name of the adjective conjugation model
-        
+
         Returns
         -------
         str

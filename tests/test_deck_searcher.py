@@ -17,39 +17,8 @@ ADJ_MODEL_NAME = 'adj model'
 SIMPLE_MODEL_NAME = 'simple model'
 REALLY_SIMPLE_MODEL_NAME = "super simple model"
 
-@pytest.fixture(name="anki_col")
-def fixture_anki_col():
-    """Fixture for providing a basically empty collection that has source
-    and target decks as well as the verb conjugation model"""
-    fd, fn = tempfile.mkstemp(suffix=".anki2")
-    os.close(fd)
-    col = anki.collection.Collection(fn)
-    col.decks.add_normal_deck_with_name(SOURCE_DECK)
-
-    basic_model = col.models.new(SIMPLE_MODEL_NAME)
-    for field_name in ["note name", "exp", "rdng", "pitch", "translation"]:
-        field_dict = col.models.new_field(field_name)
-        col.models.add_field(basic_model, field_dict)
-    col.models.add_template(basic_model, {
-        "name": "Simple",
-        "qfmt": "{{exp}}",
-        "afmt": "{{rdng}}<br>{{pitch}}<br>{{translation}}"
-    })
-    col.models.add(basic_model)
-    really_basic_model = col.models.new(REALLY_SIMPLE_MODEL_NAME)
-    for field_name in ["exp", "rdng", "translation"]:
-        field_dict = col.models.new_field(field_name)
-        col.models.add_field(really_basic_model, field_dict)
-    col.models.add_template(really_basic_model, {
-        "name": "Simple",
-        "qfmt": "{{exp}}",
-        "afmt": "{{rdng}}<br>{{translation}}"
-    })
-    col.models.add(really_basic_model)
-
-    add_or_update_verb_model(col.models, VERB_MODEL_NAME)
-    add_or_update_adjective_model(col.models, ADJ_MODEL_NAME)
-
+def add_notes(col):
+    """Add notes to an otherwise empty collection"""
     note = anki.notes.Note(col, col.models.by_name(SIMPLE_MODEL_NAME))
     note.fields = ["First Note", '食べる', '食[た]べる', "LHL", 'to eat']
     note.add_tag('ichidan-verb')
@@ -79,21 +48,54 @@ def fixture_anki_col():
     note.fields = ["First Note", '良い', '良[yo]い', "LH", 'good']
     note.add_tag('adj')
     col.add_note(note, col.decks.id(SOURCE_DECK))
-    
+
     note = anki.notes.Note(col, col.models.by_name(SIMPLE_MODEL_NAME))
     note.fields = ["First Note", '有名な', '有名[ゆうめい]な', "LHL", 'famous']
     note.add_tag('na-adjective')
     col.add_note(note, col.decks.id(SOURCE_DECK))
-    
+
     note = anki.notes.Note(col, col.models.by_name(REALLY_SIMPLE_MODEL_NAME))
     note.fields = ['難しい', '難[むずか]しい', 'difficult']
     note.add_tag('i-adjective')
     col.add_note(note, col.decks.id(SOURCE_DECK))
-    
+
     note = anki.notes.Note(col, col.models.by_name(ADJ_MODEL_NAME))
     note.fields[:3] = ['小さい', 'small', '小[ちい]さい']
     note.add_tag('i-adjective')
     col.add_note(note, col.decks.id(SOURCE_DECK))
+
+@pytest.fixture(name="anki_col")
+def fixture_anki_col():
+    """Fixture for providing a basically empty collection that has source
+    and target decks as well as the verb conjugation model"""
+    fd, fn = tempfile.mkstemp(suffix=".anki2")
+    os.close(fd)
+    col = anki.collection.Collection(fn)
+    col.decks.add_normal_deck_with_name(SOURCE_DECK)
+
+    basic_model = col.models.new(SIMPLE_MODEL_NAME)
+    for field_name in ["note name", "exp", "rdng", "pitch", "translation"]:
+        field_dict = col.models.new_field(field_name)
+        col.models.add_field(basic_model, field_dict)
+    col.models.add_template(basic_model, {
+        "name": "Simple",
+        "qfmt": "Expression: {{exp}}",
+        "afmt": "Answer!<br>{{rdng}}<br>{{pitch}}<br>{{translation}}"
+    })
+    col.models.add(basic_model)
+    really_basic_model = col.models.new(REALLY_SIMPLE_MODEL_NAME)
+    for field_name in ["exp", "rdng", "translation"]:
+        field_dict = col.models.new_field(field_name)
+        col.models.add_field(really_basic_model, field_dict)
+    col.models.add_template(really_basic_model, {
+        "name": "Super Simple",
+        "qfmt": "{{exp}}",
+        "afmt": "{{rdng}}<br>{{translation}}"
+    })
+    col.models.add(really_basic_model)
+
+    add_or_update_verb_model(col.models, VERB_MODEL_NAME)
+    add_or_update_adjective_model(col.models, ADJ_MODEL_NAME)
 
     yield col
     col.close()
