@@ -4,7 +4,7 @@ import itertools
 # import the main window object (mw) from aqt
 from aqt import mw
 # import the "show info" tool from utils.py
-from aqt.utils import showInfo, getText, Qt
+from aqt.utils import showInfo, Qt
 # import all of the Qt GUI library
 from aqt.qt import *
 
@@ -14,12 +14,9 @@ from anki.tags import TagManager
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from anki_jpn.models import (
-    VERB_MODEL_NAME, ADJECTIVE_MODEL_NAME,
     add_or_update_verb_model, add_or_update_adjective_model
 )
-from anki_jpn.enums import VerbClass, AdjectiveClass, ModelType
-from anki_jpn.verbs import generate_verb_forms
-from anki_jpn.adjectives import generate_adjective_forms
+from anki_jpn.enums import VerbClass, AdjectiveClass
 from anki_jpn.decks import DeckUpdater, DeckSearcher
 from anki_jpn.config import ConfigManager
 
@@ -144,12 +141,13 @@ def update_adjectives():
 
         mw.addonManager.writeConfig(__name__, config.dump())
 
-    add_or_update_adjective_model(mw.col.models, ADJECTIVE_MODEL_NAME)
-    dest_model = mw.col.models.by_name(ADJECTIVE_MODEL_NAME)
-    deck_updater = DeckUpdater(mw.col, target_deck_id, dest_model, ModelType.ADJECTIVE, config)
+    adj_model_name = config.adjective_model_name()
+    add_or_update_adjective_model(mw.col.models, adj_model_name)
+    dest_model = mw.col.models.by_name(adj_model_name)
+    deck_updater = DeckUpdater(mw.col, target_deck_id, dest_model, config)
 
-    deck_searcher = DeckSearcher(mw.col, source_deck_id)
-    note_ids, relevant_models = deck_searcher.find_adjectives(config)
+    deck_searcher = DeckSearcher(mw.col, source_deck_id, config)
+    note_ids, relevant_models = deck_searcher.find_adjectives(dest_model['name'])
     
     for model_name in relevant_models:
         if config.model_fields_empty(model_name):
@@ -192,12 +190,13 @@ def update_verbs():
 
         mw.addonManager.writeConfig(__name__, config.dump())
 
-    add_or_update_verb_model(mw.col.models, VERB_MODEL_NAME)
-    dest_model = mw.col.models.by_name(VERB_MODEL_NAME)
-    deck_updater = DeckUpdater(mw.col, target_deck_id, dest_model, ModelType.VERB, config)
+    verb_model_name = config.verb_model_name()
+    add_or_update_verb_model(mw.col.models, verb_model_name)
+    dest_model = mw.col.models.by_name(verb_model_name)
+    deck_updater = DeckUpdater(mw.col, target_deck_id, dest_model, config)
 
-    deck_searcher = DeckSearcher(mw.col, source_deck_id)
-    note_ids, relevant_models = deck_searcher.find_verbs(config)
+    deck_searcher = DeckSearcher(mw.col, source_deck_id, config)
+    note_ids, relevant_models = deck_searcher.find_verbs(dest_model['name'])
 
     for model_name in relevant_models:
         if config.model_fields_empty(model_name):

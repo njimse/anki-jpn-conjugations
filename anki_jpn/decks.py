@@ -126,26 +126,24 @@ class DeckSearcher:
         Anki collection where we will search for notes
     deck_id : int
         ID of the source deck to be searched for relevant notes
-    model_id : int
-        ID of the model that will be used for the conjugation cards. Notes
-        matching this model ID will *not* be returned by this object.
+    config : ConfigManager
+        Settings for the Addon, including which tags should be used for identifying
+        different kinds of verbs
     """
 
-    def __init__(self, col: anki.collection.Collection, deck_id: int, model_id: int):
+    def __init__(self, col: anki.collection.Collection, deck_id: int, config: ConfigManager):
         self._col = col
         self._deck_id = deck_id
         self._deck_name = self._col.decks.get(did=self._deck_id)['name']
-        self._model_id = model_id
-        self._model_name = self._col.models.get(model_id)['name']
+        self._cfg = config
 
-    def find_verbs(self, config: ConfigManager) -> Tuple[Dict[VerbClass, List[int]], List[str]]:
+    def find_verbs(self, conjugation_model_name: str) -> Tuple[Dict[VerbClass, List[int]], List[str]]:
         """Find all of the verbs in the source deck that match the specified tags
 
         Parameters
         ----------
-        config : ConfigManager
-            Settings for the Addon, including which tags should be used for identifying
-            different kinds of verbs
+        conjugation_model_name : str
+            Name of the conjugation model that should *not* be included in the search results
 
         Returns
         -------
@@ -157,34 +155,36 @@ class DeckSearcher:
 
         results = {}
         relevant_model_names = set()
-        notes, model_names = self.find_notes(config.get_tags(self._deck_name, VerbClass.ICHIDAN))
+        notes, model_names = self.find_notes(
+            self._cfg.get_tags(self._deck_name, VerbClass.ICHIDAN), conjugation_model_name)
         if notes:
             results[VerbClass.ICHIDAN] = notes
             relevant_model_names.update(model_names)
-        notes, model_names = self.find_notes(config.get_tags(self._deck_name, VerbClass.GODAN))
+        notes, model_names = self.find_notes(
+            self._cfg.get_tags(self._deck_name, VerbClass.GODAN), conjugation_model_name)
         if notes:
             results[VerbClass.GODAN] = notes
             relevant_model_names.update(model_names)
-        notes, model_names = self.find_notes(config.get_tags(self._deck_name, VerbClass.IRREGULAR))
+        notes, model_names = self.find_notes(
+            self._cfg.get_tags(self._deck_name, VerbClass.IRREGULAR), conjugation_model_name)
         if notes:
             results[VerbClass.IRREGULAR] = notes
             relevant_model_names.update(model_names)
-        notes, model_names = self.find_notes(config.get_tags(self._deck_name, VerbClass.GENERAL))
+        notes, model_names = self.find_notes(
+            self._cfg.get_tags(self._deck_name, VerbClass.GENERAL), conjugation_model_name)
         if notes:
             results[VerbClass.GENERAL] = notes
             relevant_model_names.update(model_names)
 
         return results, list(relevant_model_names)
 
-    def find_adjectives(self, config: ConfigManager) \
-        -> Tuple[Dict[AdjectiveClass, List[int]], List[str]]:
+    def find_adjectives(self, conjugation_model_name: str) -> Tuple[Dict[AdjectiveClass, List[int]], List[str]]:
         """Find all of the adjectives in the source deck that match the specified tags
 
         Parameters
         ----------
-        config : ConfigManager
-            Settings for the Addon, including which tags should be used for identifying
-            different kinds of adjectives
+        conjugation_model_name : str
+            Name of the conjugation model that should *not* be included in the search results
 
         Returns
         -------
@@ -197,29 +197,33 @@ class DeckSearcher:
 
         results = {}
         relevant_model_names = set()
-        notes, model_names = self.find_notes(config.get_tags(self._deck_name, AdjectiveClass.I))
+        notes, model_names = self.find_notes(
+            self._cfg.get_tags(self._deck_name, AdjectiveClass.I), conjugation_model_name)
         if notes:
             results[AdjectiveClass.I] = notes
             relevant_model_names.update(model_names)
-        notes, model_names = self.find_notes(config.get_tags(self._deck_name, AdjectiveClass.NA))
+        notes, model_names = self.find_notes(
+            self._cfg.get_tags(self._deck_name, AdjectiveClass.NA), conjugation_model_name)
         if notes:
             results[AdjectiveClass.NA] = notes
             relevant_model_names.update(model_names)
         notes, model_names = self.find_notes(
-            config.get_tags(self._deck_name, AdjectiveClass.GENERAL))
+            self._cfg.get_tags(self._deck_name, AdjectiveClass.GENERAL), conjugation_model_name)
         if notes:
             results[AdjectiveClass.GENERAL] = notes
             relevant_model_names.update(model_names)
 
         return results, list(relevant_model_names)
 
-    def find_notes(self, tags: List[str]) -> Tuple[List[int], List[str]]:
+    def find_notes(self, tags: List[str], conjugation_model_name: str) -> Tuple[List[int], List[str]]:
         """Find all notes in the source deck with at least one of the specified tags
 
         Parameters
         ----------
         tags : List[str]
             Tags to be used to find relevant notes in the source deck
+        conjugation_model_name : str
+            Name of the conjugation model that should *not* be included in the search results
 
         Returns
         -------
@@ -236,7 +240,7 @@ class DeckSearcher:
             tag_query = "(" + " OR ".join(f"tag:{tag_str}" for tag_str in tags) + ")"
         else:
             tag_query = f"tag:{tags[0]}"
-        query = f'{tag_query} "deck:{self._deck_name}" "-note:{self._model_name}"'
+        query = f'{tag_query} "deck:{self._deck_name}" -"note:{conjugation_model_name}"'
         note_ids = self._col.find_notes(query)
 
         model_ids = set()

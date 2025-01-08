@@ -33,6 +33,28 @@ class ConfigManager:
 
         return self._cfg
 
+    def verb_model_name(self) -> str:
+        """Retrieve the name of the verb conjugation model
+        
+        Returns
+        -------
+        str
+            Name to use for the verb conjugation note type
+        """
+
+        return self._cfg.get('verb_conjugation_note_type', "Japanese Verb Conjugation")
+    
+    def adjective_model_name(self) -> str:
+        """Retrieve the name of the adjective conjugation model
+        
+        Returns
+        -------
+        str
+            Name to use for the adjective conjugation note type
+        """
+
+        return self._cfg.get('adjective_conjugation_note_type', "Japanese Adjective Conjugation")
+
     def verb_tags_empty(self, deck_name: str) -> bool:
         """Determine if the tag specification is populated for finding verbs
 

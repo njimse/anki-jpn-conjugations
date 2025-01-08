@@ -9,9 +9,6 @@ import anki.models
 import anki_jpn.resources as anki_jpn_resources
 from anki_jpn.enums import Form, Formality
 
-VERB_MODEL_NAME = "Japanese Verb Conjugation"
-ADJECTIVE_MODEL_NAME = "Japanese Adjective Conjugation"
-
 VERB_COMBOS = [
     (Formality.POLITE, Form.NON_PAST),
     (Formality.POLITE, Form.NON_PAST_NEG),

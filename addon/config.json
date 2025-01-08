@@ -7,7 +7,11 @@
             "na-adjective": [
                 "na-adjective", "adjective-na", "na-adj", "adj-na"
             ],
-            "general-adjective": ["adjective", "adj"]
+            "general-adjective": ["adjective", "adj"],
+            "ichidan": ["ichidan-verb", "ichidan", "ru-verb"],
+            "godan": ["godan-verb", "godan", "u-verb"],
+            "irregular": ["irregular-verb"],
+            "general-verb": ["verb"]
         }
     },
     "note_types": {
@@ -16,5 +20,7 @@
             "meaning": "Meaning",
             "reading": "Reading"
         }
-    }
+    },
+    "adjective_conjugation_note_type": "Japanese Adjective Conjugation",
+    "verb_conjugation_note_type": "Japanese Verb Conjugation"
 }
