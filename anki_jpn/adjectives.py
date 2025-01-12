@@ -24,6 +24,9 @@ def generate_adjective_forms(dictionary_form: str, adjective_class: AdjectiveCla
         the formality will be provided as None
     """
 
+    if adjective_class == AdjectiveClass.GENERAL:
+        adjective_class = classify_adjective(dictionary_form)
+
     results = []
     # Polite forms
     results.append([polite_nonpast_positive(dictionary_form, adjective_class),
