@@ -27,6 +27,9 @@ def generate_adjective_forms(dictionary_form: str, adjective_class: AdjectiveCla
     if adjective_class == AdjectiveClass.GENERAL:
         adjective_class = classify_adjective(dictionary_form)
 
+    if adjective_class == AdjectiveClass.NA and not dictionary_form.endswith("な"):
+        dictionary_form = dictionary_form + "な"
+
     results = []
     # Polite forms
     results.append([polite_nonpast_positive(dictionary_form, adjective_class),
