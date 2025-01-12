@@ -242,3 +242,5 @@ def test_generate_verb_forms(dict_form, verb_class, reference):
     """test the generate_verb_forms() method"""
     forms = generate_verb_forms(dict_form, verb_class)
     assert forms == reference
+    general_forms = generate_verb_forms(dict_form, VerbClass.GENERAL)
+    assert general_forms == reference

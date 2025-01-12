@@ -1,5 +1,7 @@
 """Methods pertaining to the conjugation of verbs"""
 from typing import Optional, List, Tuple
+import re
+
 from anki_jpn.enums import Form, Formality, VerbClass
 
 godan_stem_mapping = {
@@ -42,6 +44,121 @@ godan_te_mapping = {
     "す": "して",
 }
 GODAN_STEM_ENDINGS = set(godan_stem_mapping.keys())
+ICHIDAN_ENDINGS = set([
+    "いる",
+    "える",
+    "きる", "ぎる",
+    "ける", "げる",
+    "しる", "じる",
+    "せる", "ぜる",
+    "ちる",
+    "てる", "でる",
+    "ひる", "びる", "ぴる",
+    "へる", "べる", "ぺる",
+    "みる",
+    "める",
+    "にる",
+    "ねる",
+    "りる",
+    "れる"
+])
+
+# Except where otherwise noted with an asterisk, -iru and -eru exceptions obtained from:
+# https://www.sljfaq.org/afaq/which-godan.html
+# This content is covered by a Creative Commons Attribution-ShareAlike Licence (V4.0)
+iru_exceptions = [
+    '油ぎる', '脂ぎる', 'あぶらぎる',
+    'びびる',
+    '打っ千切る', 'ぶっちぎる', # *
+    '千切る', 'ちぎる',
+    '契る', 'ちぎる', # *
+    '散る', 'ちる',
+    'どじる',
+    '愚痴る', 'ぐちる',
+    '引きちぎる', '引き千切る', 'ひきちぎる', # *
+    '入る', 'はいる',
+    '走る', 'はしる',
+    '穿る', # This has an ichidan homophone, therefore hiragana not included
+    '褒めちぎる', '誉めちぎる', 'ほめちぎる', # *
+    '迸る', 'ほとばしる',
+    'いびる',
+    '弄る', 'いじる',
+    # いる homophones -- Because the animate exist verb いる is so common (and is an ichidan verb),
+    # we do not include the hiragana in the expections and require the kanji input
+    '熬る',
+    '炒る',
+    '煎る',
+    '要る',
+    '煎る',
+    '炒る',
+    '熬る',
+    ## end いる homophones
+    '限る', 'かぎる',
+    '噛る', 'かじる',
+    '嚙み千切る', 'かみちぎる', # *
+    '食いちぎる', '食千切る', 'くいちぎる', # *
+    '切る', # Due to the common ichidan homophone 着る[きる], do not include the hiragana here
+    '軋る', '轢る', '輾る', 'きしる',
+    '抉じる', 'こじる',
+    '参る', 'まいる',
+    '混じる', 'まじる',
+    '滅入る', 'めいる',
+    '漲る', 'みなぎる',
+    '毟る', '挘る', 'むしる',
+    '詰る', 'なじる',
+    'ねじる',
+    '握る', 'にぎる',
+    '罵る', 'ののしる',
+    '陥る', 'おちいる',
+    'せびる',
+    '知る', 'しる',
+    '謗る', '譏る', '誹る', 'そしる',
+    '滾る', '激る', 'たぎる',
+    '魂消る', 'たまぎる',
+    'やじる',
+    '攀じる', # This has an ichidan homophone, therefore hiragana not included
+]
+eru_exceptions = [
+    '焦る', # Due to ichidan homophones, do not include hiragana
+    '老ける', # Due to ichidan homophones, do not include hiragana
+    '減る', # ichidan homophones
+    '捻る', '撚る', # ichidan homophones
+    '火照る', 'ほてる',
+    '帰る', # ichidan homophones
+    '陰る', 'かげる',
+    '翔る', # ichidan homophones
+    '蹴る', 'ける',
+    'くねる',
+    '覆る', 'くつがえる',
+    '舐める', '嘗める', '甞める', 'なめる',
+    '練る', '煉る', # ichidan homophones
+    '滑る', 'ぬめる',
+    '阿る', '阿ねる', 'おもねる',
+    '競る', '糶る', 'せる',
+    '迫る','せまる', #*
+    '押し迫る', 'おしせまる', #*
+    '追い迫る', 'おいせまる', #*
+    '差し迫る', 'さしせまる', #*
+    '鬼気迫る', 'ききせまる', #*
+    '真に迫る', 'しんにせまる', #*
+    '旦夕に迫る', 'たんせきにせまる', #*
+    '真実に迫る', 'しんじつにせまる', #*
+    '辞職を迫る', 'じしょくをせまる', #*
+    '万感胸に迫る', 'ばんかんむねにせまる', #*
+    '命旦夕に迫る', 'めいたんせきにせまる', #*
+    '挵る', 'せせる',
+    '喋る', 'しゃべる',
+    '茂る', '繁る', '滋る', 'しげる',
+    '湿気る', # ichidan homophones
+    '滑る', # ichidan homophones
+    '猛る', '哮る', # ichidan homophones
+    '照る', 'てる',
+    '詰める', 'つめる',
+    '抓る', 'つねる',
+    '畝る', 'うねる',
+    '蘇る', '甦る', 'よみがえる'
+]
+ICHIDAN_EXCEPTIONS = iru_exceptions + eru_exceptions
 
 def generate_verb_forms(dictionary_form: str, verb_class: VerbClass)\
     -> List[Tuple[str, Form, Optional[Formality]]]:
@@ -50,9 +167,9 @@ def generate_verb_forms(dictionary_form: str, verb_class: VerbClass)\
     Parameters
     ----------
     dictionary_form : str
-        Dictionary form of the adjective to be conjugated
-    verb_class : AdjectiveClass
-        Class of adjective to guide how conjugation should be performed
+        Dictionary form of the verb to be conjugated
+    verb_class : VerbClass
+        Class of verb to guide how conjugation should be performed
 
     Returns
     -------
@@ -60,6 +177,8 @@ def generate_verb_forms(dictionary_form: str, verb_class: VerbClass)\
         Each tuple is the conjugation (string), Form, and Formality. Note that for the Te form,
         the formality will be provided as None
     """
+    if verb_class == VerbClass.GENERAL:
+        verb_class = classify_verb(dictionary_form)
     results = []
     # Polite forms
     results.append([polite_nonpast_positive(dictionary_form, verb_class),
@@ -87,6 +206,32 @@ def generate_verb_forms(dictionary_form: str, verb_class: VerbClass)\
     results.append([te(dictionary_form, verb_class), Form.TE, None])
 
     return results
+
+def classify_verb(dictionary_form: str) -> VerbClass:
+    """Classify a verb as one of ichidan, godan, or irregular type
+    
+    Parameters
+    ----------
+    dictionary_form : str
+        Dictionary form of the verb to be classified
+        
+    Returns
+    -------
+    VerbClass
+        Returns the verb classification"""
+
+    shaved_dictionary_form = re.sub(r"\[[^\]]+\]", "", dictionary_form, flags=re.U)
+    kana_only = re.sub(r"((?:^| )[^\]]+)\[([^\]]+)\]", r"\2", dictionary_form, flags=re.UNICODE)
+
+    if any(shaved_dictionary_form.endswith(ending) for ending in ["する", "くる", "来る"]):
+        return VerbClass.IRREGULAR
+
+    if any(kana_only.endswith(ending) for ending in ICHIDAN_ENDINGS) \
+        and shaved_dictionary_form not in ICHIDAN_EXCEPTIONS:
+
+        return VerbClass.ICHIDAN
+
+    return VerbClass.GODAN
 
 def get_godan_stem(dictionary_form: str, formality: Formality) -> str:
     """Get the stem of the provided godan verb
