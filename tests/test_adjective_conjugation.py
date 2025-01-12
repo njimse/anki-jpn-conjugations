@@ -199,3 +199,5 @@ def test_generate_adjective_forms(dict_form, adj_class, reference):
     """test the generate_adjective_forms() method"""
     forms = generate_adjective_forms(dict_form, adj_class)
     assert forms == reference
+    general_forms = generate_adjective_forms(dict_form, AdjectiveClass.GENERAL)
+    assert general_forms == reference
