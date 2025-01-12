@@ -2,6 +2,10 @@
 """
 from typing import List, Tuple, Optional
 from anki_jpn.enums import AdjectiveClass, Form, Formality
+from anki_jpn.util import (
+    remove_furigana,
+    promote_furigana
+)
 
 def generate_adjective_forms(dictionary_form: str, adjective_class: AdjectiveClass)\
               -> List[Tuple[str, Form, Optional[Formality]]]:
@@ -46,6 +50,25 @@ def generate_adjective_forms(dictionary_form: str, adjective_class: AdjectiveCla
     results.append([te(dictionary_form, adjective_class), Form.TE, None])
 
     return results
+
+def classify_adjective(dictionary_form: str) -> AdjectiveClass:
+    """Classify an adjective as either an i-adjective or na-adjective
+    
+    Parameters
+    ----------
+    dictionary_form : str
+        Dictionary form of the adjective to be classified
+        
+    Returns
+    -------
+    AdjectiveClass
+        Returns the adjective classification"""
+
+    kana_only = promote_furigana(dictionary_form)
+    if dictionary_form.endswith('い') and kana_only not in ['きれい', 'きらい', 'さいわい']:
+        return AdjectiveClass.I
+    
+    return AdjectiveClass.NA
 
 def get_stem(dictionary_form: str) -> str:
     """Get the stem of the provided adjective
