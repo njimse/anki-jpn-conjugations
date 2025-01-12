@@ -179,6 +179,20 @@ generate_adjective_forms_data = [
         # formality-constant
         ['嫌[きら]いで', Form.TE, None],
     ]),
+    ('嫌[きら]い', AdjectiveClass.NA, [
+        # Polite forms
+        ['嫌[きら]いです', Form.NON_PAST, Formality.POLITE],
+        ['嫌[きら]いじゃないです', Form.NON_PAST_NEG, Formality.POLITE],
+        ['嫌[きら]いでした', Form.PAST, Formality.POLITE],
+        ['嫌[きら]いじゃなかったです', Form.PAST_NEG, Formality.POLITE],
+        # Plain forms
+        ['嫌[きら]いだ', Form.NON_PAST, Formality.PLAIN],
+        ['嫌[きら]いじゃない', Form.NON_PAST_NEG, Formality.PLAIN],
+        ['嫌[きら]いだった', Form.PAST, Formality.PLAIN],
+        ['嫌[きら]いじゃなかった', Form.PAST_NEG, Formality.PLAIN],
+        # formality-constant
+        ['嫌[きら]いで', Form.TE, None],
+    ]),
     ('暖[あたた]かい', AdjectiveClass.I, [
         # Polite forms
         ['暖[あたた]かいです', Form.NON_PAST, Formality.POLITE],
