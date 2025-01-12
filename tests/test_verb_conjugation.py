@@ -132,12 +132,15 @@ plain_nonpast_positive_data = [
     ('スポーツをする', 'スポーツをする'),
     ('読[よ]む', '読[よ]む'),
     ('買[か]う', '買[か]う'),
-    ('話[はな]す', '話[はな]す')
+    ('話[はな]す', '話[はな]す'),
+    ('切[き]る', '切[き]る')
 ]
 @pytest.mark.parametrize("dict_form, reference", plain_nonpast_positive_data)
 def test_plain_nonpast_positive(dict_form, reference):
     """test the Plain Non-Past conjugation"""
-    result = plain_nonpast_positive(dict_form)
+    # Note the VerbClass isn't actually used for this function, but we have the
+    # parameter to keep consistency with the other conjugation functions
+    result = plain_nonpast_positive(dict_form, VerbClass)
     assert result == reference
 
 plain_nonpast_negative_data = [
@@ -166,7 +169,8 @@ plain_past_positive_data = [
     ('読[よ]む', VerbClass.GODAN, '読[よ]んだ'),
     ('買[か]う', VerbClass.GODAN, '買[か]った'),
     ('泳[およ]ぐ', VerbClass.GODAN, '泳[およ]いだ'),
-    ('話[はな]す', VerbClass.GODAN, '話[はな]した')
+    ('話[はな]す', VerbClass.GODAN, '話[はな]した'),
+    ('切[き]る', VerbClass.GODAN, '切[き]った')
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", plain_past_positive_data)
 def test_plain_past_positive(dict_form, verb_class, reference):
@@ -235,7 +239,8 @@ generate_verb_forms_data = [
         ['切[き]らなかった', Form.PAST_NEG, Formality.PLAIN],
         # formality-constant
         ['切[き]って', Form.TE, None],
-    ])
+    ]),
+    ('汚[きたな]い', VerbClass.GENERAL, [])
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", generate_verb_forms_data)
 def test_generate_verb_forms(dict_form, verb_class, reference):

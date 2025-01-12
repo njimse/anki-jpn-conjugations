@@ -180,33 +180,36 @@ def generate_verb_forms(dictionary_form: str, verb_class: VerbClass)\
         Each tuple is the conjugation (string), Form, and Formality. Note that for the Te form,
         the formality will be provided as None
     """
+    if not any(dictionary_form.endswith(ending) for ending in GODAN_STEM_ENDINGS):
+        # If this doesn't look like a verb, don't try to conjugate it
+        return []
+
     if verb_class == VerbClass.GENERAL:
         verb_class = classify_verb(dictionary_form)
+
     results = []
-    # Polite forms
-    results.append([polite_nonpast_positive(dictionary_form, verb_class),
-                    Form.NON_PAST, Formality.POLITE])
-    results.append([polite_nonpast_negative(dictionary_form, verb_class),
-                    Form.NON_PAST_NEG, Formality.POLITE])
-    results.append([polite_past_positive(dictionary_form, verb_class),
-                    Form.PAST, Formality.POLITE])
-    results.append([polite_past_negative(dictionary_form, verb_class),
-                    Form.PAST_NEG, Formality.POLITE])
-    results.append([polite_volitional(dictionary_form, verb_class),
-                    Form.VOLITIONAL, Formality.POLITE])
+    all_forms = [
+        [polite_nonpast_positive, Form.NON_PAST, Formality.POLITE],
+        [polite_nonpast_negative, Form.NON_PAST_NEG, Formality.POLITE],
+        [polite_past_positive, Form.PAST, Formality.POLITE],
+        [polite_past_negative, Form.PAST_NEG, Formality.POLITE],
+        [polite_volitional, Form.VOLITIONAL, Formality.POLITE],
 
-    # Plain forms
-    results.append([plain_nonpast_positive(dictionary_form),
-                    Form.NON_PAST, Formality.PLAIN])
-    results.append([plain_nonpast_negative(dictionary_form, verb_class),
-                    Form.NON_PAST_NEG, Formality.PLAIN])
-    results.append([plain_past_positive(dictionary_form, verb_class),
-                    Form.PAST, Formality.PLAIN])
-    results.append([plain_past_negative(dictionary_form, verb_class),
-                    Form.PAST_NEG, Formality.PLAIN])
+        # Plain forms
+        [plain_nonpast_positive, Form.NON_PAST, Formality.PLAIN],
+        [plain_nonpast_negative, Form.NON_PAST_NEG, Formality.PLAIN],
+        [plain_past_positive, Form.PAST, Formality.PLAIN],
+        [plain_past_negative, Form.PAST_NEG, Formality.PLAIN],
 
-    # formality-constant
-    results.append([te(dictionary_form, verb_class), Form.TE, None])
+        # formality-constant
+        [te, Form.TE, None]
+    ]
+
+    for conjugate, form, formality in all_forms:
+        try:
+            results.append([conjugate(dictionary_form, verb_class), form, formality])
+        except: # pylint: disable=W0702
+            pass
 
     return results
 
@@ -299,6 +302,7 @@ def polite_nonpast_positive(dictionary_form: str, verb_class: VerbClass) -> str:
         Dictionary form of the verb to be conjugated
     verb_class : VerbClass
         Class of the verb being conjugated
+
     Returns
     -------
     str
@@ -319,6 +323,7 @@ def polite_nonpast_negative(dictionary_form: str, verb_class: VerbClass) -> str:
         Dictionary form of the verb to be conjugated
     verb_class : VerbClass
         Class of the verb being conjugated
+
     Returns
     -------
     str
@@ -339,6 +344,7 @@ def polite_past_positive(dictionary_form: str, verb_class: VerbClass) -> str:
         Dictionary form of the verb to be conjugated
     verb_class : VerbClass
         Class of the verb being conjugated
+
     Returns
     -------
     str
@@ -359,6 +365,7 @@ def polite_past_negative(dictionary_form: str, verb_class: VerbClass) -> str:
         Dictionary form of the verb to be conjugated
     verb_class : VerbClass
         Class of the verb being conjugated
+
     Returns
     -------
     str
@@ -379,6 +386,7 @@ def polite_volitional(dictionary_form: str, verb_class: VerbClass) -> str:
         Dictionary form of the verb to be conjugated
     verb_class : VerbClass
         Class of the verb being conjugated
+
     Returns
     -------
     str
@@ -399,6 +407,7 @@ def te(dictionary_form: str, verb_class: VerbClass) -> str:
         Dictionary form of the verb to be conjugated
     verb_class : VerbClass
         Class of the verb being conjugated
+
     Returns
     -------
     str
@@ -420,7 +429,7 @@ def te(dictionary_form: str, verb_class: VerbClass) -> str:
     assert completion is not None
     return completion
 
-def plain_nonpast_positive(dictionary_form: str) -> str:
+def plain_nonpast_positive(dictionary_form: str, verb_type: VerbClass) -> str: # pylint: disable=W0613
     """Get the Plain Non-Past conjugation
 
     Parameters
@@ -428,7 +437,9 @@ def plain_nonpast_positive(dictionary_form: str) -> str:
     dictionary_form : str
         Dictionary form of the verb to be conjugated
     verb_class : VerbClass
-        Class of the verb being conjugated
+        Class of the verb being conjugated. Note that it does not get used in this function,
+        but we include it for API consistency with the other conjugation functions
+
     Returns
     -------
     str
@@ -446,6 +457,7 @@ def plain_nonpast_negative(dictionary_form: str, verb_class: VerbClass) -> str:
         Dictionary form of the verb to be conjugated
     verb_class : VerbClass
         Class of the verb being conjugated
+
     Returns
     -------
     str

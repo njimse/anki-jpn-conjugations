@@ -30,29 +30,29 @@ def generate_adjective_forms(dictionary_form: str, adjective_class: AdjectiveCla
     if adjective_class == AdjectiveClass.NA and not dictionary_form.endswith("な"):
         dictionary_form = dictionary_form + "な"
 
+    # pylint: disable=R0801
     results = []
-    # Polite forms
-    results.append([polite_nonpast_positive(dictionary_form, adjective_class),
-                    Form.NON_PAST, Formality.POLITE])
-    results.append([polite_nonpast_negative(dictionary_form, adjective_class),
-                    Form.NON_PAST_NEG, Formality.POLITE])
-    results.append([polite_past_positive(dictionary_form, adjective_class),
-                    Form.PAST, Formality.POLITE])
-    results.append([polite_past_negative(dictionary_form, adjective_class),
-                    Form.PAST_NEG, Formality.POLITE])
+    all_forms = [
+        [polite_nonpast_positive, Form.NON_PAST, Formality.POLITE],
+        [polite_nonpast_negative, Form.NON_PAST_NEG, Formality.POLITE],
+        [polite_past_positive, Form.PAST, Formality.POLITE],
+        [polite_past_negative, Form.PAST_NEG, Formality.POLITE],
 
-    # Plain forms
-    results.append([plain_nonpast_positive(dictionary_form, adjective_class),
-                    Form.NON_PAST, Formality.PLAIN])
-    results.append([plain_nonpast_negative(dictionary_form, adjective_class),
-                    Form.NON_PAST_NEG, Formality.PLAIN])
-    results.append([plain_past_positive(dictionary_form, adjective_class),
-                    Form.PAST, Formality.PLAIN])
-    results.append([plain_past_negative(dictionary_form, adjective_class),
-                    Form.PAST_NEG, Formality.PLAIN])
+        # Plain forms
+        [plain_nonpast_positive, Form.NON_PAST, Formality.PLAIN],
+        [plain_nonpast_negative, Form.NON_PAST_NEG, Formality.PLAIN],
+        [plain_past_positive, Form.PAST, Formality.PLAIN],
+        [plain_past_negative, Form.PAST_NEG, Formality.PLAIN],
 
-    # formality-constant
-    results.append([te(dictionary_form, adjective_class), Form.TE, None])
+        # formality-constant
+        [te, Form.TE, None]
+    ]
+
+    for conjugate, form, formality in all_forms:
+        try:
+            results.append([conjugate(dictionary_form, adjective_class), form, formality])
+        except: # pylint: disable=W0702
+            pass
 
     return results
 

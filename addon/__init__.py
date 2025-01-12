@@ -163,8 +163,8 @@ def update_adjectives():
             note = mw.col.get_note(note_id)
             deck_updater.add_note_to_deck(note, adj_type)
 
-    new_notes, modified_notes = deck_updater.summary()
-    showInfo(f"Added {new_notes} new note(s)\nModified {modified_notes} note(s)")
+    new_notes, modified_notes, failed_notes = deck_updater.summary()
+    showInfo(f"Added {new_notes} new note(s)\nModified {modified_notes} note(s)\nFailed to conjugate {failed_notes} note(s)")
 
 def update_verbs():
     target_deck_id, target_deck_name = select_deck("Which deck would you like to update?")
@@ -212,8 +212,8 @@ def update_verbs():
             note = mw.col.get_note(note_id)
             deck_updater.add_note_to_deck(note, verb_type)
 
-    new_notes, modified_notes = deck_updater.summary()
-    showInfo(f"Added {new_notes} new note(s)\nModified {modified_notes} note(s)")
+    new_notes, modified_notes, failed_notes = deck_updater.summary()
+    showInfo(f"Added {new_notes} new note(s)\nModified {modified_notes} note(s)\nFailed to conjugate {failed_notes} note(s)")
 
 # Create the menu items
 conj_menu = QMenu("Conjugation Decks", mw)

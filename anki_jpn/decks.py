@@ -35,7 +35,7 @@ class DeckUpdater: # pylint: disable=R0903
         self._model_field_map = self._col.models.field_map(model)
         self._cfg = config
 
-        self._changes = [0, 0]
+        self._changes = [0, 0, 0]
 
     def summary(self) -> Tuple[int, int]:
         """Return the number of new and modified notes handled by this updater
@@ -91,6 +91,8 @@ class DeckUpdater: # pylint: disable=R0903
 
         self._expand_note(note, conjugations)
 
+        if len(conjugations) == 0:
+            self._changes[2] += 1
         if existing_notes:
             if existing_fields != note.fields:
                 self._changes[1] += 1
