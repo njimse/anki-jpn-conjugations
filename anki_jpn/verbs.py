@@ -1,8 +1,11 @@
 """Methods pertaining to the conjugation of verbs"""
 from typing import Optional, List, Tuple
-import re
 
 from anki_jpn.enums import Form, Formality, VerbClass
+from anki_jpn.util import (
+    remove_furigana,
+    promote_furigana
+)
 
 godan_stem_mapping = {
     "う": "い",
@@ -220,8 +223,8 @@ def classify_verb(dictionary_form: str) -> VerbClass:
     VerbClass
         Returns the verb classification"""
 
-    shaved_dictionary_form = re.sub(r"\[[^\]]+\]", "", dictionary_form, flags=re.U)
-    kana_only = re.sub(r"((?:^| )[^\]]+)\[([^\]]+)\]", r"\2", dictionary_form, flags=re.UNICODE)
+    shaved_dictionary_form = remove_furigana(dictionary_form)
+    kana_only = promote_furigana(dictionary_form)
 
     if any(shaved_dictionary_form.endswith(ending) for ending in ["する", "くる", "来る"]):
         return VerbClass.IRREGULAR
