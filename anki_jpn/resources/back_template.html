@@ -5,4 +5,14 @@ INSERT_ENDING_SPANS_FUNCTION
 
 var new_conjugation = insert_ending_spans("{{furigana:Reading}}", "{{furigana:FIELD_NAME}}");
 document.getElementById("conj").innerHTML = new_conjugation;
+
+var x = "FORMALITY";
+if (x === "polite")
+{ 
+  document.getElementById("ending").className = "polite";
+}
+else
+{ 
+  document.getElementById("ending").className = "plain";
+}
 </script>

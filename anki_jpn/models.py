@@ -343,7 +343,8 @@ def get_fields_and_templates(
                 "name": formatted_name,
                 "qfmt": _resolve_placeholders(front_template, formality=formality, form=form,
                                               field_name=formatted_name),
-                "afmt": _resolve_placeholders(back_template, field_name=formatted_name)
+                "afmt": _resolve_placeholders(back_template, formality=formality,
+                                              field_name=formatted_name)
             }
         )
     return fields, templates
