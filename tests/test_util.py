@@ -18,6 +18,8 @@ furigana_removal_data = [
 ]
 @pytest.mark.parametrize("reading, ref", furigana_removal_data)
 def test_remove_furigana(reading, ref):
+    """Test the removal of furigana"""
+
     hyp = remove_furigana(reading)
     assert hyp == ref
 
@@ -33,5 +35,7 @@ furigana_promotion_data = [
 ]
 @pytest.mark.parametrize("reading, ref", furigana_promotion_data)
 def test_promote_furigana(reading, ref):
+    """Test the promotion of furigana"""
+
     hyp = promote_furigana(reading)
     assert hyp == ref

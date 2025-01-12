@@ -3,7 +3,6 @@
 from typing import List, Tuple, Optional
 from anki_jpn.enums import AdjectiveClass, Form, Formality
 from anki_jpn.util import (
-    remove_furigana,
     promote_furigana
 )
 
@@ -67,7 +66,7 @@ def classify_adjective(dictionary_form: str) -> AdjectiveClass:
     kana_only = promote_furigana(dictionary_form)
     if dictionary_form.endswith('い') and kana_only not in ['きれい', 'きらい', 'さいわい']:
         return AdjectiveClass.I
-    
+
     return AdjectiveClass.NA
 
 def get_stem(dictionary_form: str) -> str:
