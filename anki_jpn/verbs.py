@@ -465,7 +465,7 @@ def plain_nonpast_negative(dictionary_form: str, verb_class: VerbClass) -> str:
     """
 
     if dictionary_form.endswith('ある'):
-        return 'ない'
+        return dictionary_form[:-2] + 'ない'
 
     stem = _masu_stem(dictionary_form, verb_class, formality=Formality.PLAIN)
     completion = stem + 'ない'
