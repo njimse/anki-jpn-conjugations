@@ -233,17 +233,17 @@ def _ensure_order(
         index += 1
 
 
-def _resolve_placeholders(template: str, formality: Optional[Formality] = None,
-                          form: Optional[Form] = None, field_name: Optional[str] = None) -> str:
+def _resolve_placeholders(template: str, formality: Optional[str] = None,
+                          form: Optional[str] = None, field_name: Optional[str] = None) -> str:
     """Resolve the placeholders in the card template definitions
 
     Parameters
     ----------
     template : str
         Card template with placeholders to be replaced
-    formality : Formality | None
+    formality : str | None
         Formality level for the conjugation relevant to the card
-    form : Form | None
+    form : str | None
         Form name for the conjugation relevant to the card
     field_name : str | None
         Name of the Note/Model field containing the conjugation relevant to the card
@@ -255,11 +255,11 @@ def _resolve_placeholders(template: str, formality: Optional[Formality] = None,
     """
 
     result = template
-    if formality:
-        result = result.replace('FORMALITY', formality.value)
-    if form:
-        result = result.replace('FORM_NAME', form.value)
-    if field_name:
+    if formality is not None:
+        result = result.replace('FORMALITY', formality)
+    if form is not None:
+        result = result.replace('FORM_NAME', form)
+    if field_name is not None:
         result = result.replace('FIELD_NAME', field_name)
     return result
 
@@ -341,10 +341,12 @@ def get_fields_and_templates(
         templates.append(
             {
                 "name": formatted_name,
-                "qfmt": _resolve_placeholders(front_template, formality=formality, form=form,
-                                              field_name=formatted_name),
-                "afmt": _resolve_placeholders(back_template, formality=formality,
-                                              field_name=formatted_name)
+                "qfmt": _resolve_placeholders(
+                    front_template, formality=formality.value if formality is not None else '',
+                    form=form.value, field_name=formatted_name),
+                "afmt": _resolve_placeholders(
+                    back_template, formality=formality.value if formality is not None else '',
+                    field_name=formatted_name)
             }
         )
     return fields, templates
