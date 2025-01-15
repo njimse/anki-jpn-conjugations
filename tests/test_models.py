@@ -5,7 +5,10 @@ import pytest
 
 import anki.collection
 from anki_jpn.enums import Formality, Form
-from anki_jpn.models import VERB_COMBOS, add_or_update_verb_model, _create_model
+from anki_jpn.models import (
+    VERB_COMBOS, add_or_update_verb_model,
+    add_or_update_adjective_model, _create_model
+)
 
 @pytest.fixture(name="anki_col")
 def fixture_anki_col():
@@ -31,6 +34,26 @@ def compare_models(a, b):
         assert a_template['name'] == b_template['name']
         assert a_template['qfmt'] == b_template['qfmt']
         assert a_template['afmt'] == b_template['afmt']
+
+def test_no_remaining_templates_verbs(anki_col):
+    """Test that we resolve all of the placeholders in the card templates of verbs"""
+    model_name = "verb model"
+    add_or_update_verb_model(anki_col.models, model_name)
+
+    model = anki_col.models.by_name(model_name)
+    for template in model['tmpls']:
+        assert not any(ph in template['qfmt'] for ph in ['FORMALITY', 'FORM_NAME', 'FIELD_NAME'])
+        assert not any(ph in template['afmt'] for ph in ['FORMALITY', 'FORM_NAME', 'FIELD_NAME'])
+
+def test_no_remaining_templates_adjectives(anki_col):
+    """Test that we resolve all of the placeholders in the card templates of adjectives"""
+    model_name = "adjective model"
+    add_or_update_adjective_model(anki_col.models, model_name)
+
+    model = anki_col.models.by_name(model_name)
+    for template in model['tmpls']:
+        assert not any(ph in template['qfmt'] for ph in ['FORMALITY', 'FORM_NAME', 'FIELD_NAME'])
+        assert not any(ph in template['afmt'] for ph in ['FORMALITY', 'FORM_NAME', 'FIELD_NAME'])
 
 def test_add_new_model(anki_col):
     """Test the logic for when the model does not yet exist in the collection"""
