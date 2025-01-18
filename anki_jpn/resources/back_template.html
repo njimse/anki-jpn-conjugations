@@ -7,12 +7,17 @@ var new_conjugation = insert_ending_spans("{{furigana:Reading}}", "{{furigana:FI
 document.getElementById("conj").innerHTML = new_conjugation;
 
 var x = "FORMALITY";
+var endings = document.getElementsByClassName("ending");
+var endings_color = "";
 if (x === "polite")
-{ 
-  document.getElementById("ending").className = "polite";
+{
+  endings_color = "#4DB01C";
 }
 else
-{ 
-  document.getElementById("ending").className = "plain";
+{
+  endings_color = "#2A6DEC";
+}
+for (var i = 0; i < endings.length; i++) {
+  endings[i].style.color = endings_color;
 }
 </script>
