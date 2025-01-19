@@ -210,6 +210,19 @@ generate_verb_forms_data = [
         ['来[こ]なかった', Form.PAST_NEG, Formality.PLAIN],
         # formality-constant
         ['来[き]て', Form.TE, None],
+        # tai forms
+        # Polite forms
+        ['来[き]たいです', Form.TAI_NON_PAST, Formality.POLITE],
+        ['来[き]たくないです', Form.TAI_NON_PAST_NEG, Formality.POLITE],
+        ['来[き]たかったです', Form.TAI_PAST, Formality.POLITE],
+        ['来[き]たくなかったです', Form.TAI_PAST_NEG, Formality.POLITE],
+        # Plain forms
+        ['来[き]たい', Form.TAI_NON_PAST, Formality.PLAIN],
+        ['来[き]たくない', Form.TAI_NON_PAST_NEG, Formality.PLAIN],
+        ['来[き]たかった', Form.TAI_PAST, Formality.PLAIN],
+        ['来[き]たくなかった', Form.TAI_PAST_NEG, Formality.PLAIN],
+        # formality-constant
+        ['来[き]たくて', Form.TAI_TE, None],
     ]),
     ('食[た]べる', VerbClass.ICHIDAN, [
         # Polite forms
@@ -225,6 +238,19 @@ generate_verb_forms_data = [
         ['食[た]べなかった', Form.PAST_NEG, Formality.PLAIN],
         # formality-constant
         ['食[た]べて', Form.TE, None],
+        # tai forms
+        # Polite forms
+        ['食[た]べたいです', Form.TAI_NON_PAST, Formality.POLITE],
+        ['食[た]べたくないです', Form.TAI_NON_PAST_NEG, Formality.POLITE],
+        ['食[た]べたかったです', Form.TAI_PAST, Formality.POLITE],
+        ['食[た]べたくなかったです', Form.TAI_PAST_NEG, Formality.POLITE],
+        # Plain forms
+        ['食[た]べたい', Form.TAI_NON_PAST, Formality.PLAIN],
+        ['食[た]べたくない', Form.TAI_NON_PAST_NEG, Formality.PLAIN],
+        ['食[た]べたかった', Form.TAI_PAST, Formality.PLAIN],
+        ['食[た]べたくなかった', Form.TAI_PAST_NEG, Formality.PLAIN],
+        # formality-constant
+        ['食[た]べたくて', Form.TAI_TE, None],
     ]),
     ('切[き]る', VerbClass.GODAN, [
         # Polite forms
@@ -240,6 +266,19 @@ generate_verb_forms_data = [
         ['切[き]らなかった', Form.PAST_NEG, Formality.PLAIN],
         # formality-constant
         ['切[き]って', Form.TE, None],
+        # tai forms
+        # Polite forms
+        ['切[き]りたいです', Form.TAI_NON_PAST, Formality.POLITE],
+        ['切[き]りたくないです', Form.TAI_NON_PAST_NEG, Formality.POLITE],
+        ['切[き]りたかったです', Form.TAI_PAST, Formality.POLITE],
+        ['切[き]りたくなかったです', Form.TAI_PAST_NEG, Formality.POLITE],
+        # Plain forms
+        ['切[き]りたい', Form.TAI_NON_PAST, Formality.PLAIN],
+        ['切[き]りたくない', Form.TAI_NON_PAST_NEG, Formality.PLAIN],
+        ['切[き]りたかった', Form.TAI_PAST, Formality.PLAIN],
+        ['切[き]りたくなかった', Form.TAI_PAST_NEG, Formality.PLAIN],
+        # formality-constant
+        ['切[き]りたくて', Form.TAI_TE, None],
     ]),
     ('汚[きたな]い', VerbClass.GENERAL, [])
 ]

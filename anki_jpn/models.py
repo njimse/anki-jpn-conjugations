@@ -19,7 +19,16 @@ VERB_COMBOS = [
     (Formality.PLAIN, Form.NON_PAST),
     (Formality.PLAIN, Form.NON_PAST_NEG),
     (Formality.PLAIN, Form.PAST),
-    (Formality.PLAIN, Form.PAST_NEG)
+    (Formality.PLAIN, Form.PAST_NEG),
+    (Formality.POLITE, Form.TAI_NON_PAST),
+    (Formality.POLITE, Form.TAI_NON_PAST_NEG),
+    (Formality.POLITE, Form.TAI_PAST),
+    (Formality.POLITE, Form.TAI_PAST_NEG),
+    (None, Form.TAI_TE),
+    (Formality.PLAIN, Form.TAI_NON_PAST),
+    (Formality.PLAIN, Form.TAI_NON_PAST_NEG),
+    (Formality.PLAIN, Form.TAI_PAST),
+    (Formality.PLAIN, Form.TAI_PAST_NEG),
 ]
 
 ADJECTIVE_COMBOS = [
