@@ -1,11 +1,12 @@
 """Methods pertaining to the conjugation of verbs"""
 from typing import Optional, List, Tuple
 
-from anki_jpn.enums import Form, Formality, VerbClass
+from anki_jpn.enums import Form, Formality, VerbClass, AdjectiveClass
 from anki_jpn.util import (
     remove_furigana,
     promote_furigana
 )
+from anki_jpn.adjectives import generate_adjective_forms
 
 godan_stem_mapping = {
     "う": "い",
@@ -211,6 +212,8 @@ def generate_verb_forms(dictionary_form: str, verb_class: VerbClass)\
         except: # pylint: disable=W0702
             pass
 
+    results.extend(tai_forms(dictionary_form, verb_class))
+
     return results
 
 def classify_verb(dictionary_form: str) -> VerbClass:
@@ -292,6 +295,31 @@ def _masu_stem(dictionary_form: str, v_class: VerbClass,
                 stem = dictionary_form[:-5] + '来[こ]'
     assert stem is not None
     return stem
+
+def tai_forms(dictionary_form: str, verb_class: VerbClass) \
+    -> List[Tuple[str, Form, Optional[Formality]]]:
+    """Generate the -tai form conjugations for a verb
+    
+    Parameters
+    ----------
+    dictionary_form : str
+        Dictionary form of the verb to be conjugated
+    verb_class : VerbClass
+    
+    Returns
+    -------
+    List[Tuple[str, Form, Optional[Formality]]]
+        The known i-adjective conjugations for the input verb
+    """
+
+    tai_dictionary_form = _masu_stem(dictionary_form, verb_class) + 'たい'
+    tai_conjugations = []
+    for conjugation, form, formality in \
+        generate_adjective_forms(tai_dictionary_form, AdjectiveClass.I):
+
+        tai_conjugations.append([conjugation, form.to_tai(), formality])
+
+    return tai_conjugations
 
 def polite_nonpast_positive(dictionary_form: str, verb_class: VerbClass) -> str:
     """Get the Polite Non-Past conjugation

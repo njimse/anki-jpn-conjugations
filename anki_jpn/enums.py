@@ -10,6 +10,33 @@ class Form(Enum):
     TE = 'te'
     VOLITIONAL = 'volitional'
 
+    # tai forms
+    TAI_NON_PAST = 'tai non-past'
+    TAI_NON_PAST_NEG = 'tai negative'
+    TAI_PAST = 'tai past'
+    TAI_PAST_NEG = 'tai past negative'
+    TAI_TE = 'tai te'
+
+    def to_tai(self):
+        """Map to the tai-form equivalent of this form
+        
+        Returns
+        -------
+        Form
+            The same form, just in the tai grouping"""
+
+        if self == Form.NON_PAST:
+            return Form.TAI_NON_PAST
+        if self == Form.NON_PAST_NEG:
+            return Form.TAI_NON_PAST_NEG
+        if self == Form.PAST:
+            return Form.TAI_PAST
+        if self == Form.PAST_NEG:
+            return Form.TAI_PAST_NEG
+        if self == Form.TE:
+            return Form.TAI_TE
+        return self
+
 class Formality(Enum):
     """Enumeration of known formality levels"""
     POLITE = 'polite'
