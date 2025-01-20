@@ -1,21 +1,54 @@
 """Various enumerated objects for use throughout the rest of the module"""
 from enum import Enum
+from typing import Optional
 
 class Form(Enum):
-    """Enumeration of known conjugation forms"""
-    NON_PAST = 'non-past'
-    NON_PAST_NEG = 'negative'
-    PAST = 'past'
-    PAST_NEG = 'past negative'
-    TE = 'te'
-    VOLITIONAL = 'volitional'
+    """Enumeration of known conjugation forms
+    
+    Parameters
+    ----------
+    simple_name : str
+        text to provide human-friendly description of the core aspect of the form
+    polarity : str
+        text describing the polarity of the form
+    temparality : str
+        text describing the temporal aspect of the form
+    """
+    NON_PAST = ('indicative', 'positive', 'non-past')
+    NON_PAST_NEG = ('indicative', 'negative', 'non-past')
+    PAST = ('indicative', 'positive', 'past')
+    PAST_NEG = ('indicative', 'negative', 'past')
+    TE = ('te', 'positive', '')
+    VOLITIONAL = ('volitional', '', '')
 
     # tai forms
-    TAI_NON_PAST = 'tai non-past'
-    TAI_NON_PAST_NEG = 'tai negative'
-    TAI_PAST = 'tai past'
-    TAI_PAST_NEG = 'tai past negative'
-    TAI_TE = 'tai te'
+    TAI_NON_PAST = ('tai indicative', 'positive', 'non-past')
+    TAI_NON_PAST_NEG = ('tai indicative', 'negative', 'non-past')
+    TAI_PAST = ('tai indicative', 'positive', 'past')
+    TAI_PAST_NEG = ('tai indicative', 'negative', 'past')
+    TAI_TE = ('tai te', 'positive', '')
+
+    def __init__(self, simple_name: str, polarity: Optional[bool], temporality: str):
+        self.simple_name = simple_name
+        self.polarity = polarity
+        self.temporality = temporality
+    
+    def label(self) -> str:
+        """Compose the label for the form
+
+        Returns
+        -------
+        str
+            Label describing relevant attributes of the form
+        """
+
+        result = []
+        if self.temporality:
+            result.append(self.temporality)
+        result.append(self.simple_name)
+        if self.polarity == 'negative':
+            result.append(self.polarity)
+        return ' '.join(result)
 
     def to_tai(self):
         """Map to the tai-form equivalent of this form
@@ -36,6 +69,8 @@ class Form(Enum):
         if self == Form.TE:
             return Form.TAI_TE
         return self
+    
+
 
 class Formality(Enum):
     """Enumeration of known formality levels"""
