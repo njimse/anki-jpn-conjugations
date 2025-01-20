@@ -70,7 +70,7 @@ class DeckUpdater: # pylint: disable=R0903
         reading = source_note.fields[source_fields[relevant_fields[2]][0]].split('<')[0].strip()
 
         query = f'"Expression:{expression}" "Meaning:{meaning}"' + \
-            f' "Reading:{reading}" "deck:{self._deck["name"]}" mid:{self._model_id}'
+            f' "Reading:{reading}" "deck:{self._deck["name"]}" "mid:{self._model_id}"'
         existing_notes = self._col.find_notes(query)
         if existing_notes:
             note = self._col.get_note(existing_notes[0])
