@@ -1,5 +1,6 @@
 """Tests pertaining to the creation and updating of model definitions"""
 import os
+import sys
 import tempfile
 from copy import deepcopy
 
@@ -21,33 +22,6 @@ def fixture_anki_col():
     yield col
     col.close()
     os.unlink(fn)
-
-
-# @pytest.fixture(name="deck_updater")
-# def fixture_deck_updater(anki_col):
-#     """Fixture for getting the DeckUpdater to be tested"""
-#     TARGET_DECK = 'target'
-#     SOURCE_DECK = 'source'
-#     VERB_MODEL_NAME = 'verb model'
-#     SOURCE_MODEL_NAME = 'simple model'
-
-#     anki_col.decks.add_normal_deck_with_name(SOURCE_DECK)
-#     anki_col.decks.add_normal_deck_with_name(TARGET_DECK)
-
-#     basic_model = anki_col.models.new(SOURCE_MODEL_NAME)
-#     for field_name in ["note name", "exp", "rdng", "pitch", "translation"]:
-#         field_dict = anki_col.models.new_field(field_name)
-#         anki_col.models.add_field(basic_model, field_dict)
-#     anki_col.models.add_template(basic_model, {
-#         "name": "Simple Card Template",
-#         "qfmt": "{{exp}}",
-#         "afmt": "{{rdng}}<br>{{pitch}}<br>{{translation}}"
-#     })
-#     anki_col.models.add(basic_model)
-#     add_or_update_verb_model(anki_col.models, VERB_MODEL_NAME)
-
-#     updater = DeckUpdater(anki_col, target_deck_id, verb_model, config_manager)
-#     return updater
 
 def compare_models(a, b):
     """Compare two models to ensure that they are (sufficiently) equivalent"""
@@ -119,6 +93,7 @@ def test_no_change_needed(anki_col):
 
     assert len(end_models) == len(start_models)
 
+@pytest.mark.skipIf(sys.version_info[:2] < (3,9), "'id' attribute of templates not present")
 def test_rename_fields(anki_col):
     """Test that we correctly identify changes to field names"""
     ref_model = anki_col.models.new("verb model")
@@ -135,8 +110,6 @@ def test_rename_fields(anki_col):
     for card_template in start_model['tmpls']:
         hr_name, field_hash = card_template['name'].rsplit(' ', 1)
         card_template['name'] = hr_name.lower() + " " + field_hash
-        if 'id' not in card_template:
-            assert card_template['did'] is not None
         hash_to_template[field_hash] = card_template['id']
     for field_dict in start_model['flds']:
         if '<' in field_dict['name']:
