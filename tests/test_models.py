@@ -135,6 +135,8 @@ def test_rename_fields(anki_col):
     for card_template in start_model['tmpls']:
         hr_name, field_hash = card_template['name'].rsplit(' ', 1)
         card_template['name'] = hr_name.lower() + " " + field_hash
+        if 'id' not in card_template:
+            assert 'id' in card_template.keys()
         hash_to_template[field_hash] = card_template['id']
     for field_dict in start_model['flds']:
         if '<' in field_dict['name']:
