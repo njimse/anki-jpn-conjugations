@@ -132,7 +132,6 @@ def test_rename_fields(anki_col):
     start_model = anki_col.models.by_name("verb model")
     hash_to_template = {}
     hash_to_field = {}
-    import pdb; pdb.set_trace()
     for card_template in start_model['tmpls']:
         hr_name, field_hash = card_template['name'].rsplit(' ', 1)
         card_template['name'] = hr_name.lower() + " " + field_hash
