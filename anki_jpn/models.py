@@ -1,5 +1,6 @@
 """Methods for defining models (a.k.a. Notes)"""
 from copy import deepcopy
+import re
 from typing import List, Dict, Optional, Tuple, Union
 import importlib.resources
 
@@ -8,6 +9,28 @@ import anki.models
 
 import anki_jpn.resources as anki_jpn_resources
 from anki_jpn.enums import Form, Formality
+
+COMBO_HASHES = {
+    (Formality.POLITE, Form.NON_PAST): 'uNCk',
+    (Formality.POLITE, Form.NON_PAST_NEG): 'pyJD',
+    (Formality.POLITE, Form.PAST): 'FWhU',
+    (Formality.POLITE, Form.PAST_NEG): 'OfA3',
+    (Formality.POLITE, Form.VOLITIONAL): 'TiKs',
+    (None, Form.TE): 'g1G0',
+    (Formality.PLAIN, Form.NON_PAST): 'AUXG',
+    (Formality.PLAIN, Form.NON_PAST_NEG): '5hRQ',
+    (Formality.PLAIN, Form.PAST): 'wlxY',
+    (Formality.PLAIN, Form.PAST_NEG): 'X9LC',
+    (Formality.POLITE, Form.TAI_NON_PAST): '9Rq6',
+    (Formality.POLITE, Form.TAI_NON_PAST_NEG): 'MZD6',
+    (Formality.POLITE, Form.TAI_PAST): 'F3Ve',
+    (Formality.POLITE, Form.TAI_PAST_NEG): 'mwjc',
+    (None, Form.TAI_TE): 'kHaM',
+    (Formality.PLAIN, Form.TAI_NON_PAST): '1lct',
+    (Formality.PLAIN, Form.TAI_NON_PAST_NEG): 'L0D7',
+    (Formality.PLAIN, Form.TAI_PAST): 'uRpq',
+    (Formality.PLAIN, Form.TAI_PAST_NEG): 'EgRi'
+}
 
 VERB_COMBOS = [
     (Formality.POLITE, Form.NON_PAST),
@@ -53,10 +76,11 @@ def combo_to_field_name(form: Form, formality: Union[Formality, None]) -> str:
     formality : Formality
         Formality level of the conjugation
     """
+    hash_str = COMBO_HASHES[(formality, form)]
     if formality is None:
-        formatted_name = form.label().title()
+        formatted_name = f"{form.label().title()} <{hash_str}>"
     else:
-        formatted_name = f"{formality.value} {form.label()}".title()
+        formatted_name = f"{formality.value.title()} {form.label().title()} <{hash_str}>"
     return formatted_name
 
 def add_or_update_verb_model(model_manager: anki.models.ModelManager, model_name: str) -> None:
@@ -145,7 +169,32 @@ def _model_diffs(a: anki.models.NotetypeDict, b: anki.models.NotetypeDict) -> bo
 
     return False
 
-def _resolve_model_diffs(
+def _hash_match(left: str, right: str) -> bool:
+    """Check if the hashes in two inputs match
+
+    Parameters
+    ----------
+    left : str
+        Left side of the comparison
+    right : str
+        Right side of the comparison
+
+    Returns
+    -------
+    bool
+        True if the hashes are equivalent, False if not equivalent. If hashes
+        are not detected in both the left and right inputs, then a simple string
+        comparison is performed.
+    """
+
+    try:
+        left_hash = re.search('<([^>]+)>$', left).group(1)
+        right_hash = re.search('<([^>]+)>$', right).group(1)
+    except AttributeError:
+        return left == right
+    return left_hash == right_hash
+
+def _resolve_model_diffs( # pylint: disable=R0912
         model_manager: anki.models.ModelManager, existing_model: anki.models.NotetypeDict,
         target_model: anki.models.NotetypeDict) -> anki.models.NotetypeDict:
     """Resolve the differences between an existing model and a target model
@@ -170,8 +219,15 @@ def _resolve_model_diffs(
 
     # Remove any fields that are not in the target model
     for field_dict in list(updated_model['flds']):
-        if not any(target_field_dict['name'] == field_dict['name'] \
-                   for target_field_dict in target_model['flds']):
+        has_match = False
+        for target_field_dict in target_model['flds']:
+            if _hash_match(target_field_dict['name'], field_dict['name']):
+                if target_field_dict['name'] != field_dict['name']:
+                    model_manager.rename_field(
+                        existing_model, field_dict, target_field_dict['name'])
+                has_match = True
+                continue
+        if not has_match:
             model_manager.remove_field(updated_model, field_dict)
 
     # Add any templates that are missing in the existing model.
@@ -180,11 +236,17 @@ def _resolve_model_diffs(
     for template_dict in target_model['tmpls']:
         has_match = False
         for updated_template in updated_model['tmpls']:
-            if updated_template['name'] == template_dict['name'] \
-                and updated_template['qfmt'] == template_dict['qfmt'] \
-                and updated_template['afmt'] == template_dict['afmt']:
+            if _hash_match(updated_template['name'], template_dict['name']):
+
+                # Note that as long as the hashes match, we want to pick up
+                # any updates to the name or the front/back templates
+                updated_template['name'] = template_dict['name']
+                updated_template['qfmt'] = template_dict['qfmt']
+                updated_template['afmt'] = template_dict['afmt']
 
                 has_match = True
+                continue
+
         if not has_match:
             model_manager.add_template(updated_model, template_dict)
 

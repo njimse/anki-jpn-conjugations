@@ -143,6 +143,7 @@ def update_adjectives():
 
     adj_model_name = config.adjective_model_name()
     add_or_update_adjective_model(mw.col.models, adj_model_name)
+    mw.col.fix_integrity()
     dest_model = mw.col.models.by_name(adj_model_name)
     deck_updater = DeckUpdater(mw.col, target_deck_id, dest_model, config)
 
@@ -192,6 +193,7 @@ def update_verbs():
 
     verb_model_name = config.verb_model_name()
     add_or_update_verb_model(mw.col.models, verb_model_name)
+    mw.col.fix_integrity()
     dest_model = mw.col.models.by_name(verb_model_name)
     deck_updater = DeckUpdater(mw.col, target_deck_id, dest_model, config)
 
