@@ -32,7 +32,7 @@ class Form(Enum):
         self.simple_name = simple_name
         self.polarity = polarity
         self.temporality = temporality
-    
+
     def label(self) -> str:
         """Compose the label for the form
 
@@ -69,7 +69,7 @@ class Form(Enum):
         if self == Form.TE:
             return Form.TAI_TE
         return self
-    
+
 
 
 class Formality(Enum):

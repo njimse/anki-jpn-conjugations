@@ -1,7 +1,7 @@
 """Methods for defining models (a.k.a. Notes)"""
 from copy import deepcopy
 import re
-from typing import List, Dict, Optional, Tuple, Union
+from typing import List, Dict, Tuple, Union
 import importlib.resources
 
 import anki.collection
