@@ -1,17 +1,19 @@
 """Tests pertaining to the creation and updating of model definitions"""
 import os
-import sys
 import tempfile
 from copy import deepcopy
 
 import pytest
 
+from anki.buildinfo import version as anki_version
 import anki.collection
 from anki_jpn.enums import Formality, Form
 from anki_jpn.models import (
     VERB_COMBOS, ADJECTIVE_COMBOS, COMBO_HASHES, add_or_update_verb_model,
     add_or_update_adjective_model, _create_model
 )
+
+anki_version_info = tuple(int(x) for x in anki_version.split('.'))
 
 @pytest.fixture(name="anki_col")
 def fixture_anki_col():
@@ -93,7 +95,7 @@ def test_no_change_needed(anki_col):
 
     assert len(end_models) == len(start_models)
 
-@pytest.mark.skipif(sys.version_info[:2] < (3,9), reason="'id' attribute of templates not present")
+@pytest.mark.skipif(anki_version_info <= (23, 10), reason="'id' attribute of templates not present")
 def test_rename_fields(anki_col):
     """Test that we correctly identify changes to field names"""
     ref_model = anki_col.models.new("verb model")

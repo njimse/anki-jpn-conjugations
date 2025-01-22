@@ -15,7 +15,7 @@ jobs:
           - python-version: "3.9"
             anki-version: "2.1.66"
           - python-version: "3.9"
-            anki-version: "23.2.1"
+            anki-version: "23.12.1"
           - python-version: "3.9"
             anki-version: "24.11"
     steps:
