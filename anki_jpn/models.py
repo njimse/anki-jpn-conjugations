@@ -1,7 +1,7 @@
 """Methods for defining models (a.k.a. Notes)"""
 from copy import deepcopy
 import re
-from typing import List, Dict, Optional, Tuple, Union
+from typing import List, Dict, Tuple, Union
 import importlib.resources
 
 import anki.collection
@@ -78,9 +78,9 @@ def combo_to_field_name(form: Form, formality: Union[Formality, None]) -> str:
     """
     hash_str = COMBO_HASHES[(formality, form)]
     if formality is None:
-        formatted_name = f"{form.value.title()} <{hash_str}>"
+        formatted_name = f"{form.label().title()} <{hash_str}>"
     else:
-        formatted_name = f"{formality.value.title()} {form.value.title()} <{hash_str}>"
+        formatted_name = f"{formality.value.title()} {form.label().title()} <{hash_str}>"
     return formatted_name
 
 def add_or_update_verb_model(model_manager: anki.models.ModelManager, model_name: str) -> None:
@@ -304,20 +304,15 @@ def _ensure_order(
         index += 1
 
 
-def _resolve_placeholders(template: str, formality: Optional[str] = None,
-                          form: Optional[str] = None, field_name: Optional[str] = None) -> str:
+def _resolve_placeholders(template: str, substitutions: Dict[str, str]) -> str:
     """Resolve the placeholders in the card template definitions
 
     Parameters
     ----------
     template : str
         Card template with placeholders to be replaced
-    formality : str | None
-        Formality level for the conjugation relevant to the card
-    form : str | None
-        Form name for the conjugation relevant to the card
-    field_name : str | None
-        Name of the Note/Model field containing the conjugation relevant to the card
+    substitutions : Dict[str, str]
+        Placeholder strings and the corresponding replacements
 
     Returns
     -------
@@ -326,12 +321,9 @@ def _resolve_placeholders(template: str, formality: Optional[str] = None,
     """
 
     result = template
-    if formality is not None:
-        result = result.replace('FORMALITY', formality)
-    if form is not None:
-        result = result.replace('FORM_NAME', form)
-    if field_name is not None:
-        result = result.replace('FIELD_NAME', field_name)
+    for placeholder, replacement in substitutions.items():
+        if replacement is not None:
+            result = result.replace(placeholder, replacement)
     return result
 
 def _create_model(model_manager: anki.models.ModelManager, model: anki.models.NotetypeDict,
@@ -409,15 +401,18 @@ def get_fields_and_templates(
     for formality, form in combos:
         formatted_name = combo_to_field_name(form, formality)
         fields.append(formatted_name)
+        subs = {
+            "FIELD_NAME": formatted_name,
+            "FORMALITY": formality.value if formality is not None else '',
+            "FORM_NAME": form.simple_name,
+            "POLARITY": form.polarity,
+            "TEMPORALITY": form.temporality
+        }
         templates.append(
             {
                 "name": formatted_name,
-                "qfmt": _resolve_placeholders(
-                    front_template, formality=formality.value if formality is not None else '',
-                    form=form.value, field_name=formatted_name),
-                "afmt": _resolve_placeholders(
-                    back_template, formality=formality.value if formality is not None else '',
-                    field_name=formatted_name)
+                "qfmt": _resolve_placeholders(front_template, subs),
+                "afmt": _resolve_placeholders(back_template, subs)
             }
         )
     return fields, templates
