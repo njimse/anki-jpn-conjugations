@@ -96,7 +96,7 @@ def test_no_change_needed(anki_col):
 
     assert len(end_models) == len(start_models)
 
-@pytest.mark.skipif(anki_version_info <= (2, 1, 55), reason="'id' attribute of templates not present")
+@pytest.mark.skipif(anki_version_info <= (23, 10), reason="'id' attribute of templates not present")
 def test_rename_fields(anki_col):
     """Test that we correctly identify changes to field names"""
     ref_model = anki_col.models.new("verb model")
