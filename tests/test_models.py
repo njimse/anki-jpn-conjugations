@@ -1,6 +1,5 @@
 """Tests pertaining to the creation and updating of model definitions"""
 import os
-import sys
 import tempfile
 from copy import deepcopy
 
