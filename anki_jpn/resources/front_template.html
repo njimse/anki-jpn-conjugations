@@ -1,20 +1,18 @@
 {{#FIELD_NAME}}
 <table align="center">
-  <tr><td colspan=2><div class=jp>{{Expression}}</div></td></tr>
-  <tr><td align="right">Formality</td><td align="left"><div id=formality>FORMALITY</div></td></tr>
-  <tr><td align="right">Form</td><td align="left">FORM_NAME</td></tr>
-  <tr><td align="right">Temporality</td><td align="left"><div id=temporality>TEMPORALITY</div></td></tr>
-  <tr><td align="right">Polarity</td><td align="left"><div id=polarity>POLARITY</div></td></tr>
+  <tr><td><div class=jp>{{Expression}}</div></td></tr>
+  <tr><td><div id=formality>FORMALITY</div></td></tr>
+  <tr><td>FORM_NAME</td></tr>
 </table>
 
 <script>
 var x = "FORMALITY";
-if (x === "polite")
+if (x === "Polite")
 {
   document.getElementById("formality").className = "polite";
 }
 else
-{ 
+{
   document.getElementById("formality").className = "plain";
 }
 </script>
