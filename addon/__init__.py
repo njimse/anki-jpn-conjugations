@@ -13,6 +13,7 @@ from anki.tags import TagManager
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
+from anki_jpn import __version__ as anki_jpn_version
 from anki_jpn.models import (
     add_or_update_verb_model, add_or_update_adjective_model
 )
@@ -217,14 +218,19 @@ def update_verbs():
     new_notes, modified_notes, failed_notes = deck_updater.summary()
     showInfo(f"Added {new_notes} new note(s)\nModified {modified_notes} note(s)\nFailed to conjugate {failed_notes} note(s)")
 
+def about_addon():
+    showInfo(f"Version: {anki_jpn_version}")
+
 # Create the menu items
-conj_menu = QMenu("Conjugation Decks", mw)
-update_verb_deck_action = conj_menu.addAction("Update Verb Conjugations")
-update_adjective_deck_action = conj_menu.addAction("Update Adjective Conjugations")
+conj_menu = QMenu("Japanese Conjugation", mw)
+update_verb_deck_action = conj_menu.addAction("Verbs")
+update_adjective_deck_action = conj_menu.addAction("Adjectives")
+about_action = conj_menu.addAction("About")
 
 # Add the triggers
 update_verb_deck_action.triggered.connect(update_verbs)
 update_adjective_deck_action.triggered.connect(update_adjectives)
+about_action.triggered.connect(about_addon)
 
 # Add the menu button to the "Tools" menu
 mw.form.menuTools.addMenu(conj_menu)
