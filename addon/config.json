@@ -22,5 +22,15 @@
         }
     },
     "adjective_conjugation_note_type": "Japanese Adjective Conjugation",
-    "verb_conjugation_note_type": "Japanese Verb Conjugation"
+    "verb_conjugation_note_type": "Japanese Verb Conjugation",
+    "colors": {
+        "day": {
+            "polite": "#4DB01C",
+            "plain": "#2A6DEC"
+        },
+        "night": {
+            "polite": "#4DB01C",
+            "plain": "#2A6DEC"
+        }
+    }
 }

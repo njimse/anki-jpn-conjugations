@@ -6,17 +6,18 @@ INSERT_ENDING_SPANS_FUNCTION
 var new_conjugation = insert_ending_spans("{{furigana:Reading}}", "{{furigana:FIELD_NAME}}");
 document.getElementById("conj").innerHTML = new_conjugation;
 
+var formality_class = "";
 var x = "FORMALITY";
-var endings = document.getElementsByClassName("ending");
-var endings_color = "";
 if (x === "Polite")
 {
-  endings_color = "#4DB01C";
+  formality_class = ".polite";
 }
 else
 {
-  endings_color = "#2A6DEC";
+  formality_class = ".plain";
 }
+var endings = document.getElementsByClassName("ending");
+var endings_color = document.querySelector(formality_class).computedStyleMap().get('color');
 for (var i = 0; i < endings.length; i++) {
   endings[i].style.color = endings_color;
 }

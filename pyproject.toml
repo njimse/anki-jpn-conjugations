@@ -20,7 +20,8 @@ test = [
     "pytest",
     "pytest-mock",
     "js2py",
-    "pylint"
+    "pylint",
+    "cssutils"
 ]
 
 [project.scripts]
