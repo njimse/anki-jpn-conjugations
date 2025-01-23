@@ -83,7 +83,8 @@ def combo_to_field_name(form: Form, formality: Union[Formality, None]) -> str:
         formatted_name = f"{formality.value.title()} {form.label().title()} <{hash_str}>"
     return formatted_name
 
-def add_or_update_verb_model(model_manager: anki.models.ModelManager, model_name: str) -> None:
+def add_or_update_verb_model(model_manager: anki.models.ModelManager, model_name: str,
+                             color_dict: Dict[str, Dict[str, str]]=None) -> None:
     """Ensure that the model manager is aware of an up-to-date version of the verb model
 
     Parameters
@@ -92,11 +93,14 @@ def add_or_update_verb_model(model_manager: anki.models.ModelManager, model_name
         ModelManager for the collection to be updated with the verb model
     model_name : str
         Name to be used for the verb model
+    color_dict : Dict[str, Dict[str, str]]
+        Configuration for colors to use for the style sheet
     """
 
-    _add_or_update_model(model_manager, model_name, VERB_COMBOS)
+    _add_or_update_model(model_manager, model_name, VERB_COMBOS, color_dict)
 
-def add_or_update_adjective_model(model_manager: anki.models.ModelManager, model_name: str) -> None:
+def add_or_update_adjective_model(model_manager: anki.models.ModelManager, model_name: str,
+                                  color_dict: Dict[str, Dict[str, str]]=None) -> None:
     """Ensure that the model manager is aware of an up-to-date version of the adjective model
 
     Parameters
@@ -105,13 +109,15 @@ def add_or_update_adjective_model(model_manager: anki.models.ModelManager, model
         ModelManager for the collection to be updated with the verb model
     model_name : str
         Name to be used for the verb model
+    color_dict : Dict[str, Dict[str, str]]
+        Configuration for colors to use for the style sheet
     """
 
-    _add_or_update_model(model_manager, model_name, ADJECTIVE_COMBOS)
+    _add_or_update_model(model_manager, model_name, ADJECTIVE_COMBOS, color_dict)
 
 def _add_or_update_model(
         model_manager: anki.models.ModelManager, model_name: str,
-        combos: List[Tuple[Formality, Form]]) -> None:
+        combos: List[Tuple[Formality, Form]], color_dict: Dict[str, Dict[str, str]]=None) -> None:
     """Ensure that the model manager is aware of an up-to-date version of the adjective model
 
     Parameters
@@ -120,10 +126,12 @@ def _add_or_update_model(
         ModelManager for the collection to be updated with the verb model
     model_name : str
         Name to be used for the verb model
+    color_dict : Dict[str, Dict[str, str]]
+        Configuration for colors to use for the style sheet
     """
 
     model = model_manager.new(model_name)
-    _create_model(model_manager, model, combos)
+    _create_model(model_manager, model, combos, color_dict)
     existing_model = model_manager.by_name(model_name)
     if existing_model is None:
         # Simply add the newly created model
@@ -327,7 +335,8 @@ def _resolve_placeholders(template: str, substitutions: Dict[str, str]) -> str:
     return result
 
 def _create_model(model_manager: anki.models.ModelManager, model: anki.models.NotetypeDict,
-               combos: List[Tuple[Formality, Form]]) -> anki.models.NotetypeDict:
+               combos: List[Tuple[Formality, Form]], color_dict: Dict[str, Dict[str, str]]=None) \
+                -> anki.models.NotetypeDict:
     """Get a model for tracking conjugations
 
     Parameters
@@ -338,6 +347,8 @@ def _create_model(model_manager: anki.models.ModelManager, model: anki.models.No
         Empty model to be filled out with content
     combos : List[Tuple[Formality, Form]]
         List of combos, used to define which conjugation fields should be added
+    color_dict : Dict[str, Dict[str, str]]
+        Configuration for colors to use for the style sheet
 
     Returns
     -------
@@ -352,17 +363,21 @@ def _create_model(model_manager: anki.models.ModelManager, model: anki.models.No
                                                              'insert_ending_spans.js')
     back_template = back_template.replace('INSERT_ENDING_SPANS_FUNCTION', insert_ending_spans_text)
 
-    model['css'] = card_css
-    base_fields = [
-        "Expression",
-        "Meaning",
-        "Reading"
-    ]
-    all_fields, all_templates = get_fields_and_templates(base_fields, front_template,
-                                                         back_template, combos)
+    if color_dict:
+        color_overrides = color_dict
+    else:
+        color_overrides = {}
+    css_subs = {
+        "POLITE_DAY": color_overrides.get('day', {}).get('polite', '#4DB01C'),
+        "POLITE_NIGHT": color_overrides.get('night', {}).get('polite', '#4DB01C'),
+        "PLAIN_DAY": color_overrides.get('day', {}).get('plain', '#2A6DEC'),
+        "PLAIN_NIGHT": color_overrides.get('night', {}).get('plain', '#2A6DEC')
+    }
+    model['css'] = _resolve_placeholders(card_css, css_subs)
+    all_fields, all_templates = get_fields_and_templates(["Expression", "Meaning", "Reading"],
+                                                         front_template, back_template, combos)
     for field_name in all_fields:
-        field_dict = model_manager.new_field(field_name)
-        model_manager.add_field(model, field_dict)
+        model_manager.add_field(model, model_manager.new_field(field_name))
     for template in all_templates:
         template_dict = model_manager.new_template(template['name'])
         template_dict['qfmt'] = template['qfmt']

@@ -219,3 +219,13 @@ class ConfigManager:
             fields = self._cfg['note_types'][model_name]
             return fields['expression'], fields['meaning'], fields['reading']
         return None, None, None
+
+    def get_colors(self) -> Dict[str, Dict[str, str]]:
+        """Retrieve the color settings specified in the config
+        
+        Returns
+        -------
+        Dict[str, Dict[str, str]]
+            Mapping of colors to be used in the card styling"""
+
+        return self._cfg.get('colors', {})

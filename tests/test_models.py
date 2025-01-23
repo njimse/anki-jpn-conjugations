@@ -4,6 +4,7 @@ import tempfile
 from copy import deepcopy
 
 import pytest
+import cssutils
 
 from anki.buildinfo import version as anki_version
 import anki.collection
@@ -24,6 +25,7 @@ def fixture_anki_col():
     yield col
     col.close()
     os.unlink(fn)
+
 
 def compare_models(a, b):
     """Compare two models to ensure that they are (sufficiently) equivalent"""
@@ -233,6 +235,34 @@ def test_changed_base_templates(anki_col):
     compare_models(ref_model, hyp_model)
 
     assert len(end_models) == len(start_models)
+
+custom_colors_data = [
+    (None, ('#4DB01C', '#4DB01C', '#2A6DEC', '#2A6DEC')),
+    ({}, ('#4DB01C', '#4DB01C', '#2A6DEC', '#2A6DEC')),
+    ({"day": {"polite": '#30B10F'}}, ('#30B10F', '#4DB01C', '#2A6DEC', '#2A6DEC')),
+    ({"day": {"plain": '#30B10F'}}, ('#4DB01C', '#4DB01C', '#30B10F', '#2A6DEC')),
+    ({"night": {"polite": '#30B10F'}}, ('#4DB01C', '#30B10F', '#2A6DEC', '#2A6DEC')),
+    ({"night": {"plain": '#30B10F'}}, ('#4DB01C', '#4DB01C', '#2A6DEC', '#30B10F')),
+    ({"day": {"polite": '#010394', "plain": '#ab0193'},
+      "night": {"polite": '#f02dc1', "plain": "#32df01"}},
+      ('#010394', '#f02dc1', '#ab0193', "#32df01"))
+]
+@pytest.mark.parametrize("color_dict, ref_colors", custom_colors_data)
+def test_custom_colors(anki_col, color_dict, ref_colors):
+    """Test that the configuration can be used to customize colors for the cards"""
+    model_name = "verb model"
+    add_or_update_adjective_model(anki_col.models, model_name, color_dict)
+    model = anki_col.models.by_name(model_name)
+
+    css = cssutils.parseString(model['css'])
+    day_plain_rules = [r for r in css.cssRules if r.selectorText == '.plain']
+    night_plain_rules = [r for r in css.cssRules if r.selectorText == '.nightMode .plain']
+    day_polite_rules = [r for r in css.cssRules if r.selectorText == '.polite']
+    night_polite_rules = [r for r in css.cssRules if r.selectorText == '.nightMode .polite']
+    assert day_polite_rules[-1].style.color == ref_colors[0]
+    assert night_polite_rules[-1].style.color == ref_colors[1]
+    assert day_plain_rules[-1].style.color == ref_colors[2]
+    assert night_plain_rules[-1].style.color == ref_colors[3]
 
 reference_combo_hashes = {
     'uNCk': (Formality.POLITE, Form.NON_PAST),
