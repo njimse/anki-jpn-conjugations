@@ -45,7 +45,10 @@ class Form(Enum):
         result = []
         if self.temporality:
             result.append(self.temporality)
-        result.append(self.simple_name)
+        if 'indicative' not in self.simple_name:
+            result.append(self.simple_name)
+        elif self.simple_name != 'indicative':
+            result.append(self.simple_name.replace('indicative', '').strip())
         if self.polarity == 'negative':
             result.append(self.polarity)
         return ' '.join(result)
@@ -69,7 +72,6 @@ class Form(Enum):
         if self == Form.TE:
             return Form.TAI_TE
         return self
-
 
 
 class Formality(Enum):

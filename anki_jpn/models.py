@@ -403,10 +403,8 @@ def get_fields_and_templates(
         fields.append(formatted_name)
         subs = {
             "FIELD_NAME": formatted_name,
-            "FORMALITY": formality.value if formality is not None else '',
-            "FORM_NAME": form.simple_name,
-            "POLARITY": form.polarity,
-            "TEMPORALITY": form.temporality
+            "FORMALITY": formality.value.title() if formality is not None else 'Polite',
+            "FORM_NAME": form.label().title(),
         }
         templates.append(
             {
