@@ -8,7 +8,7 @@ authors = [
 ]
 name = "anki-jpn"
 description = "This is a set of tooling to allow for generating anki cards for learning/practicing Japanese"
-version = "0.2.0"
+version = "0.3.0"
 requires-python = ">=3.8,<3.10"
 readme = "README.md"
 dependencies = [
@@ -22,6 +22,9 @@ test = [
     "js2py",
     "pylint",
     "cssutils"
+]
+dev = [
+    "bumpversion"
 ]
 
 [project.scripts]
