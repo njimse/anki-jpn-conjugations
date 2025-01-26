@@ -262,7 +262,7 @@ def get_godan_stem(dictionary_form: str, formality: Formality) -> str:
         stem = dictionary_form[:-1] + godan_plain_stem_mapping[dictionary_form[-1]]
     return stem
 
-def _masu_stem(dictionary_form: str, v_class: VerbClass,
+def _masu_stem(dictionary_form: str, v_class: VerbClass, # pylint: disable=R0912
                formality: Formality = Formality.POLITE) -> str:
     """Get the ~masu stem of the specified verb
 
@@ -293,6 +293,16 @@ def _masu_stem(dictionary_form: str, v_class: VerbClass,
                 stem = dictionary_form[:-5] + '来[き]'
             else:
                 stem = dictionary_form[:-5] + '来[こ]'
+        elif dictionary_form.endswith('来る'):
+            if len(dictionary_form) == 2:
+                buffer = ''
+            else:
+                buffer = ' '
+            if formality == Formality.POLITE:
+                ending = '来[き]'
+            else:
+                ending = '来[こ]'
+            stem = dictionary_form[:-2] + buffer + ending
         elif dictionary_form.endswith('くる'):
             if formality == Formality.POLITE:
                 stem = dictionary_form[:-2] + 'き'
@@ -450,7 +460,9 @@ def te(dictionary_form: str, verb_class: VerbClass) -> str:
     if verb_class == VerbClass.ICHIDAN:
         completion = dictionary_form[:-1] + "て"
     elif verb_class == VerbClass.GODAN:
-        if dictionary_form.endswith('行[い]く') or dictionary_form.endswith('いく'):
+        if dictionary_form.endswith('行[い]く') or dictionary_form.endswith('いく') \
+            or dictionary_form.endswith('行く'):
+
             completion = dictionary_form[:-1] + "って"
         else:
             completion = dictionary_form[:-1] + godan_te_mapping[dictionary_form[-1]]
@@ -461,6 +473,11 @@ def te(dictionary_form: str, verb_class: VerbClass) -> str:
             completion = dictionary_form[:-5] + "来[き]て"
         elif dictionary_form.endswith("くる"):
             completion = dictionary_form[:-2] + "きて"
+        elif dictionary_form.endswith("来る"):
+            if len(dictionary_form) == 2:
+                completion = "来[き]て"
+            else:
+                completion = dictionary_form[:-2] + " 来[き]て"
 
     assert completion is not None
     return completion
@@ -481,6 +498,13 @@ def plain_nonpast_positive(dictionary_form: str, verb_type: VerbClass) -> str: #
     str
         Conjugated verb
     """
+    if dictionary_form.endswith("来る"):
+        ending = "来[く]る"
+        if len(dictionary_form) == 2:
+            completion = ending
+        else:
+            completion = dictionary_form[:-2] + ' ' + ending
+        return completion
 
     return dictionary_form
 

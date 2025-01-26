@@ -35,7 +35,14 @@ polite_nonpast_positive_data = [
     ('スポーツをする', VerbClass.IRREGULAR, 'スポーツをします'),
     ('よむ', VerbClass.GODAN, 'よみます'),
     ('かう', VerbClass.GODAN, 'かいます'),
-    ('はなす', VerbClass.GODAN, 'はなします')
+    ('はなす', VerbClass.GODAN, 'はなします'),
+    # no furigana
+    ('来る', VerbClass.IRREGULAR, '来[き]ます'),
+    ('連れて来る', VerbClass.IRREGULAR, '連れて 来[き]ます'),
+    ('行く', VerbClass.GODAN, '行きます'),
+    ('読む', VerbClass.GODAN, '読みます'),
+    ('買う', VerbClass.GODAN, '買います'),
+    ('話す', VerbClass.GODAN, '話します'),
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", polite_nonpast_positive_data)
 def test_polite_nonpast_positive(dict_form, verb_class, reference):
@@ -59,7 +66,14 @@ polite_nonpast_negative_data = [
     ('いく', VerbClass.GODAN, 'いきません'),
     ('よむ', VerbClass.GODAN, 'よみません'),
     ('かう', VerbClass.GODAN, 'かいません'),
-    ('はなす', VerbClass.GODAN, 'はなしません')
+    ('はなす', VerbClass.GODAN, 'はなしません'),
+    # no furigana
+    ('来る', VerbClass.IRREGULAR, '来[き]ません'),
+    ('連れて来る', VerbClass.IRREGULAR, '連れて 来[き]ません'),
+    ('行く', VerbClass.GODAN, '行きません'),
+    ('読む', VerbClass.GODAN, '読みません'),
+    ('買う', VerbClass.GODAN, '買いません'),
+    ('話す', VerbClass.GODAN, '話しません'),
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", polite_nonpast_negative_data)
 def test_polite_nonpast_negative(dict_form, verb_class, reference):
@@ -82,7 +96,14 @@ polite_past_positive_data = [
     ('いく', VerbClass.GODAN, 'いきました'),
     ('よむ', VerbClass.GODAN, 'よみました'),
     ('かう', VerbClass.GODAN, 'かいました'),
-    ('はなす', VerbClass.GODAN, 'はなしました')
+    ('はなす', VerbClass.GODAN, 'はなしました'),
+    # no furigana
+    ('来る', VerbClass.IRREGULAR, '来[き]ました'),
+    ('連れて来る', VerbClass.IRREGULAR, '連れて 来[き]ました'),
+    ('行く', VerbClass.GODAN, '行きました'),
+    ('読む', VerbClass.GODAN, '読みました'),
+    ('買う', VerbClass.GODAN, '買いました'),
+    ('話す', VerbClass.GODAN, '話しました'),
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", polite_past_positive_data)
 def test_polite_past_positive(dict_form, verb_class, reference):
@@ -105,7 +126,14 @@ polite_past_negative_data = [
     ('いく', VerbClass.GODAN, 'いきませんでした'),
     ('よむ', VerbClass.GODAN, 'よみませんでした'),
     ('かう', VerbClass.GODAN, 'かいませんでした'),
-    ('はなす', VerbClass.GODAN, 'はなしませんでした')
+    ('はなす', VerbClass.GODAN, 'はなしませんでした'),
+    # no furigana
+    ('来る', VerbClass.IRREGULAR, '来[き]ませんでした'),
+    ('連れて来る', VerbClass.IRREGULAR, '連れて 来[き]ませんでした'),
+    ('行く', VerbClass.GODAN, '行きませんでした'),
+    ('読む', VerbClass.GODAN, '読みませんでした'),
+    ('買う', VerbClass.GODAN, '買いませんでした'),
+    ('話す', VerbClass.GODAN, '話しませんでした')
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", polite_past_negative_data)
 def test_polite_past_negative(dict_form, verb_class, reference):
@@ -128,7 +156,14 @@ polite_volitional_data = [
     ('いく', VerbClass.GODAN, 'いきましょう'),
     ('よむ', VerbClass.GODAN, 'よみましょう'),
     ('かう', VerbClass.GODAN, 'かいましょう'),
-    ('はなす', VerbClass.GODAN, 'はなしましょう')
+    ('はなす', VerbClass.GODAN, 'はなしましょう'),
+    # no furigana
+    ('来る', VerbClass.IRREGULAR, '来[き]ましょう'),
+    ('連れて来る', VerbClass.IRREGULAR, '連れて 来[き]ましょう'),
+    ('行く', VerbClass.GODAN, '行きましょう'),
+    ('読む', VerbClass.GODAN, '読みましょう'),
+    ('買う', VerbClass.GODAN, '買いましょう'),
+    ('話す', VerbClass.GODAN, '話しましょう')
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", polite_volitional_data)
 def test_polite_volitional(dict_form, verb_class, reference):
@@ -167,7 +202,22 @@ te_data = [
     ('たべる', VerbClass.ICHIDAN, 'たべて'),
     ('おきる', VerbClass.ICHIDAN, 'おきて'),
     ('あける', VerbClass.ICHIDAN, 'あけて'),
-    ('かりる', VerbClass.ICHIDAN, 'かりて')
+    ('かりる', VerbClass.ICHIDAN, 'かりて'),
+    # no furigana
+    ('来る', VerbClass.IRREGULAR, '来[き]て'),
+    ('連れて来る', VerbClass.IRREGULAR, '連れて 来[き]て'),
+    ('行く', VerbClass.GODAN, '行って'),
+    ('書く', VerbClass.GODAN, '書いて'),
+    ('遊ぶ', VerbClass.GODAN, '遊んで'),
+    ('立つ', VerbClass.GODAN, '立って'),
+    ('読む', VerbClass.GODAN, '読んで'),
+    ('買う', VerbClass.GODAN, '買って'),
+    ('話す', VerbClass.GODAN, '話して'),
+    ('泳ぐ', VerbClass.GODAN, '泳いで'),
+    ('食べる', VerbClass.ICHIDAN, '食べて'),
+    ('起きる', VerbClass.ICHIDAN, '起きて'),
+    ('開ける', VerbClass.ICHIDAN, '開けて'),
+    ('借りる', VerbClass.ICHIDAN, '借りて')
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", te_data)
 def test_te(dict_form, verb_class, reference):
@@ -193,7 +243,15 @@ plain_nonpast_positive_data = [
     ('よむ', 'よむ'),
     ('かう', 'かう'),
     ('はなす', 'はなす'),
-    ('きる', 'きる')
+    ('きる', 'きる'),
+    # no furigana
+    ('来る', '来[く]る'),
+    ('連れて来る', '連れて 来[く]る'),
+    ('行く', '行く'),
+    ('読む', '読む'),
+    ('買う', '買う'),
+    ('話す', '話す'),
+    ('切る', '切る')
 ]
 @pytest.mark.parametrize("dict_form, reference", plain_nonpast_positive_data)
 def test_plain_nonpast_positive(dict_form, reference):
@@ -221,7 +279,15 @@ plain_nonpast_negative_data = [
     ('いく', VerbClass.GODAN, 'いかない'),
     ('よむ', VerbClass.GODAN, 'よまない'),
     ('かう', VerbClass.GODAN, 'かわない'),
-    ('はなす', VerbClass.GODAN, 'はなさない')
+    ('はなす', VerbClass.GODAN, 'はなさない'),
+    # no furigana
+    ('来る', VerbClass.IRREGULAR, '来[こ]ない'),
+    ('連れて来る', VerbClass.IRREGULAR, '連れて 来[こ]ない'),
+    ('人気がある', VerbClass.GODAN, '人気がない'),
+    ('行く', VerbClass.GODAN, '行かない'),
+    ('読む', VerbClass.GODAN, '読まない'),
+    ('買う', VerbClass.GODAN, '買わない'),
+    ('話す', VerbClass.GODAN, '話さない')
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", plain_nonpast_negative_data)
 def test_plain_nonpast_negative(dict_form, verb_class, reference):
@@ -248,7 +314,16 @@ plain_past_positive_data = [
     ('かう', VerbClass.GODAN, 'かった'),
     ('およぐ', VerbClass.GODAN, 'およいだ'),
     ('はなす', VerbClass.GODAN, 'はなした'),
-    ('きる', VerbClass.GODAN, 'きった')
+    ('きる', VerbClass.GODAN, 'きった'),
+    # no furigana
+    ('来る', VerbClass.IRREGULAR, '来[き]た'),
+    ('連れて来る', VerbClass.IRREGULAR, '連れて 来[き]た'),
+    ('行く', VerbClass.GODAN, '行った'),
+    ('読む', VerbClass.GODAN, '読んだ'),
+    ('買う', VerbClass.GODAN, '買った'),
+    ('泳ぐ', VerbClass.GODAN, '泳いだ'),
+    ('話す', VerbClass.GODAN, '話した'),
+    ('切る', VerbClass.GODAN, '切った')
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", plain_past_positive_data)
 def test_plain_past_positive(dict_form, verb_class, reference):
@@ -271,7 +346,14 @@ plain_past_negative_data = [
     ('いく', VerbClass.GODAN, 'いかなかった'),
     ('よむ', VerbClass.GODAN, 'よまなかった'),
     ('かう', VerbClass.GODAN, 'かわなかった'),
-    ('はなす', VerbClass.GODAN, 'はなさなかった')
+    ('はなす', VerbClass.GODAN, 'はなさなかった'),
+    # no furigana
+    ('来る', VerbClass.IRREGULAR, '来[こ]なかった'),
+    ('連れて来る', VerbClass.IRREGULAR, '連れて 来[こ]なかった'),
+    ('行く', VerbClass.GODAN, '行かなかった'),
+    ('読む', VerbClass.GODAN, '読まなかった'),
+    ('買う', VerbClass.GODAN, '買わなかった'),
+    ('話す', VerbClass.GODAN, '話さなかった')
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", plain_past_negative_data)
 def test_plain_past_negative(dict_form, verb_class, reference):
