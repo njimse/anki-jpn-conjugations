@@ -13,6 +13,7 @@ requires-python = ">=3.8,<3.10"
 readme = "README.md"
 dependencies = [
     "anki",
+    "aqt",
     "protobuf<=3.21;python_version<'3.9'"
 ]
 [project.optional-dependencies]
