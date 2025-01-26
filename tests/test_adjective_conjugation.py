@@ -27,7 +27,13 @@ polite_nonpast_positive_data = [
     ('美味[おい]しい', AdjectiveClass.I, '美味[おい]しいです'),
     ('美味しい', AdjectiveClass.I, '美味しいです'),
     ('早[はや]い', AdjectiveClass.I, '早[はや]いです'),
-    ('格好[かっこ]いい', AdjectiveClass.I, '格好[かっこ]いいです')
+    ('格好[かっこ]いい', AdjectiveClass.I, '格好[かっこ]いいです'),
+    # no kanji
+    ('げんきな', AdjectiveClass.NA, 'げんきです'),
+    ('ひまな', AdjectiveClass.NA, 'ひまです'),
+    ('おいしい', AdjectiveClass.I, 'おいしいです'),
+    ('はやい', AdjectiveClass.I, 'はやいです'),
+    ('かっこいい', AdjectiveClass.I, 'かっこいいです')
 ]
 @pytest.mark.parametrize("dict_form, adj_class, reference", polite_nonpast_positive_data)
 def test_polite_nonpast_positive(dict_form, adj_class, reference):
@@ -43,7 +49,13 @@ polite_nonpast_negative_data = [
     ('美味[おい]しい', AdjectiveClass.I, '美味[おい]しくないです'),
     ('美味しい', AdjectiveClass.I, '美味しくないです'),
     ('早[はや]い', AdjectiveClass.I, '早[はや]くないです'),
-    ('格好[かっこ]いい', AdjectiveClass.I, '格好[かっこ]よくないです')
+    ('格好[かっこ]いい', AdjectiveClass.I, '格好[かっこ]よくないです'),
+    # no kanji
+    ('げんきな', AdjectiveClass.NA, 'げんきじゃないです'),
+    ('ひまな', AdjectiveClass.NA, 'ひまじゃないです'),
+    ('おいしい', AdjectiveClass.I, 'おいしくないです'),
+    ('はやい', AdjectiveClass.I, 'はやくないです'),
+    ('かっこいい', AdjectiveClass.I, 'かっこよくないです')
 ]
 @pytest.mark.parametrize("dict_form, adj_class, reference", polite_nonpast_negative_data)
 def test_polite_nonpast_negative(dict_form, adj_class, reference):
@@ -59,7 +71,13 @@ polite_past_positive_data = [
     ('美味[おい]しい', AdjectiveClass.I, '美味[おい]しかったです'),
     ('美味しい', AdjectiveClass.I, '美味しかったです'),
     ('早[はや]い', AdjectiveClass.I, '早[はや]かったです'),
-    ('格好[かっこ]いい', AdjectiveClass.I, '格好[かっこ]よかったです')
+    ('格好[かっこ]いい', AdjectiveClass.I, '格好[かっこ]よかったです'),
+    # no kanji
+    ('げんきな', AdjectiveClass.NA, 'げんきでした'),
+    ('ひまな', AdjectiveClass.NA, 'ひまでした'),
+    ('おいしい', AdjectiveClass.I, 'おいしかったです'),
+    ('はやい', AdjectiveClass.I, 'はやかったです'),
+    ('かっこいい', AdjectiveClass.I, 'かっこよかったです')
 ]
 @pytest.mark.parametrize("dict_form, adj_class, reference", polite_past_positive_data)
 def test_polite_past_positive(dict_form, adj_class, reference):
@@ -75,7 +93,13 @@ polite_past_negative_data = [
     ('美味[おい]しい', AdjectiveClass.I, '美味[おい]しくなかったです'),
     ('美味しい', AdjectiveClass.I, '美味しくなかったです'),
     ('早[はや]い', AdjectiveClass.I, '早[はや]くなかったです'),
-    ('格好[かっこ]いい', AdjectiveClass.I, '格好[かっこ]よくなかったです')
+    ('格好[かっこ]いい', AdjectiveClass.I, '格好[かっこ]よくなかったです'),
+    # no kanji
+    ('げんきな', AdjectiveClass.NA, 'げんきじゃなかったです'),
+    ('ひまな', AdjectiveClass.NA, 'ひまじゃなかったです'),
+    ('おいしい', AdjectiveClass.I, 'おいしくなかったです'),
+    ('はやい', AdjectiveClass.I, 'はやくなかったです'),
+    ('かっこいい', AdjectiveClass.I, 'かっこよくなかったです')
 ]
 @pytest.mark.parametrize("dict_form, adj_class, reference", polite_past_negative_data)
 def test_polite_past_negative(dict_form, adj_class, reference):
@@ -91,7 +115,13 @@ te_data = [
     ('美味[おい]しい', AdjectiveClass.I, '美味[おい]しくて'),
     ('美味しい', AdjectiveClass.I, '美味しくて'),
     ('早[はや]い', AdjectiveClass.I, '早[はや]くて'),
-    ('格好[かっこ]いい', AdjectiveClass.I, '格好[かっこ]よくて')
+    ('格好[かっこ]いい', AdjectiveClass.I, '格好[かっこ]よくて'),
+    # no kanji
+    ('げんきな', AdjectiveClass.NA, 'げんきで'),
+    ('ひまな', AdjectiveClass.NA, 'ひまで'),
+    ('おいしい', AdjectiveClass.I, 'おいしくて'),
+    ('はやい', AdjectiveClass.I, 'はやくて'),
+    ('かっこいい', AdjectiveClass.I, 'かっこよくて')
 ]
 @pytest.mark.parametrize("dict_form, adj_class, reference", te_data)
 def test_te(dict_form, adj_class, reference):
@@ -108,7 +138,13 @@ plain_nonpast_positive_data = [
     ('美味[おい]しい', AdjectiveClass.I, '美味[おい]しい'),
     ('美味しい', AdjectiveClass.I, '美味しい'),
     ('早[はや]い', AdjectiveClass.I, '早[はや]い'),
-    ('格好[かっこ]いい', AdjectiveClass.I, '格好[かっこ]いい')
+    ('格好[かっこ]いい', AdjectiveClass.I, '格好[かっこ]いい'),
+    # no kanji
+    ('げんきな', AdjectiveClass.NA, 'げんきだ'),
+    ('ひまな', AdjectiveClass.NA, 'ひまだ'),
+    ('おいしい', AdjectiveClass.I, 'おいしい'),
+    ('はやい', AdjectiveClass.I, 'はやい'),
+    ('かっこいい', AdjectiveClass.I, 'かっこいい')
 ]
 @pytest.mark.parametrize("dict_form, adj_class, reference", plain_nonpast_positive_data)
 def test_plain_nonpast_positive(dict_form, adj_class, reference):
@@ -124,7 +160,13 @@ plain_nonpast_negative_data = [
     ('美味[おい]しい', AdjectiveClass.I, '美味[おい]しくない'),
     ('美味しい', AdjectiveClass.I, '美味しくない'),
     ('早[はや]い', AdjectiveClass.I, '早[はや]くない'),
-    ('格好[かっこ]いい', AdjectiveClass.I, '格好[かっこ]よくない')
+    ('格好[かっこ]いい', AdjectiveClass.I, '格好[かっこ]よくない'),
+    # no kanji
+    ('げんきな', AdjectiveClass.NA, 'げんきじゃない'),
+    ('ひまな', AdjectiveClass.NA, 'ひまじゃない'),
+    ('おいしい', AdjectiveClass.I, 'おいしくない'),
+    ('はやい', AdjectiveClass.I, 'はやくない'),
+    ('かっこいい', AdjectiveClass.I, 'かっこよくない')
 ]
 @pytest.mark.parametrize("dict_form, adj_class, reference", plain_nonpast_negative_data)
 def test_plain_nonpast_negative(dict_form, adj_class, reference):
@@ -140,7 +182,13 @@ plain_past_positive_data = [
     ('美味[おい]しい', AdjectiveClass.I, '美味[おい]しかった'),
     ('美味しい', AdjectiveClass.I, '美味しかった'),
     ('早[はや]い', AdjectiveClass.I, '早[はや]かった'),
-    ('格好[かっこ]いい', AdjectiveClass.I, '格好[かっこ]よかった')
+    ('格好[かっこ]いい', AdjectiveClass.I, '格好[かっこ]よかった'),
+    # no kanji
+    ('げんきな', AdjectiveClass.NA, 'げんきだった'),
+    ('ひまな', AdjectiveClass.NA, 'ひまだった'),
+    ('おいしい', AdjectiveClass.I, 'おいしかった'),
+    ('はやい', AdjectiveClass.I, 'はやかった'),
+    ('かっこいい', AdjectiveClass.I, 'かっこよかった')
 ]
 @pytest.mark.parametrize("dict_form, adj_class, reference", plain_past_positive_data)
 def test_plain_past_positive(dict_form, adj_class, reference):
@@ -156,7 +204,13 @@ plain_past_negative_data = [
     ('美味[おい]しい', AdjectiveClass.I, '美味[おい]しくなかった'),
     ('美味しい', AdjectiveClass.I, '美味しくなかった'),
     ('早[はや]い', AdjectiveClass.I, '早[はや]くなかった'),
-    ('格好[かっこ]いい', AdjectiveClass.I, '格好[かっこ]よくなかった')
+    ('格好[かっこ]いい', AdjectiveClass.I, '格好[かっこ]よくなかった'),
+    # no kanji
+    ('げんきな', AdjectiveClass.NA, 'げんきじゃなかった'),
+    ('ひまな', AdjectiveClass.NA, 'ひまじゃなかった'),
+    ('おいしい', AdjectiveClass.I, 'おいしくなかった'),
+    ('はやい', AdjectiveClass.I, 'はやくなかった'),
+    ('かっこいい', AdjectiveClass.I, 'かっこよくなかった')
 ]
 @pytest.mark.parametrize("dict_form, adj_class, reference", plain_past_negative_data)
 def test_plain_past_negative(dict_form, adj_class, reference):

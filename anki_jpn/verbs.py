@@ -293,6 +293,11 @@ def _masu_stem(dictionary_form: str, v_class: VerbClass,
                 stem = dictionary_form[:-5] + '来[き]'
             else:
                 stem = dictionary_form[:-5] + '来[こ]'
+        elif dictionary_form.endswith('くる'):
+            if formality == Formality.POLITE:
+                stem = dictionary_form[:-2] + 'き'
+            else:
+                stem = dictionary_form[:-2] + 'こ'
     assert stem is not None
     return stem
 
@@ -445,7 +450,7 @@ def te(dictionary_form: str, verb_class: VerbClass) -> str:
     if verb_class == VerbClass.ICHIDAN:
         completion = dictionary_form[:-1] + "て"
     elif verb_class == VerbClass.GODAN:
-        if dictionary_form.endswith('行[い]く'):
+        if dictionary_form.endswith('行[い]く') or dictionary_form.endswith('いく'):
             completion = dictionary_form[:-1] + "って"
         else:
             completion = dictionary_form[:-1] + godan_te_mapping[dictionary_form[-1]]
@@ -454,6 +459,9 @@ def te(dictionary_form: str, verb_class: VerbClass) -> str:
             completion = dictionary_form[:-2] + "して"
         elif dictionary_form.endswith("来[く]る"):
             completion = dictionary_form[:-5] + "来[き]て"
+        elif dictionary_form.endswith("くる"):
+            completion = dictionary_form[:-2] + "きて"
+
     assert completion is not None
     return completion
 
