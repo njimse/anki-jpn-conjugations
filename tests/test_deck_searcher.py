@@ -108,8 +108,9 @@ def fixture_anki_col():
 def fixture_config_manager():
     """Fixture for getting a ConfigManager object"""
     cfg = {
-        "tags": {
+        "decks": {
             SOURCE_DECK: {
+                "allow_unseen": True,
                 VerbClass.ICHIDAN.value: ['ichidan', 'ichidan-verb'],
                 VerbClass.GODAN.value: ['godan', 'godan-verb'],
                 VerbClass.IRREGULAR.value: ['irregular-verb'],
@@ -181,3 +182,26 @@ def test_search_for_adjectives(anki_col, config_manager, deck_searcher):
     general_adjectives = get_note_expression(
         anki_col, adjs[AdjectiveClass.GENERAL], config_manager)
     assert general_adjectives == ['良い']
+
+def test_disallow_unseen(anki_col, config_manager, deck_searcher):
+    """Test that we can filter out unseen notes from search results"""
+
+    for verb in ['食べる', '来る']:
+        note_id = anki_col.find_notes(f"exp:{verb}")[0]
+        card_ids = anki_col.find_cards(f"nid:{note_id}")
+        card = anki_col.get_card(card_ids[0])
+        card.reps += 5
+        anki_col.update_card(card)
+
+    config_manager._cfg['decks'][SOURCE_DECK]['allow_unseen'] = False # pylint: disable=W0212
+
+    verbs, models = deck_searcher.find_verbs(VERB_MODEL_NAME)
+
+    assert models == [SIMPLE_MODEL_NAME]
+
+    ichidan_verbs = get_note_expression(anki_col, verbs[VerbClass.ICHIDAN], config_manager)
+    assert ichidan_verbs == ['食べる']
+    assert VerbClass.GODAN not in verbs
+    irregular_verbs = get_note_expression(anki_col, verbs[VerbClass.IRREGULAR], config_manager)
+    assert irregular_verbs == ['来る']
+    assert VerbClass.GENERAL not in verbs

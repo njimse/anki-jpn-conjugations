@@ -18,8 +18,8 @@ class ConfigManager:
         else:
             self._cfg = {}
 
-        if 'tags' not in self._cfg:
-            self._cfg['tags'] = {}
+        if 'decks' not in self._cfg:
+            self._cfg['decks'] = {}
         if 'note_types' not in self._cfg:
             self._cfg['note_types'] = {}
 
@@ -69,13 +69,13 @@ class ConfigManager:
             True if the tag specification is incomplete/empty
         """
 
-        if deck_name not in self._cfg['tags']:
+        if deck_name not in self._cfg['decks']:
             return True
 
-        ichidan_tags = self._cfg['tags'][deck_name].get(VerbClass.ICHIDAN.value, [])
-        godan_tags = self._cfg['tags'][deck_name].get(VerbClass.GODAN.value, [])
-        irregular_tags = self._cfg['tags'][deck_name].get(VerbClass.IRREGULAR.value, [])
-        general_tags = self._cfg['tags'][deck_name].get(VerbClass.GENERAL.value, [])
+        ichidan_tags = self._cfg['decks'][deck_name].get(VerbClass.ICHIDAN.value, [])
+        godan_tags = self._cfg['decks'][deck_name].get(VerbClass.GODAN.value, [])
+        irregular_tags = self._cfg['decks'][deck_name].get(VerbClass.IRREGULAR.value, [])
+        general_tags = self._cfg['decks'][deck_name].get(VerbClass.GENERAL.value, [])
 
         if not any(tag_list for tag_list in [ichidan_tags, godan_tags,
                                              irregular_tags, general_tags]):
@@ -97,12 +97,12 @@ class ConfigManager:
             True if the tag specification is incomplete/empty
         """
 
-        if deck_name not in self._cfg['tags']:
+        if deck_name not in self._cfg['decks']:
             return True
 
-        i_tags = self._cfg['tags'][deck_name].get(AdjectiveClass.I.value, [])
-        na_tags = self._cfg['tags'][deck_name].get(AdjectiveClass.NA.value, [])
-        general_tags = self._cfg['tags'][deck_name].get(AdjectiveClass.GENERAL.value, [])
+        i_tags = self._cfg['decks'][deck_name].get(AdjectiveClass.I.value, [])
+        na_tags = self._cfg['decks'][deck_name].get(AdjectiveClass.NA.value, [])
+        general_tags = self._cfg['decks'][deck_name].get(AdjectiveClass.GENERAL.value, [])
 
         if not any(tag_list for tag_list in [i_tags, na_tags, general_tags]):
             return True
@@ -146,12 +146,12 @@ class ConfigManager:
             Type of word that the tag indicates
         """
 
-        if deck_name not in self._cfg['tags']:
-            self._cfg['tags'][deck_name] = {}
-        if word_type.value not in self._cfg['tags'][deck_name]:
-            self._cfg['tags'][deck_name][word_type.value] = []
-        if tag is not None and tag not in self._cfg['tags'][deck_name][word_type.value]:
-            self._cfg['tags'][deck_name][word_type.value].append(tag)
+        if deck_name not in self._cfg['decks']:
+            self._cfg['decks'][deck_name] = {}
+        if word_type.value not in self._cfg['decks'][deck_name]:
+            self._cfg['decks'][deck_name][word_type.value] = []
+        if tag is not None and tag not in self._cfg['decks'][deck_name][word_type.value]:
+            self._cfg['decks'][deck_name][word_type.value].append(tag)
 
     def add_model_fields(self, model_name: str,
                          expression: str, meaning: str, reading: str) -> None:
@@ -193,10 +193,10 @@ class ConfigManager:
             empty if no tags have been registered for the given word type.
         """
 
-        if deck_name not in self._cfg['tags']:
+        if deck_name not in self._cfg['decks']:
             return []
 
-        return self._cfg['tags'][deck_name].get(word_type.value, [])
+        return self._cfg['decks'][deck_name].get(word_type.value, [])
 
     def get_model_fields(self, model_name: str) -> Tuple[str, str, str]:
         """Retrieve the relevant fields for the requested model
@@ -229,3 +229,19 @@ class ConfigManager:
             Mapping of colors to be used in the card styling"""
 
         return self._cfg.get('colors', {})
+
+    def allow_unseen(self, deck_name: str) -> bool:
+        """Retrieve the setting for allowing unseen notes/cards to be used as input
+        
+        Parameters
+        ----------
+        deck_name : str
+            Name of the deck for which the setting is being requested
+
+        Returns
+        -------
+        bool
+            True if completely unseen notes are permitted for conjugation inputs.
+            False if at least one repetition for at least one card is required."""
+
+        return self._cfg.get('decks', {}).get(deck_name, {}).get('allow_unseen', False)

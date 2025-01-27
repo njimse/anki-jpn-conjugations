@@ -237,7 +237,7 @@ class DeckSearcher:
             of the specified tags. The second element is a list of model names that were
             seen across the identified notes.
         """
-
+        allow_unseen = self._cfg.allow_unseen(self._deck_name)
         if len(tags) == 0:
             return [], []
 
@@ -248,10 +248,19 @@ class DeckSearcher:
         query = f'{tag_query} "deck:{self._deck_name}" -"note:{conjugation_model_name}"'
         note_ids = self._col.find_notes(query)
 
+        filtered_notes = set()
         model_ids = set()
         for nid in note_ids:
-            note = self._col.get_note(nid)
-            model_ids.add(note.mid)
+            seen = False
+            for card_id in self._col.find_cards(f"nid:{nid}"):
+                card = self._col.get_card(card_id)
+                if card.reps > 0:
+                    seen = True
+            if allow_unseen or seen:
+                filtered_notes.add(nid)
+                note = self._col.get_note(nid)
+                model_ids.add(note.mid)
+
         model_names = [self._col.models.get(mid)['name'] for mid in model_ids]
 
-        return note_ids, model_names
+        return list(filtered_notes), model_names
