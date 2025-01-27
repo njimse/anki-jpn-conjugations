@@ -218,6 +218,7 @@ def update_verbs():
     for verb_type, note_id_list in note_ids.items():
         for note_id in note_id_list:
             note = mw.col.get_note(note_id)
+            card_ids = mw.col.find_cards(f"nid:{note_id}")
             deck_updater.add_note_to_deck(note, verb_type)
 
     new_notes, modified_notes, failed_notes = deck_updater.summary()
@@ -328,6 +329,10 @@ def create_filtered_deck():
     
     adj_model_name = config.adjective_model_name()
     verb_model_name = config.verb_model_name()
+    add_or_update_verb_model(mw.col.models, verb_model_name, config.get_colors())
+    mw.col.fix_integrity()
+    add_or_update_adjective_model(mw.col.models, adj_model_name, config.get_colors())
+    mw.col.fix_integrity()
 
     conjugation_template_names = set()
     verb_model = mw.col.models.by_name(verb_model_name)

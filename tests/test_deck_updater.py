@@ -127,7 +127,6 @@ def test_update_note_in_deck(anki_col, verb_model, deck_updater):
     starting_note.fields[-2] = 'foobar'
     starting_note.fields[-3] = 'foobuzz'
     anki_col.add_note(starting_note, anki_col.decks.id(TARGET_DECK))
-
     conjugations = generate_verb_forms(base_note.fields[2], VerbClass.ICHIDAN)
     query = f'"Expression:食べる" "Meaning:to eat" "Reading:食[た]べる" "deck:{TARGET_DECK}"'
     initial_result_note_ids = anki_col.find_notes(query)

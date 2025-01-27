@@ -8,11 +8,13 @@ There are three fields that are required for input notes:
 
 The names of these fields may vary across note types; this section of the configuration allows for specifying which fields are which for the sake of this add-on.
 
-## `tags`
+## `decks`
 
 Verbs and adjectives are located using the tags of each note. You can configure which tags map to which types of verbs and adjectives. This allows for multiple tags to be routed to a given type.
 
 For content identified as either `general-adjective` or `general-verb`, the add-on will attempt to classify into the more precise categories using general rules and known exceptions. To avoid issues with any faulty classification, it is recommended that source content be tagged with the more precise categories wherever possible.
+
+Additionally, the "allow_unseen" flag controls whether unseen notes can be used for generating conjugation notes. If set to `false`, then a note must have at least one associated card with at least one repetition/view in order to be accepted for generation. If set to `true`, then no minimim repetition/view count is required.
 
 ## `colors`
 
