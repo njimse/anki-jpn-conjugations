@@ -16,7 +16,6 @@ test:
 update_addon:
 	rm -rf myaddon/*
 	cp -r japanese_conjugation/* myaddon/
-	# cp addon/* myaddon/
 	cp doc/config.md myaddon/
 	- find myaddon/ -name "__pycache__" -type d -exec rm -r "{}" \;
 	- find myaddon/ -type d -name "*egg-info" -exec rm -r "{}" \;
@@ -25,8 +24,7 @@ update_addon:
 create_addon:
 	rm -rf ../japanese_conjugation
 	mkdir -p ../japanese_conjugation
-	cp -r anki_jpn ../japanese_conjugation/
-	cp -r addon/* ../japanese_conjugation/
+	cp -r japanese_conjugation/* ../japanese_conjugation/
 	cp doc/config.md ../japanese_conjugation/
 	- find ../japanese_conjugation/ -name "__pycache__" -type d -exec rm -r "{}" \;
 	- find ../japanese_conjugation/ -type d -name "*egg-info" -exec rm -r "{}" \;
