@@ -1,3 +1,4 @@
+"""Addon for creating notes focused on Japanese conjugation"""
 import os
 import sys
 from typing import List
@@ -18,13 +19,13 @@ from anki.buildinfo import version as anki_version
 
 # sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from japanese_conjugation import __version__ as anki_jpn_version
-from japanese_conjugation.models import (
+from .version import __version__ as anki_jpn_version
+from .models import (
     add_or_update_verb_model, add_or_update_adjective_model
 )
-from japanese_conjugation.enums import VerbClass, AdjectiveClass
-from japanese_conjugation.decks import DeckUpdater, DeckSearcher
-from japanese_conjugation.config import ConfigManager
+from .enums import VerbClass, AdjectiveClass
+from .decks import DeckUpdater, DeckSearcher
+from .config import ConfigManager
 anki_version_info = tuple(int(x) for x in anki_version.split('.'))
 config = ConfigManager(mw.addonManager.getConfig(__name__))
 

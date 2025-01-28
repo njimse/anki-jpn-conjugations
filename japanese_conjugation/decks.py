@@ -6,11 +6,11 @@ import anki.notes
 import anki.collection
 from anki.models import NotetypeDict
 
-from anki_jpn.enums import Form, Formality, VerbClass, AdjectiveClass
-from anki_jpn.models import combo_to_field_name
-from anki_jpn.verbs import generate_verb_forms
-from anki_jpn.adjectives import generate_adjective_forms
-from anki_jpn.config import ConfigManager
+from .enums import Form, Formality, VerbClass, AdjectiveClass
+from .models import combo_to_field_name
+from .verbs import generate_verb_forms
+from .adjectives import generate_adjective_forms
+from .config import ConfigManager
 
 class DeckUpdater: # pylint: disable=R0903
     """Class object for updating a target deck with content from source notes

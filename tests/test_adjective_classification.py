@@ -1,8 +1,8 @@
 """Unit tests for the classification of adjectives"""
 import pytest
 
-from anki_jpn.enums import AdjectiveClass
-from anki_jpn.adjectives import classify_adjective
+from japanese_conjugation.enums import AdjectiveClass
+from japanese_conjugation.adjectives import classify_adjective
 
 adjective_classification_data = [
     # These are the (main) exceptions

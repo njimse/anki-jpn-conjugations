@@ -1,11 +1,11 @@
 """Unit tests for the verb conjugation functions"""
 import pytest
-from anki_jpn.enums import (
+from japanese_conjugation.enums import (
     VerbClass,
     Formality,
     Form,
 )
-from anki_jpn.verbs import (
+from japanese_conjugation.verbs import (
     generate_verb_forms,
     polite_nonpast_positive,
     polite_nonpast_negative,

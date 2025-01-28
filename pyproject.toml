@@ -6,13 +6,14 @@ build-backend = "setuptools.build_meta"
 authors = [
     {name = "Nathan Imse", email = "njimse@gmail.com"}
 ]
-name = "anki-jpn"
+name = "japanese-conjugation"
 description = "This is a set of tooling to allow for generating anki cards for learning/practicing Japanese"
 version = "1.0.0"
 requires-python = ">=3.8,<3.10"
 readme = "README.md"
 dependencies = [
     "anki",
+    "aqt;python_version>'3.8'",
     "protobuf<=3.21;python_version<'3.9'"
 ]
 [project.optional-dependencies]
@@ -28,9 +29,9 @@ dev = [
 ]
 
 [project.scripts]
-anki-jpn = "anki_jpn.cli:main_cli"
+anki-jpn = "japanese_conjugation.cli:main_cli"
 
 [tool.setuptools]
-packages = ["anki_jpn"]
+packages = ["japanese_conjugation"]
 [tool.setuptools.package-data]
-anki_jpn = ["*.html", "*.css", "*.js"]
+japanese_conjugation = ["*.html", "*.css", "*.js"]

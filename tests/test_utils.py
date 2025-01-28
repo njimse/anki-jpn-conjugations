@@ -2,13 +2,13 @@
 import importlib.resources
 import pytest
 import js2py
-import anki_jpn.resources
-from anki_jpn.util import (
+import japanese_conjugation.resources
+from japanese_conjugation.util import (
     remove_furigana,
     promote_furigana
 )
 
-insert_ending_spans_text = importlib.resources.read_text(anki_jpn.resources, # pylint: disable=W4902
+insert_ending_spans_text = importlib.resources.read_text(japanese_conjugation.resources, # pylint: disable=W4902
                                                          'insert_ending_spans.js')
 insert_ending_spans = js2py.eval_js(insert_ending_spans_text)
 insert_ending_spans_data = [

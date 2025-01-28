@@ -1,12 +1,12 @@
 """Unit tests for the adjective conjugation methods"""
 import pytest
 
-from anki_jpn.enums import (
+from japanese_conjugation.enums import (
     AdjectiveClass,
     Form,
     Formality
 )
-from anki_jpn.adjectives import (
+from japanese_conjugation.adjectives import (
     generate_adjective_forms,
     polite_nonpast_positive,
     polite_nonpast_negative,

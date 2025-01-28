@@ -1,6 +1,6 @@
 init: clean
 	python3.9 -m venv env
-	env/bin/pip install -U pip setuptools
+	env/bin/pip install -U "pip<25" setuptools
 	env/bin/pip install -e .[test,dev]
 	echo "to activate default venv:\n\tsource env/bin/activate"
 
@@ -15,8 +15,8 @@ test:
 
 update_addon:
 	rm -rf myaddon/*
-	cp -r anki_jpn myaddon/
-	cp -r addon/* myaddon/
+	cp -r japanese_conjugation/* myaddon/
+	# cp addon/* myaddon/
 	cp doc/config.md myaddon/
 	- find myaddon/ -name "__pycache__" -type d -exec rm -r "{}" \;
 	- find myaddon/ -type d -name "*egg-info" -exec rm -r "{}" \;

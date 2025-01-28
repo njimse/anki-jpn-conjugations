@@ -7,8 +7,8 @@ import importlib.resources
 import anki.collection
 import anki.models
 
-import anki_jpn.resources as anki_jpn_resources
-from anki_jpn.enums import Form, Formality
+from . import resources as anki_jpn_resources
+from .enums import Form, Formality
 
 COMBO_HASHES = {
     (Formality.POLITE, Form.NON_PAST): 'uNCk',

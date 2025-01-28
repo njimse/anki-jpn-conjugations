@@ -8,8 +8,8 @@ import cssutils
 
 from anki.buildinfo import version as anki_version
 import anki.collection
-from anki_jpn.enums import Formality, Form
-from anki_jpn.models import (
+from japanese_conjugation.enums import Formality, Form
+from japanese_conjugation.models import (
     VERB_COMBOS, ADJECTIVE_COMBOS, COMBO_HASHES, add_or_update_verb_model,
     add_or_update_adjective_model, _create_model
 )
@@ -174,7 +174,7 @@ def test_removed_combos(mocker, anki_col):
     extra_combos = VERB_COMBOS + [(Formality.POLITE, Form.TE)]
     mock_hashes = deepcopy(COMBO_HASHES)
     mock_hashes[(Formality.POLITE, Form.TE)] = "0000"
-    mocker.patch("anki_jpn.models.COMBO_HASHES", mock_hashes)
+    mocker.patch("japanese_conjugation.models.COMBO_HASHES", mock_hashes)
     model_name = "verb model"
     start_model = anki_col.models.new(model_name)
     _create_model(anki_col.models, start_model, extra_combos)

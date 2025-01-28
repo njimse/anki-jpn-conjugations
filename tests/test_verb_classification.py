@@ -1,8 +1,8 @@
 """Unit tests for the classification of verbs"""
 import pytest
 
-from anki_jpn.enums import VerbClass
-from anki_jpn.verbs import classify_verb
+from japanese_conjugation.enums import VerbClass
+from japanese_conjugation.verbs import classify_verb
 
 verb_classification_data = [
     ("たべる", VerbClass.ICHIDAN),

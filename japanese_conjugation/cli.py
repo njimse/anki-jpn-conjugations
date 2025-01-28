@@ -11,9 +11,9 @@ import anki.stdmodels
 import anki.notes
 import anki.exporting
 
-from anki_jpn.config import ConfigManager
-from anki_jpn.decks import DeckSearcher, DeckUpdater
-from anki_jpn.models import (
+from .config import ConfigManager
+from .decks import DeckSearcher, DeckUpdater
+from .models import (
     add_or_update_verb_model, add_or_update_adjective_model
 )
 

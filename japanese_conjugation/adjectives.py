@@ -1,8 +1,8 @@
 """Methods pertaining to the conjugation of adjectives
 """
 from typing import List, Tuple, Optional
-from anki_jpn.enums import AdjectiveClass, Form, Formality
-from anki_jpn.util import (
+from .enums import AdjectiveClass, Form, Formality
+from .util import (
     promote_furigana
 )
 

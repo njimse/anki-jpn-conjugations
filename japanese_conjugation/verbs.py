@@ -1,12 +1,12 @@
 """Methods pertaining to the conjugation of verbs"""
 from typing import Optional, List, Tuple
 
-from anki_jpn.enums import Form, Formality, VerbClass, AdjectiveClass
-from anki_jpn.util import (
+from .enums import Form, Formality, VerbClass, AdjectiveClass
+from .util import (
     remove_furigana,
     promote_furigana
 )
-from anki_jpn.adjectives import generate_adjective_forms
+from .adjectives import generate_adjective_forms
 
 godan_stem_mapping = {
     "う": "い",
