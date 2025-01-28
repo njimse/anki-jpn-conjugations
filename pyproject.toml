@@ -8,7 +8,7 @@ authors = [
 ]
 name = "japanese-conjugation"
 description = "This is a set of tooling to allow for generating anki cards for learning/practicing Japanese"
-version = "1.0.0"
+version = "1.0.1"
 requires-python = ">=3.8,<3.10"
 readme = "README.md"
 dependencies = [
