@@ -161,7 +161,7 @@ def test_search_for_verbs(anki_col, config_manager, deck_searcher):
     assert models == [SIMPLE_MODEL_NAME]
 
     ichidan_verbs = get_note_expression(anki_col, verbs[VerbClass.ICHIDAN], config_manager)
-    assert ichidan_verbs == ['食べる', '借りる']
+    assert sorted(ichidan_verbs) == ['借りる', '食べる']
     assert VerbClass.GODAN not in verbs
     irregular_verbs = get_note_expression(anki_col, verbs[VerbClass.IRREGULAR], config_manager)
     assert irregular_verbs == ['来る']
