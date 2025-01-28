@@ -2,32 +2,55 @@
 import os
 import sys
 from typing import List
-# import the main window object (mw) from aqt
-from aqt import mw
-from aqt.forms.taglimit import Ui_Dialog
-# import the "show info" tool from utils.py
-from aqt.utils import showInfo, Qt, disable_help_button, restoreGeom, saveGeom, showWarning, tr
-from aqt.filtered_deck import FilteredDeckConfigDialog
-# from aqt.taglimit import TagLimit
-# import all of the Qt GUI library
-from aqt.qt import *
+try:
+    # import the main window object (mw) from aqt
+    from aqt import mw
+    from aqt.forms.taglimit import Ui_Dialog
+    # import the "show info" tool from utils.py
+    from aqt.utils import showInfo, Qt, disable_help_button, restoreGeom, saveGeom, showWarning, tr
+    from aqt.filtered_deck import FilteredDeckConfigDialog
+    # from aqt.taglimit import TagLimit
+    # import all of the Qt GUI library
+    from aqt.qt import *
 
-from anki.decks import DeckManager
-from anki.tags import TagManager
-# from anki.scheduler.base import CustomStudyDefaults
-from anki.buildinfo import version as anki_version
+    from anki.decks import DeckManager
+    from anki.tags import TagManager
+    # from anki.scheduler.base import CustomStudyDefaults
+    from anki.buildinfo import version as anki_version
 
-# sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+except ImportError:
+    # Skip over these imports for the sake of unit testing
+    pass
+else:
+    from .version import __version__ as anki_jpn_version
+    from .models import (
+        add_or_update_verb_model, add_or_update_adjective_model
+    )
+    from .enums import VerbClass, AdjectiveClass
+    from .decks import DeckUpdater, DeckSearcher
+    from .config import ConfigManager
 
-from .version import __version__ as anki_jpn_version
-from .models import (
-    add_or_update_verb_model, add_or_update_adjective_model
-)
-from .enums import VerbClass, AdjectiveClass
-from .decks import DeckUpdater, DeckSearcher
-from .config import ConfigManager
-anki_version_info = tuple(int(x) for x in anki_version.split('.'))
-config = ConfigManager(mw.addonManager.getConfig(__name__))
+    anki_version_info = tuple(int(x) for x in anki_version.split('.'))
+    config = ConfigManager(mw.addonManager.getConfig(__name__))
+    # Create the menu items
+    conj_menu = QMenu("Japanese Conjugation", mw)
+    update_adjective_deck_action = conj_menu.addAction("Create/Update Adjectives")
+    update_verb_deck_action = conj_menu.addAction("Create/Update Verbs")
+    create_filtered_deck_action = conj_menu.addAction("Create Filtered Deck")
+    about_action = conj_menu.addAction("About Add-on")
+
+    # Add the triggers
+    update_verb_deck_action.triggered.connect(update_verbs)
+    update_adjective_deck_action.triggered.connect(update_adjectives)
+    create_filtered_deck_action.triggered.connect(create_filtered_deck)
+    about_action.triggered.connect(about_addon)
+
+    # Add the menu button to the "Tools" menu
+    mw.form.menuTools.addMenu(conj_menu)
+
+
+
+    
 
 def get_qt_version():
     """ Return the version of Qt used by Anki.
@@ -225,105 +248,108 @@ def update_verbs():
     new_notes, modified_notes, failed_notes = deck_updater.summary()
     showInfo(f"Added {new_notes} new note(s)\nModified {modified_notes} note(s)\nFailed to conjugate {failed_notes} note(s)")
 
-class CardLimitItem:
-    name: str
-    include: bool
-    exclude: bool
 
-    def __init__(self, name: str, include: bool = False, exclude: bool = False):
-        self.name = name
-        self.include = include
-        self.exclude = exclude
-
-class CardLimit(QDialog):
-    def __init__(
-        self,
-        parent: QWidget,
-        tags: List[CardLimitItem]
-    ) -> None:
-        "Ask user to select tags. on_success() will be called with selected included and excluded tags."
-        QDialog.__init__(self, parent, Qt.WindowType.Window)
-        self.tags = tags
-        self.form = Ui_Dialog()
-        self.form.setupUi(self)
-        self.form.activeCheck.setText("Select one or more of these conjugations to include")
-        self.form.label.setText("Select conjugations to exclude")
-        self.include_list = None
-        self.exclude_list = None
-        disable_help_button(self)
-        s = QShortcut(
-            QKeySequence("ctrl+d"),
-            self.form.activeList,
-            context=Qt.ShortcutContext.WidgetShortcut,
-        )
-        qconnect(s.activated, self.form.activeList.clearSelection)
-        s = QShortcut(
-            QKeySequence("ctrl+d"),
-            self.form.inactiveList,
-            context=Qt.ShortcutContext.WidgetShortcut,
-        )
-        qconnect(s.activated, self.form.inactiveList.clearSelection)
-        self.build_tag_lists()
-        restoreGeom(self, "cardLimit")
-        self.open()
-
-    def build_tag_lists(self) -> None:
-        def add_tag(tag: str, select: bool, list: QListWidget) -> None:
-            item = QListWidgetItem(tag.replace("_", " "))
-            list.addItem(item)
-            if select:
-                idx = list.indexFromItem(item)
-                list_selection_model = list.selectionModel()
-                assert list_selection_model is not None
-                list_selection_model.select(
-                    idx, QItemSelectionModel.SelectionFlag.Select
-                )
-
-        had_included_tag = False
-
-        for tag in self.tags:
-            if tag.include:
-                had_included_tag = True
-            add_tag(tag.name, tag.include, self.form.activeList)
-            add_tag(tag.name, tag.exclude, self.form.inactiveList)
-
-        if had_included_tag:
-            self.form.activeCheck.setChecked(True)
-
-    def reject(self) -> None:
-        QDialog.reject(self)
-
-    def accept(self) -> None:
-        include_tags = []
-        exclude_tags = []
-        want_active = self.form.activeCheck.isChecked()
-        for c, tag in enumerate(self.tags):
-            # active
-            if want_active:
-                item = self.form.activeList.item(c)
-                idx = self.form.activeList.indexFromItem(item)
-                active_list_selection_model = self.form.activeList.selectionModel()
-                assert active_list_selection_model is not None
-                if active_list_selection_model.isSelected(idx):
-                    include_tags.append(tag.name)
-            # inactive
-            item = self.form.inactiveList.item(c)
-            idx = self.form.inactiveList.indexFromItem(item)
-            inactive_list_selection_model = self.form.inactiveList.selectionModel()
-            assert inactive_list_selection_model is not None
-            if inactive_list_selection_model.isSelected(idx):
-                exclude_tags.append(tag.name)
-
-        if (len(include_tags) + len(exclude_tags)) > 100:
-            showWarning(with_collapsed_whitespace(tr.errors_100_tags_max()))
-            return
-
-        saveGeom(self, "cardLimit")
-        QDialog.accept(self)
-        self.include_list = include_tags
-        self.exclude_list = exclude_tags
 
 def create_filtered_deck():
+
+    class CardLimitItem:
+        name: str
+        include: bool
+        exclude: bool
+
+        def __init__(self, name: str, include: bool = False, exclude: bool = False):
+            self.name = name
+            self.include = include
+            self.exclude = exclude
+
+    class CardLimit(QDialog):
+        def __init__(
+            self,
+            parent: QWidget,
+            tags: List[CardLimitItem]
+        ) -> None:
+            "Ask user to select tags. on_success() will be called with selected included and excluded tags."
+            QDialog.__init__(self, parent, Qt.WindowType.Window)
+            self.tags = tags
+            self.form = Ui_Dialog()
+            self.form.setupUi(self)
+            self.form.activeCheck.setText("Select one or more of these conjugations to include")
+            self.form.label.setText("Select conjugations to exclude")
+            self.include_list = None
+            self.exclude_list = None
+            disable_help_button(self)
+            s = QShortcut(
+                QKeySequence("ctrl+d"),
+                self.form.activeList,
+                context=Qt.ShortcutContext.WidgetShortcut,
+            )
+            qconnect(s.activated, self.form.activeList.clearSelection)
+            s = QShortcut(
+                QKeySequence("ctrl+d"),
+                self.form.inactiveList,
+                context=Qt.ShortcutContext.WidgetShortcut,
+            )
+            qconnect(s.activated, self.form.inactiveList.clearSelection)
+            self.build_tag_lists()
+            restoreGeom(self, "cardLimit")
+            self.open()
+
+        def build_tag_lists(self) -> None:
+            def add_tag(tag: str, select: bool, list: QListWidget) -> None:
+                item = QListWidgetItem(tag.replace("_", " "))
+                list.addItem(item)
+                if select:
+                    idx = list.indexFromItem(item)
+                    list_selection_model = list.selectionModel()
+                    assert list_selection_model is not None
+                    list_selection_model.select(
+                        idx, QItemSelectionModel.SelectionFlag.Select
+                    )
+
+            had_included_tag = False
+
+            for tag in self.tags:
+                if tag.include:
+                    had_included_tag = True
+                add_tag(tag.name, tag.include, self.form.activeList)
+                add_tag(tag.name, tag.exclude, self.form.inactiveList)
+
+            if had_included_tag:
+                self.form.activeCheck.setChecked(True)
+
+        def reject(self) -> None:
+            QDialog.reject(self)
+
+        def accept(self) -> None:
+            include_tags = []
+            exclude_tags = []
+            want_active = self.form.activeCheck.isChecked()
+            for c, tag in enumerate(self.tags):
+                # active
+                if want_active:
+                    item = self.form.activeList.item(c)
+                    idx = self.form.activeList.indexFromItem(item)
+                    active_list_selection_model = self.form.activeList.selectionModel()
+                    assert active_list_selection_model is not None
+                    if active_list_selection_model.isSelected(idx):
+                        include_tags.append(tag.name)
+                # inactive
+                item = self.form.inactiveList.item(c)
+                idx = self.form.inactiveList.indexFromItem(item)
+                inactive_list_selection_model = self.form.inactiveList.selectionModel()
+                assert inactive_list_selection_model is not None
+                if inactive_list_selection_model.isSelected(idx):
+                    exclude_tags.append(tag.name)
+
+            if (len(include_tags) + len(exclude_tags)) > 100:
+                showWarning(with_collapsed_whitespace(tr.errors_100_tags_max()))
+                return
+
+            saveGeom(self, "cardLimit")
+            QDialog.accept(self)
+            self.include_list = include_tags
+            self.exclude_list = exclude_tags
+
     target_deck_id, target_deck_name = select_deck("Which deck has the conjugation notes to be filtered?")
     if target_deck_id is None:
         return
@@ -369,19 +395,3 @@ def create_filtered_deck():
 
 def about_addon():
     showInfo(f"Version: {anki_jpn_version}")
-
-# Create the menu items
-conj_menu = QMenu("Japanese Conjugation", mw)
-update_adjective_deck_action = conj_menu.addAction("Create/Update Adjectives")
-update_verb_deck_action = conj_menu.addAction("Create/Update Verbs")
-create_filtered_deck_action = conj_menu.addAction("Create Filtered Deck")
-about_action = conj_menu.addAction("About Add-on")
-
-# Add the triggers
-update_verb_deck_action.triggered.connect(update_verbs)
-update_adjective_deck_action.triggered.connect(update_adjectives)
-create_filtered_deck_action.triggered.connect(create_filtered_deck)
-about_action.triggered.connect(about_addon)
-
-# Add the menu button to the "Tools" menu
-mw.form.menuTools.addMenu(conj_menu)
