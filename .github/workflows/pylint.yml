@@ -20,4 +20,4 @@ jobs:
         pip install pylint .[test]
     - name: Analysing the code with pylint
       run: |
-        pylint anki_jpn tests
+        pylint japanese_conjugation tests
