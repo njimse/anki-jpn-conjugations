@@ -6,10 +6,10 @@ import pytest
 
 import anki.collection
 import anki.notes
-from anki_jpn.enums import VerbClass, AdjectiveClass
-from anki_jpn.decks import DeckSearcher
-from anki_jpn.config import ConfigManager
-from anki_jpn.models import add_or_update_verb_model, add_or_update_adjective_model
+from japanese_conjugation.enums import VerbClass, AdjectiveClass
+from japanese_conjugation.decks import DeckSearcher
+from japanese_conjugation.config import ConfigManager
+from japanese_conjugation.models import add_or_update_verb_model, add_or_update_adjective_model
 
 SOURCE_DECK = 'source'
 VERB_MODEL_NAME = 'verb model'

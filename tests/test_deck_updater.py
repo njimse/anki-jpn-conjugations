@@ -6,10 +6,10 @@ import pytest
 
 import anki.collection
 import anki.notes
-from anki_jpn.verbs import generate_verb_forms, VerbClass
-from anki_jpn.decks import DeckUpdater
-from anki_jpn.config import ConfigManager
-from anki_jpn.models import combo_to_field_name, add_or_update_verb_model
+from japanese_conjugation.verbs import generate_verb_forms, VerbClass
+from japanese_conjugation.decks import DeckUpdater
+from japanese_conjugation.config import ConfigManager
+from japanese_conjugation.models import combo_to_field_name, add_or_update_verb_model
 
 TARGET_DECK = 'target'
 SOURCE_DECK = 'source'

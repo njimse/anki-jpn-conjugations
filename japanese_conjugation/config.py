@@ -1,7 +1,7 @@
 """classes and functions focused on managing the Addon configuration"""
 from typing import Dict, Any, Union, List, Tuple
 
-from anki_jpn.enums import VerbClass, AdjectiveClass
+from .enums import VerbClass, AdjectiveClass
 
 class ConfigManager:
     """Object for managing and querying the Addon configuration
