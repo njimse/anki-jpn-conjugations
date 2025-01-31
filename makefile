@@ -10,6 +10,7 @@ clean:
 	rm -rf japanese_conjugation.ankiaddon
 	rm -f japanese_conjugation.ankiaddon.zip
 	- find . -name "__pycache__" -type d -exec rm -r "{}" \;
+	- find . -type d -name "*egg-info" -exec rm -r "{}" \;
 	- find . -type f -name "*.pyc" -delete
 
 test:
