@@ -7,6 +7,8 @@ init: clean
 clean:
 	rm -rf env
 	rm -rf *.egg-info
+	rm -rf japanese_conjugation.ankiaddon
+	rm -f japanese_conjugation.ankiaddon.zip
 	- find . -name "__pycache__" -type d -exec rm -r "{}" \;
 	- find . -type f -name "*.pyc" -delete
 
