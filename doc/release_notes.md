@@ -1,5 +1,13 @@
 # Release Notes
 
+## 1.0.2
+
+* Add Anki version compatibility boundaries
+
+## 1.0.1
+
+* Reorganized git project to better align with the desired addon manifest
+
 ## 1.0.0
 
 Initial release! Notable features in this release:
