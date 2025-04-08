@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.1.0
+
+* Add support for the potential form, covering positive and negative for both nonpast and past as well as polite and plain. This also covers the potential te-form.
+
 ## 1.0.2
 
 * Add Anki version compatibility boundaries
