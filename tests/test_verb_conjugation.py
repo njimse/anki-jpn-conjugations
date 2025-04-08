@@ -11,12 +11,14 @@ from japanese_conjugation.verbs import (
     polite_nonpast_negative,
     polite_past_positive,
     polite_past_negative,
+    polite_nonpast_positive_potential,
     polite_volitional,
     te,
     plain_nonpast_positive,
     plain_nonpast_negative,
     plain_past_positive,
-    plain_past_negative
+    plain_past_negative,
+    plain_nonpast_positive_potential,
 )
 
 polite_nonpast_positive_data = [
@@ -139,6 +141,37 @@ polite_past_negative_data = [
 def test_polite_past_negative(dict_form, verb_class, reference):
     """test the Polite Past Negative conjugation"""
     result = polite_past_negative(dict_form, verb_class)
+    assert result == reference
+
+polite_nonpast_positive_potential_data = [
+    ('来[く]る', VerbClass.IRREGULAR, '来[こ]られます'),
+    ('連[つ]れて 来[く]る', VerbClass.IRREGULAR, '連[つ]れて 来[こ]られます'),
+    ('する', VerbClass.IRREGULAR, 'できます'),
+    ('行[い]く', VerbClass.GODAN, '行[い]けます'),
+    ('スポーツをする', VerbClass.IRREGULAR, 'スポーツができます'),
+    ('読[よ]む', VerbClass.GODAN, '読[よ]めます'),
+    ('買[か]う', VerbClass.GODAN, '買[か]えます'),
+    ('話[はな]す', VerbClass.GODAN, '話[はな]せます'),
+    # No kanji
+    ('くる', VerbClass.IRREGULAR, 'こられます'),
+    ('つれてくる', VerbClass.IRREGULAR, 'つれてこられます'),
+    ('いく', VerbClass.GODAN, 'いけます'),
+    ('スポーツをする', VerbClass.IRREGULAR, 'スポーツができます'),
+    ('よむ', VerbClass.GODAN, 'よめます'),
+    ('かう', VerbClass.GODAN, 'かえます'),
+    ('はなす', VerbClass.GODAN, 'はなせます'),
+    # no furigana
+    ('来る', VerbClass.IRREGULAR, '来[こ]られます'),
+    ('連れて来る', VerbClass.IRREGULAR, '連れて 来[こ]られます'),
+    ('行く', VerbClass.GODAN, '行けます'),
+    ('読む', VerbClass.GODAN, '読めます'),
+    ('買う', VerbClass.GODAN, '買えます'),
+    ('話す', VerbClass.GODAN, '話せます'),
+]
+@pytest.mark.parametrize("dict_form, verb_class, reference", polite_nonpast_positive_potential_data)
+def test_polite_nonpast_positive_potential(dict_form, verb_class, reference):
+    """test the Polite Non-Past conjugation"""
+    result = polite_nonpast_positive_potential(dict_form, verb_class)
     assert result == reference
 
 polite_volitional_data = [
@@ -359,6 +392,63 @@ plain_past_negative_data = [
 def test_plain_past_negative(dict_form, verb_class, reference):
     """test the Plain Past Negative conjugation"""
     result = plain_past_negative(dict_form, verb_class)
+    assert result == reference
+
+plain_nonpast_positive_potential_data = [
+
+    ('来[く]る', VerbClass.IRREGULAR, '来[こ]られる'),
+    ('連[つ]れて 来[く]る', VerbClass.IRREGULAR, '連[つ]れて 来[こ]られる'),
+    ('する', VerbClass.IRREGULAR, 'できる'),
+    ('行[い]く', VerbClass.GODAN, '行[い]ける'),
+    ('書[か]く', VerbClass.GODAN, '書[か]ける'),
+    ('遊[あそ]ぶ', VerbClass.GODAN, '遊[あそ]べる'),
+    ('立[た]つ', VerbClass.GODAN, '立[た]てる'),
+    ('スポーツをする', VerbClass.IRREGULAR, 'スポーツができる'),
+    ('読[よ]む', VerbClass.GODAN, '読[よ]める'),
+    ('買[か]う', VerbClass.GODAN, '買[か]える'),
+    ('話[はな]す', VerbClass.GODAN, '話[はな]せる'),
+    ('泳[およ]ぐ', VerbClass.GODAN, '泳[およ]げる'),
+    ('食[た]べる', VerbClass.ICHIDAN, '食[た]べられる'),
+    ('起[お]きる', VerbClass.ICHIDAN, '起[お]きられる'),
+    ('開[あ]ける', VerbClass.ICHIDAN, '開[あ]けられる'),
+    ('借[か]りる', VerbClass.ICHIDAN, '借[か]りられる'),
+    # no kanji
+    ('くる', VerbClass.IRREGULAR, 'こられる'),
+    ('つれてくる', VerbClass.IRREGULAR, 'つれてこられる'),
+    ('いく', VerbClass.GODAN, 'いける'),
+    ('かく', VerbClass.GODAN, 'かける'),
+    ('あそぶ', VerbClass.GODAN, 'あそべる'),
+    ('たつ', VerbClass.GODAN, 'たてる'),
+    ('よむ', VerbClass.GODAN, 'よめる'),
+    ('かう', VerbClass.GODAN, 'かえる'),
+    ('はなす', VerbClass.GODAN, 'はなせる'),
+    ('およぐ', VerbClass.GODAN, 'およげる'),
+    ('たべる', VerbClass.ICHIDAN, 'たべられる'),
+    ('おきる', VerbClass.ICHIDAN, 'おきられる'),
+    ('あける', VerbClass.ICHIDAN, 'あけられる'),
+    ('かりる', VerbClass.ICHIDAN, 'かりられる'),
+    # no furigana
+    ('来る', VerbClass.IRREGULAR, '来[こ]られる'),
+    ('連れて来る', VerbClass.IRREGULAR, '連れて 来[こ]られる'),
+    ('行く', VerbClass.GODAN, '行ける'),
+    ('書く', VerbClass.GODAN, '書ける'),
+    ('遊ぶ', VerbClass.GODAN, '遊べる'),
+    ('立つ', VerbClass.GODAN, '立てる'),
+    ('読む', VerbClass.GODAN, '読める'),
+    ('買う', VerbClass.GODAN, '買える'),
+    ('話す', VerbClass.GODAN, '話せる'),
+    ('泳ぐ', VerbClass.GODAN, '泳げる'),
+    ('食べる', VerbClass.ICHIDAN, '食べられる'),
+    ('起きる', VerbClass.ICHIDAN, '起きられる'),
+    ('開ける', VerbClass.ICHIDAN, '開けられる'),
+    ('借りる', VerbClass.ICHIDAN, '借りられる')
+]
+@pytest.mark.parametrize("dict_form, verb_class, reference", plain_nonpast_positive_potential_data)
+def test_plain_nonpast_positive_potential(dict_form, verb_class, reference):
+    """test the Plain Non-Past conjugation"""
+    # Note the VerbClass isn't actually used for this function, but we have the
+    # parameter to keep consistency with the other conjugation functions
+    result = plain_nonpast_positive_potential(dict_form, verb_class)
     assert result == reference
 
 generate_verb_forms_data = [
