@@ -619,6 +619,27 @@ def te(dictionary_form: str, verb_class: VerbClass) -> str:
     assert completion is not None
     return completion
 
+def te_potential(dictionary_form: str, verb_class: VerbClass) -> str:
+    """Get the Te Potential form conjugation
+
+    Parameters
+    ----------
+    dictionary_form : str
+        Dictionary form of the verb to be conjugated
+    verb_class : VerbClass
+        Class of the verb being conjugated
+
+    Returns
+    -------
+    str
+        Conjugated verb
+    """
+
+    plain_potential = plain_nonpast_positive_potential(dictionary_form, verb_class)
+    completion = te(plain_potential, VerbClass.ICHIDAN)
+
+    return completion
+
 def plain_nonpast_positive(dictionary_form: str, verb_class: VerbClass) -> str: # pylint: disable=W0613
     """Get the Plain Non-Past conjugation
 

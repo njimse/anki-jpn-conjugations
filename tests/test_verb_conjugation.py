@@ -17,6 +17,7 @@ from japanese_conjugation.verbs import (
     polite_past_negative_potential,
     polite_volitional,
     te,
+    te_potential,
     plain_nonpast_positive,
     plain_nonpast_negative,
     plain_past_positive,
@@ -353,6 +354,60 @@ te_data = [
 def test_te(dict_form, verb_class, reference):
     """test the Te conjugation"""
     result = te(dict_form, verb_class)
+    assert result == reference
+
+te_potential_data = [
+    ('来[く]る', VerbClass.IRREGULAR, '来[こ]られて'),
+    ('連[つ]れて 来[く]る', VerbClass.IRREGULAR, '連[つ]れて 来[こ]られて'),
+    ('する', VerbClass.IRREGULAR, 'できて'),
+    ('行[い]く', VerbClass.GODAN, '行[い]けて'),
+    ('書[か]く', VerbClass.GODAN, '書[か]けて'),
+    ('遊[あそ]ぶ', VerbClass.GODAN, '遊[あそ]べて'),
+    ('立[た]つ', VerbClass.GODAN, '立[た]てて'),
+    ('スポーツをする', VerbClass.IRREGULAR, 'スポーツができて'),
+    ('読[よ]む', VerbClass.GODAN, '読[よ]めて'),
+    ('買[か]う', VerbClass.GODAN, '買[か]えて'),
+    ('話[はな]す', VerbClass.GODAN, '話[はな]せて'),
+    ('泳[およ]ぐ', VerbClass.GODAN, '泳[およ]げて'),
+    ('食[た]べる', VerbClass.ICHIDAN, '食[た]べられて'),
+    ('起[お]きる', VerbClass.ICHIDAN, '起[お]きられて'),
+    ('開[あ]ける', VerbClass.ICHIDAN, '開[あ]けられて'),
+    ('借[か]りる', VerbClass.ICHIDAN, '借[か]りられて'),
+    # no kanji
+    ('くる', VerbClass.IRREGULAR, 'こられて'),
+    ('つれてくる', VerbClass.IRREGULAR, 'つれてこられて'),
+    ('いく', VerbClass.GODAN, 'いけて'),
+    ('かく', VerbClass.GODAN, 'かけて'),
+    ('あそぶ', VerbClass.GODAN, 'あそべて'),
+    ('たつ', VerbClass.GODAN, 'たてて'),
+    ('よむ', VerbClass.GODAN, 'よめて'),
+    ('かう', VerbClass.GODAN, 'かえて'),
+    ('はなす', VerbClass.GODAN, 'はなせて'),
+    ('およぐ', VerbClass.GODAN, 'およげて'),
+    ('たべる', VerbClass.ICHIDAN, 'たべられて'),
+    ('おきる', VerbClass.ICHIDAN, 'おきられて'),
+    ('あける', VerbClass.ICHIDAN, 'あけられて'),
+    ('かりる', VerbClass.ICHIDAN, 'かりられて'),
+    # no furigana
+    ('来る', VerbClass.IRREGULAR, '来[こ]られて'),
+    ('連れて来る', VerbClass.IRREGULAR, '連れて 来[こ]られて'),
+    ('行く', VerbClass.GODAN, '行けて'),
+    ('書く', VerbClass.GODAN, '書けて'),
+    ('遊ぶ', VerbClass.GODAN, '遊べて'),
+    ('立つ', VerbClass.GODAN, '立てて'),
+    ('読む', VerbClass.GODAN, '読めて'),
+    ('買う', VerbClass.GODAN, '買えて'),
+    ('話す', VerbClass.GODAN, '話せて'),
+    ('泳ぐ', VerbClass.GODAN, '泳げて'),
+    ('食べる', VerbClass.ICHIDAN, '食べられて'),
+    ('起きる', VerbClass.ICHIDAN, '起きられて'),
+    ('開ける', VerbClass.ICHIDAN, '開けられて'),
+    ('借りる', VerbClass.ICHIDAN, '借りられて')
+]
+@pytest.mark.parametrize("dict_form, verb_class, reference", te_potential_data)
+def test_te_potential(dict_form, verb_class, reference):
+    """test the Te Potential conjugation"""
+    result = te_potential(dict_form, verb_class)
     assert result == reference
 
 # Plain forms
