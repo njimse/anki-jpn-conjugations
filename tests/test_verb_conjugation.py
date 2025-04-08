@@ -718,6 +718,18 @@ generate_verb_forms_data = [
         ['来[こ]なかった', Form.PAST_NEG, Formality.PLAIN],
         # formality-constant
         ['来[き]て', Form.TE, None],
+        # Polite Potential forms
+        ['来[こ]られます', Form.POTENTIAL_NON_PAST, Formality.POLITE],
+        ['来[こ]られません', Form.POTENTIAL_NON_PAST_NEG, Formality.POLITE],
+        ['来[こ]られました', Form.POTENTIAL_PAST, Formality.POLITE],
+        ['来[こ]られませんでした', Form.POTENTIAL_PAST_NEG, Formality.POLITE],
+        # Plain Potential forms
+        ['来[こ]られる', Form.POTENTIAL_NON_PAST, Formality.PLAIN],
+        ['来[こ]られない', Form.POTENTIAL_NON_PAST_NEG, Formality.PLAIN],
+        ['来[こ]られた', Form.POTENTIAL_PAST, Formality.PLAIN],
+        ['来[こ]られなかった', Form.POTENTIAL_PAST_NEG, Formality.PLAIN],
+        # formality-constant Potential
+        ['来[こ]られて', Form.POTENTIAL_TE, None],
         # tai forms
         # Polite forms
         ['来[き]たいです', Form.TAI_NON_PAST, Formality.POLITE],
@@ -746,6 +758,21 @@ generate_verb_forms_data = [
         ['食[た]べなかった', Form.PAST_NEG, Formality.PLAIN],
         # formality-constant
         ['食[た]べて', Form.TE, None],
+
+        # Potential forms
+        # Polite forms
+        ['食[た]べられます', Form.POTENTIAL_NON_PAST, Formality.POLITE],
+        ['食[た]べられません', Form.POTENTIAL_NON_PAST_NEG, Formality.POLITE],
+        ['食[た]べられました', Form.POTENTIAL_PAST, Formality.POLITE],
+        ['食[た]べられませんでした', Form.POTENTIAL_PAST_NEG, Formality.POLITE],
+        # Plain forms
+        ['食[た]べられる', Form.POTENTIAL_NON_PAST, Formality.PLAIN],
+        ['食[た]べられない', Form.POTENTIAL_NON_PAST_NEG, Formality.PLAIN],
+        ['食[た]べられた', Form.POTENTIAL_PAST, Formality.PLAIN],
+        ['食[た]べられなかった', Form.POTENTIAL_PAST_NEG, Formality.PLAIN],
+        # formality-constant
+        ['食[た]べられて', Form.POTENTIAL_TE, None],
+
         # tai forms
         # Polite forms
         ['食[た]べたいです', Form.TAI_NON_PAST, Formality.POLITE],
@@ -774,6 +801,21 @@ generate_verb_forms_data = [
         ['切[き]らなかった', Form.PAST_NEG, Formality.PLAIN],
         # formality-constant
         ['切[き]って', Form.TE, None],
+
+        # Potential forms
+        # Polite forms
+        ['切[き]れます', Form.POTENTIAL_NON_PAST, Formality.POLITE],
+        ['切[き]れません', Form.POTENTIAL_NON_PAST_NEG, Formality.POLITE],
+        ['切[き]れました', Form.POTENTIAL_PAST, Formality.POLITE],
+        ['切[き]れませんでした', Form.POTENTIAL_PAST_NEG, Formality.POLITE],
+        # Plain forms
+        ['切[き]れる', Form.POTENTIAL_NON_PAST, Formality.PLAIN],
+        ['切[き]れない', Form.POTENTIAL_NON_PAST_NEG, Formality.PLAIN],
+        ['切[き]れた', Form.POTENTIAL_PAST, Formality.PLAIN],
+        ['切[き]れなかった', Form.POTENTIAL_PAST_NEG, Formality.PLAIN],
+        # formality-constant
+        ['切[き]れて', Form.POTENTIAL_TE, None],
+
         # tai forms
         # Polite forms
         ['切[き]りたいです', Form.TAI_NON_PAST, Formality.POLITE],

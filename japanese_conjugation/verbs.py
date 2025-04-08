@@ -217,7 +217,21 @@ def generate_verb_forms(dictionary_form: str, verb_class: VerbClass)\
         [plain_past_negative, Form.PAST_NEG, Formality.PLAIN],
 
         # formality-constant
-        [te, Form.TE, None]
+        [te, Form.TE, None],
+
+        [polite_nonpast_positive_potential, Form.POTENTIAL_NON_PAST, Formality.POLITE],
+        [polite_nonpast_negative_potential, Form.POTENTIAL_NON_PAST_NEG, Formality.POLITE],
+        [polite_past_positive_potential, Form.POTENTIAL_PAST, Formality.POLITE],
+        [polite_past_negative_potential, Form.POTENTIAL_PAST_NEG, Formality.POLITE],
+
+        # Plain forms
+        [plain_nonpast_positive_potential, Form.POTENTIAL_NON_PAST, Formality.PLAIN],
+        [plain_nonpast_negative_potential, Form.POTENTIAL_NON_PAST_NEG, Formality.PLAIN],
+        [plain_past_positive_potential, Form.POTENTIAL_PAST, Formality.PLAIN],
+        [plain_past_negative_potential, Form.POTENTIAL_PAST_NEG, Formality.PLAIN],
+
+        # formality-constant
+        [te_potential, Form.POTENTIAL_TE, None]
     ]
 
     for conjugate, form, formality in all_forms:

@@ -28,6 +28,13 @@ class Form(Enum):
     TAI_PAST_NEG = ('tai indicative', 'negative', 'past')
     TAI_TE = ('tai te', 'positive', '')
 
+    # potential forms
+    POTENTIAL_NON_PAST = ('potential indicative', 'positive', 'non-past')
+    POTENTIAL_NON_PAST_NEG = ('potential indicative', 'negative', 'non-past')
+    POTENTIAL_PAST = ('potential indicative', 'positive', 'past')
+    POTENTIAL_PAST_NEG = ('potential indicative', 'negative', 'past')
+    POTENTIAL_TE = ('potential te', 'positive', '')
+
     def __init__(self, simple_name: str, polarity: Optional[bool], temporality: str):
         self.simple_name = simple_name
         self.polarity = polarity
