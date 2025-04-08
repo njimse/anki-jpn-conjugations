@@ -14,6 +14,7 @@ from japanese_conjugation.verbs import (
     polite_nonpast_positive_potential,
     polite_nonpast_negative_potential,
     polite_past_positive_potential,
+    polite_past_negative_potential,
     polite_volitional,
     te,
     plain_nonpast_positive,
@@ -22,7 +23,8 @@ from japanese_conjugation.verbs import (
     plain_past_negative,
     plain_nonpast_positive_potential,
     plain_nonpast_negative_potential,
-    plain_past_positive_potential
+    plain_past_positive_potential,
+    plain_past_negative_potential
 )
 
 polite_nonpast_positive_data = [
@@ -143,7 +145,7 @@ polite_past_negative_data = [
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", polite_past_negative_data)
 def test_polite_past_negative(dict_form, verb_class, reference):
-    """test the Polite Past Negative Potential conjugation"""
+    """test the Polite Past Negative conjugation"""
     result = polite_past_negative(dict_form, verb_class)
     assert result == reference
 
@@ -237,6 +239,36 @@ polite_past_positive_potential_data = [
 def test_polite_past_positive_potential(dict_form, verb_class, reference):
     """test the Polite Past Potential conjugation"""
     result = polite_past_positive_potential(dict_form, verb_class)
+    assert result == reference
+
+polite_past_negative_potential_data = [
+    ('来[く]る', VerbClass.IRREGULAR, '来[こ]られませんでした'),
+    ('連[つ]れて 来[く]る', VerbClass.IRREGULAR, '連[つ]れて 来[こ]られませんでした'),
+    ('する', VerbClass.IRREGULAR, 'できませんでした'),
+    ('行[い]く', VerbClass.GODAN, '行[い]けませんでした'),
+    ('スポーツをする', VerbClass.IRREGULAR, 'スポーツができませんでした'),
+    ('読[よ]む', VerbClass.GODAN, '読[よ]めませんでした'),
+    ('買[か]う', VerbClass.GODAN, '買[か]えませんでした'),
+    ('話[はな]す', VerbClass.GODAN, '話[はな]せませんでした'),
+    # no kanji
+    ('くる', VerbClass.IRREGULAR, 'こられませんでした'),
+    ('つれてくる', VerbClass.IRREGULAR, 'つれてこられませんでした'),
+    ('いく', VerbClass.GODAN, 'いけませんでした'),
+    ('よむ', VerbClass.GODAN, 'よめませんでした'),
+    ('かう', VerbClass.GODAN, 'かえませんでした'),
+    ('はなす', VerbClass.GODAN, 'はなせませんでした'),
+    # no furigana
+    ('来る', VerbClass.IRREGULAR, '来[こ]られませんでした'),
+    ('連れて来る', VerbClass.IRREGULAR, '連れて 来[こ]られませんでした'),
+    ('行く', VerbClass.GODAN, '行けませんでした'),
+    ('読む', VerbClass.GODAN, '読めませんでした'),
+    ('買う', VerbClass.GODAN, '買えませんでした'),
+    ('話す', VerbClass.GODAN, '話せませんでした')
+]
+@pytest.mark.parametrize("dict_form, verb_class, reference", polite_past_negative_potential_data)
+def test_polite_past_negative_potential(dict_form, verb_class, reference):
+    """test the Polite Past Negative Potential conjugation"""
+    result = polite_past_negative_potential(dict_form, verb_class)
     assert result == reference
 
 polite_volitional_data = [
@@ -584,6 +616,36 @@ plain_past_positive_potential_data = [
 def test_plain_past_positive_potential(dict_form, verb_class, reference):
     """test the Plain Past Potenial conjugation"""
     result = plain_past_positive_potential(dict_form, verb_class)
+    assert result == reference
+
+plain_past_negative_potential_data = [
+    ('来[く]る', VerbClass.IRREGULAR, '来[こ]られなかった'),
+    ('連[つ]れて 来[く]る', VerbClass.IRREGULAR, '連[つ]れて 来[こ]られなかった'),
+    ('する', VerbClass.IRREGULAR, 'できなかった'),
+    ('行[い]く', VerbClass.GODAN, '行[い]けなかった'),
+    ('スポーツをする', VerbClass.IRREGULAR, 'スポーツができなかった'),
+    ('読[よ]む', VerbClass.GODAN, '読[よ]めなかった'),
+    ('買[か]う', VerbClass.GODAN, '買[か]えなかった'),
+    ('話[はな]す', VerbClass.GODAN, '話[はな]せなかった'),
+    # no kanji
+    ('くる', VerbClass.IRREGULAR, 'こられなかった'),
+    ('つれてくる', VerbClass.IRREGULAR, 'つれてこられなかった'),
+    ('いく', VerbClass.GODAN, 'いけなかった'),
+    ('よむ', VerbClass.GODAN, 'よめなかった'),
+    ('かう', VerbClass.GODAN, 'かえなかった'),
+    ('はなす', VerbClass.GODAN, 'はなせなかった'),
+    # no furigana
+    ('来る', VerbClass.IRREGULAR, '来[こ]られなかった'),
+    ('連れて来る', VerbClass.IRREGULAR, '連れて 来[こ]られなかった'),
+    ('行く', VerbClass.GODAN, '行けなかった'),
+    ('読む', VerbClass.GODAN, '読めなかった'),
+    ('買う', VerbClass.GODAN, '買えなかった'),
+    ('話す', VerbClass.GODAN, '話せなかった')
+]
+@pytest.mark.parametrize("dict_form, verb_class, reference", plain_past_negative_potential_data)
+def test_plain_past_negative_potential(dict_form, verb_class, reference):
+    """test the Plain Past Negative Potential conjugation"""
+    result = plain_past_negative_potential(dict_form, verb_class)
     assert result == reference
 
 generate_verb_forms_data = [

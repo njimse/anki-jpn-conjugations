@@ -536,6 +536,27 @@ def polite_past_positive_potential(dictionary_form: str, verb_class: VerbClass) 
 
     return completion
 
+def polite_past_negative_potential(dictionary_form: str, verb_class: VerbClass) -> str:
+    """Get the Polite Past Negative Potential conjugation
+
+    Parameters
+    ----------
+    dictionary_form : str
+        Dictionary form of the verb to be conjugated
+    verb_class : VerbClass
+        Class of the verb being conjugated
+
+    Returns
+    -------
+    str
+        Conjugated verb
+    """
+
+    plain_potential = plain_nonpast_positive_potential(dictionary_form, verb_class)
+    completion = polite_past_negative(plain_potential, VerbClass.ICHIDAN)
+
+    return completion
+
 def polite_volitional(dictionary_form: str, verb_class: VerbClass) -> str:
     """Get the Polite Volitional conjugation
 
@@ -751,5 +772,25 @@ def plain_past_positive_potential(dictionary_form: str, verb_class: VerbClass) -
 
     plain_potential = plain_nonpast_positive_potential(dictionary_form, verb_class)
     completion = plain_past_positive(plain_potential, VerbClass.ICHIDAN)
+
+    return completion
+
+def plain_past_negative_potential(dictionary_form: str, verb_class: VerbClass) -> str:
+    """Get the Plain Past Negative Potential Potential conjugation
+
+    Parameters
+    ----------
+    dictionary_form : str
+        Dictionary form of the verb to be conjugated
+    verb_class : VerbClass
+        Class of the verb being conjugated
+    Returns
+    -------
+    str
+        Conjugated verb
+    """
+
+    plain_potential = plain_nonpast_positive_potential(dictionary_form, verb_class)
+    completion = plain_past_negative(plain_potential, VerbClass.ICHIDAN)
 
     return completion
