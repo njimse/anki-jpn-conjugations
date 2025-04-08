@@ -47,6 +47,20 @@ godan_te_mapping = {
     "ぐ": "いで",
     "す": "して",
 }
+godan_potential_mapping = {
+    "う": "え",
+    "く": "け",
+    "す": "せ",
+    "つ": "て",
+    "ぬ": "ね",
+    "ふ": "へ",
+    "む": "め",
+    "る": "れ",
+    "ぐ": "げ",
+    "ず": "ぜ",
+    "ぶ": "べ",
+    "ぷ": "ぺ"
+}
 GODAN_STEM_ENDINGS = set(godan_stem_mapping.keys())
 ICHIDAN_ENDINGS = set([
     "いる",
@@ -203,7 +217,21 @@ def generate_verb_forms(dictionary_form: str, verb_class: VerbClass)\
         [plain_past_negative, Form.PAST_NEG, Formality.PLAIN],
 
         # formality-constant
-        [te, Form.TE, None]
+        [te, Form.TE, None],
+
+        [polite_nonpast_positive_potential, Form.POTENTIAL_NON_PAST, Formality.POLITE],
+        [polite_nonpast_negative_potential, Form.POTENTIAL_NON_PAST_NEG, Formality.POLITE],
+        [polite_past_positive_potential, Form.POTENTIAL_PAST, Formality.POLITE],
+        [polite_past_negative_potential, Form.POTENTIAL_PAST_NEG, Formality.POLITE],
+
+        # Plain forms
+        [plain_nonpast_positive_potential, Form.POTENTIAL_NON_PAST, Formality.PLAIN],
+        [plain_nonpast_negative_potential, Form.POTENTIAL_NON_PAST_NEG, Formality.PLAIN],
+        [plain_past_positive_potential, Form.POTENTIAL_PAST, Formality.PLAIN],
+        [plain_past_negative_potential, Form.POTENTIAL_PAST_NEG, Formality.PLAIN],
+
+        # formality-constant
+        [te_potential, Form.POTENTIAL_TE, None]
     ]
 
     for conjugate, form, formality in all_forms:
@@ -278,7 +306,7 @@ def _masu_stem(dictionary_form: str, v_class: VerbClass, # pylint: disable=R0912
     Returns
     -------
     str
-        ~masu stem onto which most conjugation endings can be appended
+        ~masu stem onto which many/most conjugation endings can be appended
     """
     stem = None
     if v_class == VerbClass.ICHIDAN:
@@ -308,6 +336,46 @@ def _masu_stem(dictionary_form: str, v_class: VerbClass, # pylint: disable=R0912
                 stem = dictionary_form[:-2] + 'き'
             else:
                 stem = dictionary_form[:-2] + 'こ'
+    assert stem is not None
+    return stem
+
+def _potential_stem(dictionary_form: str, v_class: VerbClass) -> str: # pylint: disable=R0912
+    """Get the potential stem of the specified verb
+
+    Parameters
+    ----------
+    dictionary_form : str
+        Dictionary form of the verb for which the ~masu stem will be determined
+    v_class : VerbClass
+        Verb class of the requested verb
+    formality : Formality
+        Formality level of the requested stem
+
+    Returns
+    -------
+    str
+        stem onto which potential conjugation endings can be appended
+    """
+    stem = None
+    if v_class == VerbClass.ICHIDAN:
+        stem = dictionary_form[:-1] + 'られ'
+    elif v_class == VerbClass.GODAN:
+        stem = dictionary_form[:-1] + godan_potential_mapping[dictionary_form[-1]]
+    elif v_class == VerbClass.IRREGULAR:
+        if dictionary_form.endswith('する'):
+            stem = dictionary_form[:-2].replace('を', 'が') + 'でき'
+
+        elif dictionary_form.endswith('来[く]る'):
+            stem = dictionary_form[:-5] + '来[こ]られ'
+        elif dictionary_form.endswith('来る'):
+            if len(dictionary_form) == 2:
+                buffer = ''
+            else:
+                buffer = ' '
+            ending = '来[こ]られ'
+            stem = dictionary_form[:-2] + buffer + ending
+        elif dictionary_form.endswith('くる'):
+            stem = dictionary_form[:-2] + 'こられ'
     assert stem is not None
     return stem
 
@@ -420,6 +488,89 @@ def polite_past_negative(dictionary_form: str, verb_class: VerbClass) -> str:
 
     return completion
 
+def polite_nonpast_positive_potential(dictionary_form: str, verb_class: VerbClass) -> str:
+    """Get the Polite Non-Past Potential conjugation
+
+    Parameters
+    ----------
+    dictionary_form : str
+        Dictionary form of the verb to be conjugated
+    verb_class : VerbClass
+        Class of the verb being conjugated
+
+    Returns
+    -------
+    str
+        Conjugated verb
+    """
+    plain_potential = plain_nonpast_positive_potential(dictionary_form, verb_class)
+    completion = polite_nonpast_positive(plain_potential, VerbClass.ICHIDAN)
+
+    return completion
+
+def polite_nonpast_negative_potential(dictionary_form: str, verb_class: VerbClass) -> str:
+    """Get the Polite Non-Past Negative Potential conjugation
+
+    Parameters
+    ----------
+    dictionary_form : str
+        Dictionary form of the verb to be conjugated
+    verb_class : VerbClass
+        Class of the verb being conjugated
+
+    Returns
+    -------
+    str
+        Conjugated verb
+    """
+
+    plain_potential = plain_nonpast_positive_potential(dictionary_form, verb_class)
+    completion = polite_nonpast_negative(plain_potential, VerbClass.ICHIDAN)
+
+    return completion
+
+def polite_past_positive_potential(dictionary_form: str, verb_class: VerbClass) -> str:
+    """Get the Polite Past Potential conjugation
+
+    Parameters
+    ----------
+    dictionary_form : str
+        Dictionary form of the verb to be conjugated
+    verb_class : VerbClass
+        Class of the verb being conjugated
+
+    Returns
+    -------
+    str
+        Conjugated verb
+    """
+
+    plain_potential = plain_nonpast_positive_potential(dictionary_form, verb_class)
+    completion = polite_past_positive(plain_potential, VerbClass.ICHIDAN)
+
+    return completion
+
+def polite_past_negative_potential(dictionary_form: str, verb_class: VerbClass) -> str:
+    """Get the Polite Past Negative Potential conjugation
+
+    Parameters
+    ----------
+    dictionary_form : str
+        Dictionary form of the verb to be conjugated
+    verb_class : VerbClass
+        Class of the verb being conjugated
+
+    Returns
+    -------
+    str
+        Conjugated verb
+    """
+
+    plain_potential = plain_nonpast_positive_potential(dictionary_form, verb_class)
+    completion = polite_past_negative(plain_potential, VerbClass.ICHIDAN)
+
+    return completion
+
 def polite_volitional(dictionary_form: str, verb_class: VerbClass) -> str:
     """Get the Polite Volitional conjugation
 
@@ -482,7 +633,28 @@ def te(dictionary_form: str, verb_class: VerbClass) -> str:
     assert completion is not None
     return completion
 
-def plain_nonpast_positive(dictionary_form: str, verb_type: VerbClass) -> str: # pylint: disable=W0613
+def te_potential(dictionary_form: str, verb_class: VerbClass) -> str:
+    """Get the Te Potential form conjugation
+
+    Parameters
+    ----------
+    dictionary_form : str
+        Dictionary form of the verb to be conjugated
+    verb_class : VerbClass
+        Class of the verb being conjugated
+
+    Returns
+    -------
+    str
+        Conjugated verb
+    """
+
+    plain_potential = plain_nonpast_positive_potential(dictionary_form, verb_class)
+    completion = te(plain_potential, VerbClass.ICHIDAN)
+
+    return completion
+
+def plain_nonpast_positive(dictionary_form: str, verb_class: VerbClass) -> str: # pylint: disable=W0613
     """Get the Plain Non-Past conjugation
 
     Parameters
@@ -572,4 +744,88 @@ def plain_past_negative(dictionary_form: str, verb_class: VerbClass) -> str:
 
     nai_form = plain_nonpast_negative(dictionary_form, verb_class)
     completion = nai_form[:-1] + 'かった'
+    return completion
+
+def plain_nonpast_positive_potential(dictionary_form: str, verb_class: VerbClass) -> str: # pylint: disable=W0613
+    """Get the Plain Non-Past Potential conjugation
+
+    Parameters
+    ----------
+    dictionary_form : str
+        Dictionary form of the verb to be conjugated
+    verb_class : VerbClass
+        Class of the verb being conjugated. Note that it does not get used in this function,
+        but we include it for API consistency with the other conjugation functions
+
+    Returns
+    -------
+    str
+        Conjugated verb
+    """
+
+    stem = _potential_stem(dictionary_form, verb_class)
+    completion = stem + "る"
+    return completion
+
+def plain_nonpast_negative_potential(dictionary_form: str, verb_class: VerbClass) -> str:
+    """Get the Plain Non-Past Negative Potential conjugation
+
+    Parameters
+    ----------
+    dictionary_form : str
+        Dictionary form of the verb to be conjugated
+    verb_class : VerbClass
+        Class of the verb being conjugated
+
+    Returns
+    -------
+    str
+        Conjugated verb
+    """
+
+    plain_potential = plain_nonpast_positive_potential(dictionary_form, verb_class)
+    completion = plain_nonpast_negative(plain_potential, VerbClass.ICHIDAN)
+
+    return completion
+
+def plain_past_positive_potential(dictionary_form: str, verb_class: VerbClass) -> str: # pylint: disable=W0613
+    """Get the Plain Non-Past Potential conjugation
+
+    Parameters
+    ----------
+    dictionary_form : str
+        Dictionary form of the verb to be conjugated
+    verb_class : VerbClass
+        Class of the verb being conjugated. Note that it does not get used in this function,
+        but we include it for API consistency with the other conjugation functions
+
+    Returns
+    -------
+    str
+        Conjugated verb
+    """
+
+    plain_potential = plain_nonpast_positive_potential(dictionary_form, verb_class)
+    completion = plain_past_positive(plain_potential, VerbClass.ICHIDAN)
+
+    return completion
+
+def plain_past_negative_potential(dictionary_form: str, verb_class: VerbClass) -> str:
+    """Get the Plain Past Negative Potential Potential conjugation
+
+    Parameters
+    ----------
+    dictionary_form : str
+        Dictionary form of the verb to be conjugated
+    verb_class : VerbClass
+        Class of the verb being conjugated
+    Returns
+    -------
+    str
+        Conjugated verb
+    """
+
+    plain_potential = plain_nonpast_positive_potential(dictionary_form, verb_class)
+    completion = plain_past_negative(plain_potential, VerbClass.ICHIDAN)
+
     return completion
