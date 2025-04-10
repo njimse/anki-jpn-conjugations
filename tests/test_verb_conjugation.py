@@ -560,6 +560,7 @@ plain_nonpast_positive_potential_data = [
     ('買[か]う', VerbClass.GODAN, '買[か]える'),
     ('話[はな]す', VerbClass.GODAN, '話[はな]せる'),
     ('泳[およ]ぐ', VerbClass.GODAN, '泳[およ]げる'),
+    ('電話[でんわ]を 掛[か]ける', VerbClass.ICHIDAN, '電話[でんわ]が 掛[か]けられる'),
     ('食[た]べる', VerbClass.ICHIDAN, '食[た]べられる'),
     ('起[お]きる', VerbClass.ICHIDAN, '起[お]きられる'),
     ('開[あ]ける', VerbClass.ICHIDAN, '開[あ]けられる'),

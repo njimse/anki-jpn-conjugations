@@ -363,7 +363,7 @@ def _potential_stem(dictionary_form: str, v_class: VerbClass) -> str: # pylint: 
         stem = dictionary_form[:-1] + godan_potential_mapping[dictionary_form[-1]]
     elif v_class == VerbClass.IRREGULAR:
         if dictionary_form.endswith('する'):
-            stem = dictionary_form[:-2].replace('を', 'が') + 'でき'
+            stem = dictionary_form[:-2] + 'でき'
 
         elif dictionary_form.endswith('来[く]る'):
             stem = dictionary_form[:-5] + '来[こ]られ'
@@ -377,6 +377,7 @@ def _potential_stem(dictionary_form: str, v_class: VerbClass) -> str: # pylint: 
         elif dictionary_form.endswith('くる'):
             stem = dictionary_form[:-2] + 'こられ'
     assert stem is not None
+    stem = stem.replace('を', 'が')
     return stem
 
 def tai_forms(dictionary_form: str, verb_class: VerbClass) \
