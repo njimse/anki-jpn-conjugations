@@ -10,6 +10,7 @@ from .enums import Form, Formality, VerbClass, AdjectiveClass
 from .models import combo_to_field_name
 from .verbs import generate_verb_forms
 from .adjectives import generate_adjective_forms
+from .util import escape_query
 from .config import ConfigManager
 
 class DeckUpdater: # pylint: disable=R0903
@@ -69,8 +70,9 @@ class DeckUpdater: # pylint: disable=R0903
         meaning = source_note.fields[source_fields[relevant_fields[1]][0]]
         reading = source_note.fields[source_fields[relevant_fields[2]][0]].split('<')[0].strip()
 
-        query = f'"Expression:{expression}" "Meaning:{meaning}"' + \
-            f' "Reading:{reading}" "deck:{self._deck["name"]}" "mid:{self._model_id}"'
+        query = f'"Expression:{escape_query(expression)}" "Meaning:{escape_query(meaning)}"' + \
+            f' "Reading:{escape_query(reading)}" ' + \
+            f' "deck:{escape_query(self._deck["name"])}" "mid:{self._model_id}"'
         existing_notes = self._col.find_notes(query)
         if existing_notes:
             note = self._col.get_note(existing_notes[0])
@@ -245,7 +247,8 @@ class DeckSearcher:
             tag_query = "(" + " OR ".join(f"tag:{tag_str}" for tag_str in tags) + ")"
         else:
             tag_query = f"tag:{tags[0]}"
-        query = f'{tag_query} "deck:{self._deck_name}" -"note:{conjugation_model_name}"'
+        query = f'{tag_query} "deck:{escape_query(self._deck_name)}" ' +\
+            f'-"note:{escape_query(conjugation_model_name)}"'
         note_ids = self._col.find_notes(query)
 
         filtered_notes = set()

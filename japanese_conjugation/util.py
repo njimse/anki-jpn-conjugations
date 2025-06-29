@@ -33,3 +33,20 @@ def promote_furigana(reading: str) -> str:
     """
 
     return re.sub(r"(^| )(\S+)\[([^\]]+)\]", r"\3", reading, flags=re.UNICODE)
+
+def escape_query(raw_input: str) -> str:
+    """Escape a raw string input so that it can be included in a query
+    
+    Parameters
+    ----------
+    raw_input : str
+        Raw input string potentially containing characters in need of escaping
+        
+    Returns
+    -------
+    str
+        Input string modified such that it can be used safely in a collection search
+    """
+    match_pattern = r'(^|(?:\\\\)+|[^\\])"'
+
+    return re.sub(match_pattern, r'\1\\"', raw_input)

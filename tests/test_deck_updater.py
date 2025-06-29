@@ -10,6 +10,7 @@ from japanese_conjugation.verbs import generate_verb_forms, VerbClass
 from japanese_conjugation.decks import DeckUpdater
 from japanese_conjugation.config import ConfigManager
 from japanese_conjugation.models import combo_to_field_name, add_or_update_verb_model
+from japanese_conjugation.util import escape_query
 
 TARGET_DECK = 'target'
 SOURCE_DECK = 'source'
@@ -94,6 +95,26 @@ def _compose_ref_field_values(field_map, expression, meaning, reading, conjugati
 
     return ref_values
 
+verify_query_escaping_data = [
+    ('to eat'),
+    ('"to eat"'),
+    ('to eat compose()'),
+    ('to eat "compose()"'),
+    ('to eat "compose()'),
+]
+@pytest.mark.parametrize("translation", verify_query_escaping_data)
+def test_verify_query_escaping(anki_col, translation):
+    """Test that the escaped queries allow us to match the relevant notes"""
+    base_note = anki.notes.Note(anki_col, anki_col.models.by_name(SOURCE_MODEL_NAME))
+    base_note.fields = ["First Note", '食べる', '食[た]べる', "LHL", translation]
+    anki_col.add_note(base_note, anki_col.decks.id(SOURCE_DECK))
+    all_note_ids = anki_col.find_notes("deck:*")
+    assert len(all_note_ids) == 1
+    query = f'"exp:食べる" "translation:{escape_query(translation)}" '\
+        + f'"rdng:食[た]べる" "deck:{SOURCE_DECK}"'
+    queried_note_ids = anki_col.find_notes(query)
+    assert len(queried_note_ids) == 1
+
 def test_add_new_note_to_deck(anki_col, verb_model, deck_updater):
     """Test that we create a new note when the word is not present in the target deck"""
     base_note = anki.notes.Note(anki_col, anki_col.models.by_name(SOURCE_MODEL_NAME))
@@ -109,6 +130,35 @@ def test_add_new_note_to_deck(anki_col, verb_model, deck_updater):
     note = anki_col.get_note(result_note_ids[0])
     ref_fields = _compose_ref_field_values(anki_col.models.field_map(verb_model),
                                            '食べる', 'to eat', '食[た]べる', conjugations)
+    for index, ref_value in enumerate(ref_fields):
+        assert note.fields[index] == ref_value
+
+add_note_to_deck_data = [
+    ("First Note", '食べる', '食[た]べる', "LHL", '"to eat"'),
+    ("First Note", '食べる', '食[た]べる', "LHL", '"eat ()"'),
+    ("First Note", '食べる', '食[た]べる', "LHL", 'to eat (e.g. sandwich)'),
+    ("First Note", '食べる', '食[た]べる', "LHL", 'to eat (e.g. sandwich, chips)'),
+    ("First Note", '"食べる"', '食[た]べる', "LHL", 'to eat'),
+]
+@pytest.mark.parametrize("name, expression, rdng, pitch, translation", add_note_to_deck_data)
+def test_add_new_note_to_deck_sanitation(anki_col, verb_model, deck_updater, # pylint: disable=R0913,R0914,R0917
+                                         name, expression, rdng, pitch, translation):
+    """Test that we create a new note when the word is not present in the target deck"""
+    base_note = anki.notes.Note(anki_col, anki_col.models.by_name(SOURCE_MODEL_NAME))
+    base_note.fields = [name, expression, rdng, pitch, translation]
+    anki_col.add_note(base_note, anki_col.decks.id(SOURCE_DECK))
+    conjugations = generate_verb_forms(base_note.fields[2], VerbClass.ICHIDAN)
+
+    starting_note_ids = anki_col.find_notes("deck:*")
+    assert len(starting_note_ids) == 1
+    deck_updater.add_note_to_deck(base_note, VerbClass.ICHIDAN)
+    updated_note_ids = anki_col.find_notes("deck:*")
+    assert len(updated_note_ids) == 2
+    conj_note_ids = [i for i in updated_note_ids if i not in starting_note_ids]
+    assert len(conj_note_ids) == 1
+    note = anki_col.get_note(conj_note_ids[0])
+    ref_fields = _compose_ref_field_values(anki_col.models.field_map(verb_model),
+                                           expression, translation, rdng, conjugations)
     for index, ref_value in enumerate(ref_fields):
         assert note.fields[index] == ref_value
 
