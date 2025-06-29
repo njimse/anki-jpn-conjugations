@@ -82,9 +82,9 @@ escape_query_data = [
     ('"cat"', r'\"cat\"'),
     ("'cat'", "'cat'"),
     ('cat" and dog', r'cat\" and dog'),
-    (r'cat\" and dog', r'cat\" and dog'),
-    (r'cat\\" and dog', r'cat\\\" and dog'),
-    (r'cat\\" and \"dog', r'cat\\\" and \"dog')
+    (r'cat\" and dog', r'cat\\\" and dog'),
+    (r'cat\\" and dog', r'cat\\\\\" and dog'),
+    (r'cat\\" and \"dog', r'cat\\\\\" and \\\"dog')
 ]
 @pytest.mark.parametrize("raw_input, ref_output", escape_query_data)
 def test_escape_query(raw_input, ref_output):
