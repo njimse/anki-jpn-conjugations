@@ -101,6 +101,10 @@ verify_query_escaping_data = [
     ('to eat compose()'),
     ('to eat "compose()"'),
     ('to eat "compose()'),
+    (r'"食べる'),
+    (r'\"食べる'),
+    (r'\\"食べる'),
+    (r'\\\"食べる')
 ]
 @pytest.mark.parametrize("translation", verify_query_escaping_data)
 def test_verify_query_escaping(anki_col, translation):
@@ -139,6 +143,10 @@ add_note_to_deck_data = [
     ("First Note", '食べる', '食[た]べる', "LHL", 'to eat (e.g. sandwich)'),
     ("First Note", '食べる', '食[た]べる', "LHL", 'to eat (e.g. sandwich, chips)'),
     ("First Note", '"食べる"', '食[た]べる', "LHL", 'to eat'),
+    ("First Note", r'\"食べる"', '食[た]べる', "LHL", 'to eat'),
+    ("First Note", r'\\"食べる"', '食[た]べる', "LHL", 'to eat'),
+    ("First Note", r'\\\"食べる', '食[た]べる', "LHL", 'to eat'),
+    ("First Note", r'\\\"食べる"', '食[た]べる', "LHL", 'to eat'),
 ]
 @pytest.mark.parametrize("name, expression, rdng, pitch, translation", add_note_to_deck_data)
 def test_add_new_note_to_deck_sanitation(anki_col, verb_model, deck_updater, # pylint: disable=R0913,R0914,R0917

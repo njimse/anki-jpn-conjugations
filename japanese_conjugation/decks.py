@@ -244,9 +244,9 @@ class DeckSearcher:
             return [], []
 
         if len(tags) > 1:
-            tag_query = "(" + " OR ".join(f"tag:{tag_str}" for tag_str in tags) + ")"
+            tag_query = "(" + " OR ".join(f"tag:{escape_query(tag_str)}" for tag_str in tags) + ")"
         else:
-            tag_query = f"tag:{tags[0]}"
+            tag_query = f"tag:{escape_query(tags[0])}"
         query = f'{tag_query} "deck:{escape_query(self._deck_name)}" ' +\
             f'-"note:{escape_query(conjugation_model_name)}"'
         note_ids = self._col.find_notes(query)

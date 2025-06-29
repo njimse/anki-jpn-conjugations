@@ -47,6 +47,4 @@ def escape_query(raw_input: str) -> str:
     str
         Input string modified such that it can be used safely in a collection search
     """
-    match_pattern = r'(^|(?:\\\\)+|[^\\])"'
-
-    return re.sub(match_pattern, r'\1\\"', raw_input)
+    return raw_input.replace('\\', r'\\').replace(r'"', r'\"')
