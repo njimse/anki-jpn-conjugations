@@ -7,8 +7,6 @@ import zipfile
 import argparse
 
 import anki.collection
-import anki.stdmodels
-import anki.notes
 import anki.exporting
 
 from .config import ConfigManager
@@ -79,19 +77,39 @@ def main(args): # pylint: disable=R0914
     col.close()
     shutil.rmtree(temp_dir_name)
 
+def inspect_main(args):
+    """Load the specified collection and start a debugger"""
+    temp_dir_name = tempfile.mkdtemp()
+    with zipfile.ZipFile(args.input, 'r') as zip_ref:
+        zip_ref.extractall(temp_dir_name)
+    if not os.path.exists(os.path.join(temp_dir_name, 'collection.media')):
+        os.makedirs(os.path.join(temp_dir_name, 'collection.media'))
+    collection_file = os.path.join(temp_dir_name, "collection.anki21")
+    col = anki.collection.Collection(collection_file) # pylint: disable=E1101
+    note_ids = col.find_notes("tag:yomitan")
+    note = col.get_note(note_ids[0]) # pylint: disable=W0612
+    print("All done!")
+
 def main_cli():
     """Console script for generating verb and adjective decks"""
     parser = argparse.ArgumentParser()
-    parser.add_argument('-i', '--input')
-    parser.add_argument('-o', '--output')
+    subparsers = parser.add_subparsers()
+    gen_parser = subparsers.add_parser("generate", help="Generate conjugation notes")
+    gen_parser.add_argument('-i', '--input')
+    gen_parser.add_argument('-o', '--output')
 
-    parser.add_argument('--source-deck-name', dest='source_deck_name', required=True)
-    parser.add_argument('--verb-deck-name', dest='verb_deck_name',
+    gen_parser.add_argument('--source-deck-name', dest='source_deck_name', required=True)
+    gen_parser.add_argument('--verb-deck-name', dest='verb_deck_name',
                         default="Japanese Verb Conjugations")
-    parser.add_argument('--adj-deck-name', dest='adj_deck_name',
+    gen_parser.add_argument('--adj-deck-name', dest='adj_deck_name',
                         default="Japanese Adjective Conjugations")
 
-    parser.add_argument('--config')
-    args = parser.parse_args()
+    gen_parser.add_argument('--config')
+    gen_parser.set_defaults(func=main)
 
-    main(args)
+    inspect_parser = subparsers.add_parser("inspect", help="Load a collection for inspection")
+    inspect_parser.add_argument("input")
+    inspect_parser.set_defaults(func=inspect_main)
+
+    args = parser.parse_args()
+    args.func(args)

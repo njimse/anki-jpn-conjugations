@@ -5,7 +5,8 @@ import js2py
 import japanese_conjugation.resources
 from japanese_conjugation.util import (
     remove_furigana,
-    promote_furigana
+    promote_furigana,
+    escape_query
 )
 
 insert_ending_spans_text = importlib.resources.read_text(japanese_conjugation.resources, # pylint: disable=W4902
@@ -74,3 +75,19 @@ def test_promote_furigana(reading, ref):
 
     hyp = promote_furigana(reading)
     assert hyp == ref
+
+escape_query_data = [
+    ("", ""),
+    ("cat", "cat"),
+    ('"cat"', r'\"cat\"'),
+    ("'cat'", "'cat'"),
+    ('cat" and dog', r'cat\" and dog'),
+    (r'cat\" and dog', r'cat\\\" and dog'),
+    (r'cat\\" and dog', r'cat\\\\\" and dog'),
+    (r'cat\\" and \"dog', r'cat\\\\\" and \\\"dog')
+]
+@pytest.mark.parametrize("raw_input, ref_output", escape_query_data)
+def test_escape_query(raw_input, ref_output):
+    """Test the escaping of query text"""
+    output = escape_query(raw_input)
+    assert output == ref_output
