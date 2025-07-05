@@ -202,6 +202,21 @@ def generate_verb_forms(dictionary_form: str, verb_class: VerbClass)\
     if verb_class == VerbClass.GENERAL:
         verb_class = classify_verb(dictionary_form)
 
+    if dictionary_form == "です":
+        results = [
+            ['です', Form.NON_PAST, Formality.POLITE],
+            ['じゃないです', Form.NON_PAST_NEG, Formality.POLITE],
+            ['でした', Form.PAST, Formality.POLITE],
+            ['ませんでした', Form.PAST_NEG, Formality.POLITE],
+            ['でしょう', Form.VOLITIONAL, Formality.POLITE],
+            ['だ', Form.NON_PAST, Formality.PLAIN],
+            ['じゃない', Form.NON_PAST_NEG, Formality.PLAIN],
+            ['だった', Form.PAST, Formality.PLAIN],
+            ['なかった', Form.PAST_NEG, Formality.PLAIN],
+            ['で', Form.TE, None],
+        ]
+        return results
+
     results = []
     all_forms = [
         [polite_nonpast_positive, Form.NON_PAST, Formality.POLITE],

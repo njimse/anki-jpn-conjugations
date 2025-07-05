@@ -3,6 +3,8 @@
 ## 1.1.1
 
 * Escape quotation marks when composing queries to detect existing notes
+* Added support for proper conjugation of the copula です
+* Do not add conjugation note for words that fail to conjugate
 
 ## 1.1.0
 

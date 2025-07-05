@@ -70,6 +70,15 @@ class DeckUpdater: # pylint: disable=R0903
         meaning = source_note.fields[source_fields[relevant_fields[1]][0]]
         reading = source_note.fields[source_fields[relevant_fields[2]][0]].split('<')[0].strip()
 
+        if word_type in AdjectiveClass:
+            conjugations = generate_adjective_forms(reading, word_type)
+        else: # VerbClass
+            conjugations = generate_verb_forms(reading, word_type)
+
+        if len(conjugations) == 0:
+            self._changes[2] += 1
+            return
+
         query = f'"Expression:{escape_query(expression)}" "Meaning:{escape_query(meaning)}"' + \
             f' "Reading:{escape_query(reading)}" ' + \
             f' "deck:{escape_query(self._deck["name"])}" "mid:{self._model_id}"'
@@ -86,15 +95,8 @@ class DeckUpdater: # pylint: disable=R0903
         for t in source_note.tags:
             note.add_tag(t)
 
-        if word_type in AdjectiveClass:
-            conjugations = generate_adjective_forms(reading, word_type)
-        else: # AdjectiveClass
-            conjugations = generate_verb_forms(reading, word_type)
-
         self._expand_note(note, conjugations)
 
-        if len(conjugations) == 0:
-            self._changes[2] += 1
         if existing_notes:
             if existing_fields != note.fields:
                 self._changes[1] += 1

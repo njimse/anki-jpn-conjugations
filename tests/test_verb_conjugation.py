@@ -831,7 +831,22 @@ generate_verb_forms_data = [
         # formality-constant
         ['切[き]りたくて', Form.TAI_TE, None],
     ]),
-    ('汚[きたな]い', VerbClass.GENERAL, [])
+    ('汚[きたな]い', VerbClass.GENERAL, []),
+    ('です', VerbClass.GODAN, [
+        # Polite forms pylint: disable=R0801
+        ['です', Form.NON_PAST, Formality.POLITE],
+        ['じゃないです', Form.NON_PAST_NEG, Formality.POLITE],
+        ['でした', Form.PAST, Formality.POLITE],
+        ['ませんでした', Form.PAST_NEG, Formality.POLITE],
+        ['でしょう', Form.VOLITIONAL, Formality.POLITE],
+        # Plain forms
+        ['だ', Form.NON_PAST, Formality.PLAIN],
+        ['じゃない', Form.NON_PAST_NEG, Formality.PLAIN],
+        ['だった', Form.PAST, Formality.PLAIN],
+        ['なかった', Form.PAST_NEG, Formality.PLAIN],
+        # formality-constant
+        ['で', Form.TE, None],
+    ])
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", generate_verb_forms_data)
 def test_generate_verb_forms(dict_form, verb_class, reference):
