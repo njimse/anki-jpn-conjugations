@@ -14,6 +14,14 @@ Now select the deck that will provide the **source** content. In this case, the 
 
 Congratulations! You should now have a study deck with individual cards dedicated to specific conjugations. As you add more vocabulary to your source deck(s), you can skip over the deck creation and use the same menu selections to update the conjugation deck with the new words.
 
+### Help! No Conjugation Notes Were Created!
+
+It's possible that when trying to use the add-on, it reports that it didn't create or update any new notes. There are a few common reasons that may explain it:
+
+1. The deck that you are using as input (the "source" deck) doesn't use tags to identify verbs and adjectives
+2. The tags that *are* in your source deck don't match what is configured in the add-on configuration
+3. Any notes in the source deck that would match the tag configurations are "new"; if you haven't studied those notes yet, then they won't be picked up by this add-on.
+
 ## Creating a Filtered Study Deck
 
 At times, you may wish to focus your conjugation studying on particular forms (maybe you have a quiz coming up, or you are just feeling rusty/slow on a set of forms). This addon provides a customized start to creating a filtered deck, hopefully making it a bit easier to select which conjugations you do/don't want to work on.
