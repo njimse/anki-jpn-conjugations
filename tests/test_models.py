@@ -275,6 +275,7 @@ reference_combo_hashes = {
     '5hRQ': (Formality.PLAIN, Form.NON_PAST_NEG),
     'wlxY': (Formality.PLAIN, Form.PAST),
     'X9LC': (Formality.PLAIN, Form.PAST_NEG),
+    'n6Nx': (Formality.PLAIN, Form.VOLITIONAL),
     '9Rq6': (Formality.POLITE, Form.TAI_NON_PAST),
     'MZD6': (Formality.POLITE, Form.TAI_NON_PAST_NEG),
     'F3Ve': (Formality.POLITE, Form.TAI_PAST),

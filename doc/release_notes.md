@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.0
+
+* Added support for plain volitional form
+
 ## 1.1.1
 
 * Escape quotation marks when composing queries to detect existing notes

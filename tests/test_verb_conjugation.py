@@ -22,6 +22,7 @@ from japanese_conjugation.verbs import (
     plain_nonpast_negative,
     plain_past_positive,
     plain_past_negative,
+    plain_volitional,
     plain_nonpast_positive_potential,
     plain_nonpast_negative_potential,
     plain_past_positive_potential,
@@ -546,6 +547,36 @@ def test_plain_past_negative(dict_form, verb_class, reference):
     result = plain_past_negative(dict_form, verb_class)
     assert result == reference
 
+plain_volitional_data = [
+    ('来[く]る', VerbClass.IRREGULAR, '来[こ]よう'),
+    ('連[つ]れて 来[く]る', VerbClass.IRREGULAR, '連[つ]れて 来[こ]よう'),
+    ('する', VerbClass.IRREGULAR, 'しよう'),
+    ('行[い]く', VerbClass.GODAN, '行[い]こう'),
+    ('スポーツをする', VerbClass.IRREGULAR, 'スポーツをしよう'),
+    ('読[よ]む', VerbClass.GODAN, '読[よ]もう'),
+    ('買[か]う', VerbClass.GODAN, '買[か]おう'),
+    ('話[はな]す', VerbClass.GODAN, '話[はな]そう'),
+    # no kanji
+    ('くる', VerbClass.IRREGULAR, 'こよう'),
+    ('つれてくる', VerbClass.IRREGULAR, 'つれてこよう'),
+    ('いく', VerbClass.GODAN, 'いこう'),
+    ('よむ', VerbClass.GODAN, 'よもう'),
+    ('かう', VerbClass.GODAN, 'かおう'),
+    ('はなす', VerbClass.GODAN, 'はなそう'),
+    # no furigana
+    ('来る', VerbClass.IRREGULAR, '来[こ]よう'),
+    ('連れて来る', VerbClass.IRREGULAR, '連れて 来[こ]よう'),
+    ('行く', VerbClass.GODAN, '行こう'),
+    ('読む', VerbClass.GODAN, '読もう'),
+    ('買う', VerbClass.GODAN, '買おう'),
+    ('話す', VerbClass.GODAN, '話そう')
+]
+@pytest.mark.parametrize("dict_form, verb_class, reference", plain_volitional_data)
+def test_plain_volitional(dict_form, verb_class, reference):
+    """test the Plain Past Negative conjugation"""
+    result = plain_volitional(dict_form, verb_class)
+    assert result == reference
+
 plain_nonpast_positive_potential_data = [
 
     ('来[く]る', VerbClass.IRREGULAR, '来[こ]られる'),
@@ -717,6 +748,7 @@ generate_verb_forms_data = [
         ['来[こ]ない', Form.NON_PAST_NEG, Formality.PLAIN],
         ['来[き]た', Form.PAST, Formality.PLAIN],
         ['来[こ]なかった', Form.PAST_NEG, Formality.PLAIN],
+        ['来[こ]よう', Form.VOLITIONAL, Formality.PLAIN],
         # formality-constant
         ['来[き]て', Form.TE, None],
         # Polite Potential forms
@@ -757,6 +789,7 @@ generate_verb_forms_data = [
         ['食[た]べない', Form.NON_PAST_NEG, Formality.PLAIN],
         ['食[た]べた', Form.PAST, Formality.PLAIN],
         ['食[た]べなかった', Form.PAST_NEG, Formality.PLAIN],
+        ['食[た]べよう', Form.VOLITIONAL, Formality.PLAIN],
         # formality-constant
         ['食[た]べて', Form.TE, None],
 
@@ -800,6 +833,7 @@ generate_verb_forms_data = [
         ['切[き]らない', Form.NON_PAST_NEG, Formality.PLAIN],
         ['切[き]った', Form.PAST, Formality.PLAIN],
         ['切[き]らなかった', Form.PAST_NEG, Formality.PLAIN],
+        ['切[き]ろう', Form.VOLITIONAL, Formality.PLAIN],
         # formality-constant
         ['切[き]って', Form.TE, None],
 
@@ -844,6 +878,7 @@ generate_verb_forms_data = [
         ['じゃない', Form.NON_PAST_NEG, Formality.PLAIN],
         ['だった', Form.PAST, Formality.PLAIN],
         ['なかった', Form.PAST_NEG, Formality.PLAIN],
+        ['だろう', Form.VOLITIONAL, Formality.PLAIN],
         # formality-constant
         ['で', Form.TE, None],
     ])
