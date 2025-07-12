@@ -22,6 +22,7 @@ from japanese_conjugation.verbs import (
     plain_nonpast_negative,
     plain_past_positive,
     plain_past_negative,
+    plain_volitional,
     plain_nonpast_positive_potential,
     plain_nonpast_negative_potential,
     plain_past_positive_potential,
@@ -544,6 +545,36 @@ plain_past_negative_data = [
 def test_plain_past_negative(dict_form, verb_class, reference):
     """test the Plain Past Negative conjugation"""
     result = plain_past_negative(dict_form, verb_class)
+    assert result == reference
+
+plain_volitional_data = [
+    ('来[く]る', VerbClass.IRREGULAR, '来[こ]よう'),
+    ('連[つ]れて 来[く]る', VerbClass.IRREGULAR, '連[つ]れて 来[こ]よう'),
+    ('する', VerbClass.IRREGULAR, 'しよう'),
+    ('行[い]く', VerbClass.GODAN, '行[い]こう'),
+    ('スポーツをする', VerbClass.IRREGULAR, 'スポーツをしよう'),
+    ('読[よ]む', VerbClass.GODAN, '読[よ]もう'),
+    ('買[か]う', VerbClass.GODAN, '買[か]おう'),
+    ('話[はな]す', VerbClass.GODAN, '話[はな]そう'),
+    # no kanji
+    ('くる', VerbClass.IRREGULAR, 'こよう'),
+    ('つれてくる', VerbClass.IRREGULAR, 'つれてこよう'),
+    ('いく', VerbClass.GODAN, 'いこう'),
+    ('よむ', VerbClass.GODAN, 'よもう'),
+    ('かう', VerbClass.GODAN, 'かおう'),
+    ('はなす', VerbClass.GODAN, 'はなそう'),
+    # no furigana
+    ('来る', VerbClass.IRREGULAR, '来[こ]よう'),
+    ('連れて来る', VerbClass.IRREGULAR, '連れて 来[こ]よう'),
+    ('行く', VerbClass.GODAN, '行こう'),
+    ('読む', VerbClass.GODAN, '読もう'),
+    ('買う', VerbClass.GODAN, '買おう'),
+    ('話す', VerbClass.GODAN, '話そう')
+]
+@pytest.mark.parametrize("dict_form, verb_class, reference", plain_volitional_data)
+def test_plain_volitional(dict_form, verb_class, reference):
+    """test the Plain Past Negative conjugation"""
+    result = plain_volitional(dict_form, verb_class)
     assert result == reference
 
 plain_nonpast_positive_potential_data = [

@@ -61,6 +61,20 @@ godan_potential_mapping = {
     "ぶ": "べ",
     "ぷ": "ぺ"
 }
+godan_volitional_mapping = {
+    "う": "おう",
+    "く": "こう",
+    "す": "そう",
+    "つ": "とう",
+    "ぬ": "のう",
+    "ふ": "ほう",
+    "む": "もう",
+    "る": "ろう",
+    "ぐ": "ごう",
+    "ず": "ぞう",
+    "ぶ": "ぼう",
+    "ぷ": "ぽう"
+}
 GODAN_STEM_ENDINGS = set(godan_stem_mapping.keys())
 ICHIDAN_ENDINGS = set([
     "いる",
@@ -393,6 +407,46 @@ def _potential_stem(dictionary_form: str, v_class: VerbClass) -> str: # pylint: 
             stem = dictionary_form[:-2] + 'こられ'
     assert stem is not None
     stem = stem.replace('を', 'が')
+    return stem
+
+def _volitional_stem(dictionary_form: str, v_class: VerbClass) -> str:
+    """Get the volitional stem of the specified verb
+
+    Parameters
+    ----------
+    dictionary_form : str
+        Dictionary form of the verb for which the ~masu stem will be determined
+    v_class : VerbClass
+        Verb class of the requested verb
+    formality : Formality
+        Formality level of the requested stem
+
+    Returns
+    -------
+    str
+        stem onto which volitional conjugation endings can be appended
+    """
+    stem = None
+    if v_class == VerbClass.ICHIDAN:
+        stem = dictionary_form[:-1] + 'よう'
+    elif v_class == VerbClass.GODAN:
+        stem = dictionary_form[:-1] + godan_volitional_mapping[dictionary_form[-1]]
+    elif v_class == VerbClass.IRREGULAR:
+        if dictionary_form.endswith('する'):
+            stem = dictionary_form[:-2] + 'しよう'
+
+        elif dictionary_form.endswith('来[く]る'):
+            stem = dictionary_form[:-5] + '来[こ]よう'
+        elif dictionary_form.endswith('来る'):
+            if len(dictionary_form) == 2:
+                buffer = ''
+            else:
+                buffer = ' '
+            ending = '来[こ]よう'
+            stem = dictionary_form[:-2] + buffer + ending
+        elif dictionary_form.endswith('くる'):
+            stem = dictionary_form[:-2] + 'こよう'
+    assert stem is not None
     return stem
 
 def tai_forms(dictionary_form: str, verb_class: VerbClass) \
@@ -760,6 +814,44 @@ def plain_past_negative(dictionary_form: str, verb_class: VerbClass) -> str:
 
     nai_form = plain_nonpast_negative(dictionary_form, verb_class)
     completion = nai_form[:-1] + 'かった'
+    return completion
+
+def plain_volitional(dictionary_form: str, verb_class: VerbClass) -> str:
+    """Get the Plain Volitional conjugation
+
+    Parameters
+    ----------
+    dictionary_form : str
+        Dictionary form of the verb to be conjugated
+    verb_class : VerbClass
+        Class of the verb being conjugated
+    Returns
+    -------
+    str
+        Conjugated verb
+    """
+
+    completion = None
+    if verb_class == VerbClass.ICHIDAN:
+        completion = dictionary_form[:-1] + 'よう'
+    elif verb_class == VerbClass.GODAN:
+        completion = dictionary_form[:-1] + godan_volitional_mapping[dictionary_form[-1]]
+    elif verb_class == VerbClass.IRREGULAR:
+        if dictionary_form.endswith('する'):
+            completion = dictionary_form[:-2] + 'しよう'
+
+        elif dictionary_form.endswith('来[く]る'):
+            completion = dictionary_form[:-5] + '来[こ]よう'
+        elif dictionary_form.endswith('来る'):
+            if len(dictionary_form) == 2:
+                buffer = ''
+            else:
+                buffer = ' '
+            ending = '来[こ]よう'
+            completion = dictionary_form[:-2] + buffer + ending
+        elif dictionary_form.endswith('くる'):
+            completion = dictionary_form[:-2] + 'こよう'
+    assert completion is not None
     return completion
 
 def plain_nonpast_positive_potential(dictionary_form: str, verb_class: VerbClass) -> str: # pylint: disable=W0613
