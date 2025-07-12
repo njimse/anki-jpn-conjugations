@@ -227,6 +227,7 @@ def generate_verb_forms(dictionary_form: str, verb_class: VerbClass)\
             ['じゃない', Form.NON_PAST_NEG, Formality.PLAIN],
             ['だった', Form.PAST, Formality.PLAIN],
             ['なかった', Form.PAST_NEG, Formality.PLAIN],
+            ['だろう', Form.VOLITIONAL, Formality.PLAIN],
             ['で', Form.TE, None],
         ]
         return results
@@ -244,6 +245,7 @@ def generate_verb_forms(dictionary_form: str, verb_class: VerbClass)\
         [plain_nonpast_negative, Form.NON_PAST_NEG, Formality.PLAIN],
         [plain_past_positive, Form.PAST, Formality.PLAIN],
         [plain_past_negative, Form.PAST_NEG, Formality.PLAIN],
+        [plain_volitional, Form.VOLITIONAL, Formality.PLAIN],
 
         # formality-constant
         [te, Form.TE, None],

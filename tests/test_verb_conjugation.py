@@ -748,6 +748,7 @@ generate_verb_forms_data = [
         ['来[こ]ない', Form.NON_PAST_NEG, Formality.PLAIN],
         ['来[き]た', Form.PAST, Formality.PLAIN],
         ['来[こ]なかった', Form.PAST_NEG, Formality.PLAIN],
+        ['来[こ]よう', Form.VOLITIONAL, Formality.PLAIN],
         # formality-constant
         ['来[き]て', Form.TE, None],
         # Polite Potential forms
@@ -788,6 +789,7 @@ generate_verb_forms_data = [
         ['食[た]べない', Form.NON_PAST_NEG, Formality.PLAIN],
         ['食[た]べた', Form.PAST, Formality.PLAIN],
         ['食[た]べなかった', Form.PAST_NEG, Formality.PLAIN],
+        ['食[た]べよう', Form.VOLITIONAL, Formality.PLAIN],
         # formality-constant
         ['食[た]べて', Form.TE, None],
 
@@ -831,6 +833,7 @@ generate_verb_forms_data = [
         ['切[き]らない', Form.NON_PAST_NEG, Formality.PLAIN],
         ['切[き]った', Form.PAST, Formality.PLAIN],
         ['切[き]らなかった', Form.PAST_NEG, Formality.PLAIN],
+        ['切[き]ろう', Form.VOLITIONAL, Formality.PLAIN],
         # formality-constant
         ['切[き]って', Form.TE, None],
 
@@ -875,6 +878,7 @@ generate_verb_forms_data = [
         ['じゃない', Form.NON_PAST_NEG, Formality.PLAIN],
         ['だった', Form.PAST, Formality.PLAIN],
         ['なかった', Form.PAST_NEG, Formality.PLAIN],
+        ['だろう', Form.VOLITIONAL, Formality.PLAIN],
         # formality-constant
         ['で', Form.TE, None],
     ])
