@@ -1,5 +1,10 @@
 # Release Notes
 
+## 1.3.0
+
+* Added support for irregular honorific verbs
+* Added 返る to the ichidan exceptions list
+
 ## 1.2.0
 
 * Added support for plain volitional form

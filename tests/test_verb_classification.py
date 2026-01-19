@@ -33,7 +33,12 @@ verb_classification_data = [
     ("かえる", VerbClass.ICHIDAN),
     ("減る", VerbClass.GODAN),
     ("減[へ]る", VerbClass.GODAN),
-    ("へる", VerbClass.ICHIDAN)
+    ("へる", VerbClass.ICHIDAN),
+    ("いらっしゃる", VerbClass.IRREGULAR),
+    ("おっしゃる", VerbClass.IRREGULAR),
+    ("下[くだ]さる", VerbClass.IRREGULAR),
+    ("くださる", VerbClass.IRREGULAR),
+    ("なさる", VerbClass.IRREGULAR)
 ]
 @pytest.mark.parametrize("reading, ref_class", verb_classification_data)
 def test_verb_classification(reading, ref_class):

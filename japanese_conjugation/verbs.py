@@ -288,11 +288,13 @@ def classify_verb(dictionary_form: str) -> VerbClass:
     -------
     VerbClass
         Returns the verb classification"""
-
     shaved_dictionary_form = remove_furigana(dictionary_form)
     kana_only = promote_furigana(dictionary_form)
 
-    if any(shaved_dictionary_form.endswith(ending) for ending in ["する", "くる", "来る"]):
+
+    if any(shaved_dictionary_form.endswith(ending) for ending in \
+           ["する", "くる", "来る", "しゃる", "なさる", "下さる"]) \
+        or kana_only in ["なさる", "くださる"]:
         return VerbClass.IRREGULAR
 
     if any(kana_only.endswith(ending) for ending in ICHIDAN_ENDINGS) \
@@ -368,6 +370,14 @@ def _masu_stem(dictionary_form: str, v_class: VerbClass, # pylint: disable=R0912
                 stem = dictionary_form[:-2] + 'き'
             else:
                 stem = dictionary_form[:-2] + 'こ'
+        elif dictionary_form.endswith('しゃる') \
+            or dictionary_form.endswith('なさる') \
+            or dictionary_form.endswith('くださる') \
+            or dictionary_form.endswith('下[くだ]さる') \
+            or dictionary_form.endswith('下さる'):
+
+            stem = dictionary_form[:-1] + 'い'
+
     assert stem is not None
     return stem
 
@@ -408,48 +418,15 @@ def _potential_stem(dictionary_form: str, v_class: VerbClass) -> str: # pylint: 
             stem = dictionary_form[:-2] + buffer + ending
         elif dictionary_form.endswith('くる'):
             stem = dictionary_form[:-2] + 'こられ'
+        elif dictionary_form.endswith('しゃる') \
+            or dictionary_form.endswith('なさる') \
+            or dictionary_form.endswith('くださる') \
+            or dictionary_form.endswith('下[くだ]さる') \
+            or dictionary_form.endswith('下さる'):
+
+            stem = dictionary_form[:-1] + 'れ'
     assert stem is not None
     stem = stem.replace('を', 'が')
-    return stem
-
-def _volitional_stem(dictionary_form: str, v_class: VerbClass) -> str:
-    """Get the volitional stem of the specified verb
-
-    Parameters
-    ----------
-    dictionary_form : str
-        Dictionary form of the verb for which the ~masu stem will be determined
-    v_class : VerbClass
-        Verb class of the requested verb
-    formality : Formality
-        Formality level of the requested stem
-
-    Returns
-    -------
-    str
-        stem onto which volitional conjugation endings can be appended
-    """
-    stem = None
-    if v_class == VerbClass.ICHIDAN:
-        stem = dictionary_form[:-1] + 'よう'
-    elif v_class == VerbClass.GODAN:
-        stem = dictionary_form[:-1] + godan_volitional_mapping[dictionary_form[-1]]
-    elif v_class == VerbClass.IRREGULAR:
-        if dictionary_form.endswith('する'):
-            stem = dictionary_form[:-2] + 'しよう'
-
-        elif dictionary_form.endswith('来[く]る'):
-            stem = dictionary_form[:-5] + '来[こ]よう'
-        elif dictionary_form.endswith('来る'):
-            if len(dictionary_form) == 2:
-                buffer = ''
-            else:
-                buffer = ' '
-            ending = '来[こ]よう'
-            stem = dictionary_form[:-2] + buffer + ending
-        elif dictionary_form.endswith('くる'):
-            stem = dictionary_form[:-2] + 'こよう'
-    assert stem is not None
     return stem
 
 def tai_forms(dictionary_form: str, verb_class: VerbClass) \
@@ -702,6 +679,13 @@ def te(dictionary_form: str, verb_class: VerbClass) -> str:
                 completion = "来[き]て"
             else:
                 completion = dictionary_form[:-2] + " 来[き]て"
+        elif dictionary_form.endswith('しゃる') \
+            or dictionary_form.endswith('なさる') \
+            or dictionary_form.endswith('くださる') \
+            or dictionary_form.endswith('下[くだ]さる') \
+            or dictionary_form.endswith('下さる'):
+
+            completion = dictionary_form[:-1] + "って"
 
     assert completion is not None
     return completion
@@ -772,7 +756,15 @@ def plain_nonpast_negative(dictionary_form: str, verb_class: VerbClass) -> str:
     if dictionary_form.endswith('ある'):
         return dictionary_form[:-2] + 'ない'
 
-    stem = _masu_stem(dictionary_form, verb_class, formality=Formality.PLAIN)
+    if dictionary_form.endswith('しゃる') \
+        or dictionary_form.endswith('なさる') \
+        or dictionary_form.endswith('くださる') \
+        or dictionary_form.endswith('下[くだ]さる') \
+        or dictionary_form.endswith('下さる'):
+
+        stem = dictionary_form[:-1] + 'ら'
+    else:
+        stem = _masu_stem(dictionary_form, verb_class, formality=Formality.PLAIN)
     completion = stem + 'ない'
     return completion
 
@@ -854,6 +846,13 @@ def plain_volitional(dictionary_form: str, verb_class: VerbClass) -> str:
             completion = dictionary_form[:-2] + buffer + ending
         elif dictionary_form.endswith('くる'):
             completion = dictionary_form[:-2] + 'こよう'
+        elif dictionary_form.endswith('しゃる') \
+            or dictionary_form.endswith('なさる') \
+            or dictionary_form.endswith('くださる') \
+            or dictionary_form.endswith('下[くだ]さる') \
+            or dictionary_form.endswith('下さる'):
+
+            completion = dictionary_form[:-1] + 'ろう'
     assert completion is not None
     return completion
 
