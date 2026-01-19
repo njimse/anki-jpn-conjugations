@@ -157,6 +157,7 @@ eru_exceptions = [
     '捻る', '撚る', # ichidan homophones
     '火照る', 'ほてる',
     '帰る', # ichidan homophones
+    '返る', # ichidan homophones
     '陰る', 'かげる',
     '翔る', # ichidan homophones
     '蹴る', 'ける',
