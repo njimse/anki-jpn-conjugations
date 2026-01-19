@@ -865,50 +865,50 @@ generate_verb_forms_data = [
         # formality-constant
         ['切[き]りたくて', Form.TAI_TE, None],
     ]),
-    # ('下[くだ]さる', VerbClass.IRREGULAR, [
-    #     # Polite forms
-    #     ['下[くだ]さいます', Form.NON_PAST, Formality.POLITE],
-    #     ['下[くだ]さいません', Form.NON_PAST_NEG, Formality.POLITE],
-    #     ['下[くだ]さいました', Form.PAST, Formality.POLITE],
-    #     ['下[くだ]さいませんでした', Form.PAST_NEG, Formality.POLITE],
-    #     ['下[くだ]さいましょう', Form.VOLITIONAL, Formality.POLITE],
-    #     # Plain forms
-    #     ['下[くだ]さる', Form.NON_PAST, Formality.PLAIN],
-    #     ['下[くだ]さらない', Form.NON_PAST_NEG, Formality.PLAIN],
-    #     ['下[くだ]さった', Form.PAST, Formality.PLAIN],
-    #     ['下[くだ]さらなかった', Form.PAST_NEG, Formality.PLAIN],
-    #     ['下[くだ]さろう', Form.VOLITIONAL, Formality.PLAIN],
-    #     # formality-constant
-    #     ['下[くだ]さって', Form.TE, None],
+    ('下[くだ]さる', VerbClass.IRREGULAR, [
+        # Polite forms
+        ['下[くだ]さいます', Form.NON_PAST, Formality.POLITE],
+        ['下[くだ]さいません', Form.NON_PAST_NEG, Formality.POLITE],
+        ['下[くだ]さいました', Form.PAST, Formality.POLITE],
+        ['下[くだ]さいませんでした', Form.PAST_NEG, Formality.POLITE],
+        ['下[くだ]さいましょう', Form.VOLITIONAL, Formality.POLITE],
+        # Plain forms
+        ['下[くだ]さる', Form.NON_PAST, Formality.PLAIN],
+        ['下[くだ]さらない', Form.NON_PAST_NEG, Formality.PLAIN],
+        ['下[くだ]さった', Form.PAST, Formality.PLAIN],
+        ['下[くだ]さらなかった', Form.PAST_NEG, Formality.PLAIN],
+        ['下[くだ]さろう', Form.VOLITIONAL, Formality.PLAIN],
+        # formality-constant
+        ['下[くだ]さって', Form.TE, None],
 
-    #     # Potential forms
-    #     # Polite forms
-    #     ['下[くだ]されます', Form.POTENTIAL_NON_PAST, Formality.POLITE],
-    #     ['下[くだ]されません', Form.POTENTIAL_NON_PAST_NEG, Formality.POLITE],
-    #     ['下[くだ]されました', Form.POTENTIAL_PAST, Formality.POLITE],
-    #     ['下[くだ]されませんでした', Form.POTENTIAL_PAST_NEG, Formality.POLITE],
-    #     # Plain forms
-    #     ['下[くだ]される', Form.POTENTIAL_NON_PAST, Formality.PLAIN],
-    #     ['下[くだ]されない', Form.POTENTIAL_NON_PAST_NEG, Formality.PLAIN],
-    #     ['下[くだ]された', Form.POTENTIAL_PAST, Formality.PLAIN],
-    #     ['下[くだ]されなかった', Form.POTENTIAL_PAST_NEG, Formality.PLAIN],
-    #     # formality-constant
-    #     ['下[くだ]されて', Form.POTENTIAL_TE, None],
+        # Potential forms
+        # Polite forms
+        ['下[くだ]されます', Form.POTENTIAL_NON_PAST, Formality.POLITE],
+        ['下[くだ]されません', Form.POTENTIAL_NON_PAST_NEG, Formality.POLITE],
+        ['下[くだ]されました', Form.POTENTIAL_PAST, Formality.POLITE],
+        ['下[くだ]されませんでした', Form.POTENTIAL_PAST_NEG, Formality.POLITE],
+        # Plain forms
+        ['下[くだ]される', Form.POTENTIAL_NON_PAST, Formality.PLAIN],
+        ['下[くだ]されない', Form.POTENTIAL_NON_PAST_NEG, Formality.PLAIN],
+        ['下[くだ]された', Form.POTENTIAL_PAST, Formality.PLAIN],
+        ['下[くだ]されなかった', Form.POTENTIAL_PAST_NEG, Formality.PLAIN],
+        # formality-constant
+        ['下[くだ]されて', Form.POTENTIAL_TE, None],
 
-    #     # tai forms
-    #     # Polite forms
-    #     ['下[くだ]さいたいです', Form.TAI_NON_PAST, Formality.POLITE],
-    #     ['下[くだ]さいたくないです', Form.TAI_NON_PAST_NEG, Formality.POLITE],
-    #     ['下[くだ]さいたかったです', Form.TAI_PAST, Formality.POLITE],
-    #     ['下[くだ]さいたくなかったです', Form.TAI_PAST_NEG, Formality.POLITE],
-    #     # Plain forms
-    #     ['下[くだ]さいたい', Form.TAI_NON_PAST, Formality.PLAIN],
-    #     ['下[くだ]さいたくない', Form.TAI_NON_PAST_NEG, Formality.PLAIN],
-    #     ['下[くだ]さいたかった', Form.TAI_PAST, Formality.PLAIN],
-    #     ['下[くだ]さいたくなかった', Form.TAI_PAST_NEG, Formality.PLAIN],
-    #     # formality-constant
-    #     ['下[くだ]さいたくて', Form.TAI_TE, None],
-    # ]),
+        # tai forms
+        # Polite forms
+        ['下[くだ]さいたいです', Form.TAI_NON_PAST, Formality.POLITE],
+        ['下[くだ]さいたくないです', Form.TAI_NON_PAST_NEG, Formality.POLITE],
+        ['下[くだ]さいたかったです', Form.TAI_PAST, Formality.POLITE],
+        ['下[くだ]さいたくなかったです', Form.TAI_PAST_NEG, Formality.POLITE],
+        # Plain forms
+        ['下[くだ]さいたい', Form.TAI_NON_PAST, Formality.PLAIN],
+        ['下[くだ]さいたくない', Form.TAI_NON_PAST_NEG, Formality.PLAIN],
+        ['下[くだ]さいたかった', Form.TAI_PAST, Formality.PLAIN],
+        ['下[くだ]さいたくなかった', Form.TAI_PAST_NEG, Formality.PLAIN],
+        # formality-constant
+        ['下[くだ]さいたくて', Form.TAI_TE, None],
+    ]),
     ('なさる', VerbClass.IRREGULAR, [
         # Polite forms
         ['なさいます', Form.NON_PAST, Formality.POLITE],

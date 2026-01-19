@@ -293,7 +293,7 @@ def classify_verb(dictionary_form: str) -> VerbClass:
 
 
     if any(shaved_dictionary_form.endswith(ending) for ending in \
-           ["する", "くる", "来る", "しゃる", "なさる", "ださる"]) \
+           ["する", "くる", "来る", "しゃる", "なさる", "下さる"]) \
         or kana_only in ["なさる", "くださる"]:
         return VerbClass.IRREGULAR
 
@@ -372,7 +372,9 @@ def _masu_stem(dictionary_form: str, v_class: VerbClass, # pylint: disable=R0912
                 stem = dictionary_form[:-2] + 'こ'
         elif dictionary_form.endswith('しゃる') \
             or dictionary_form.endswith('なさる') \
-            or dictionary_form.endswith('ださる'):
+            or dictionary_form.endswith('くださる') \
+            or dictionary_form.endswith('下[くだ]さる') \
+            or dictionary_form.endswith('下さる'):
 
             stem = dictionary_form[:-1] + 'い'
 
@@ -418,7 +420,10 @@ def _potential_stem(dictionary_form: str, v_class: VerbClass) -> str: # pylint: 
             stem = dictionary_form[:-2] + 'こられ'
         elif dictionary_form.endswith('しゃる') \
             or dictionary_form.endswith('なさる') \
-            or dictionary_form.endswith('ださる'):
+            or dictionary_form.endswith('くださる') \
+            or dictionary_form.endswith('下[くだ]さる') \
+            or dictionary_form.endswith('下さる'):
+
             stem = dictionary_form[:-1] + 'れ'
     assert stem is not None
     stem = stem.replace('を', 'が')
@@ -674,9 +679,12 @@ def te(dictionary_form: str, verb_class: VerbClass) -> str:
                 completion = "来[き]て"
             else:
                 completion = dictionary_form[:-2] + " 来[き]て"
-        elif dictionary_form.endswith("しゃる") \
+        elif dictionary_form.endswith('しゃる') \
             or dictionary_form.endswith('なさる') \
-            or dictionary_form.endswith('ださる'):
+            or dictionary_form.endswith('くださる') \
+            or dictionary_form.endswith('下[くだ]さる') \
+            or dictionary_form.endswith('下さる'):
+
             completion = dictionary_form[:-1] + "って"
 
     assert completion is not None
@@ -750,7 +758,9 @@ def plain_nonpast_negative(dictionary_form: str, verb_class: VerbClass) -> str:
 
     if dictionary_form.endswith('しゃる') \
         or dictionary_form.endswith('なさる') \
-        or dictionary_form.endswith('ださる'):
+        or dictionary_form.endswith('くださる') \
+        or dictionary_form.endswith('下[くだ]さる') \
+        or dictionary_form.endswith('下さる'):
 
         stem = dictionary_form[:-1] + 'ら'
     else:
@@ -838,7 +848,9 @@ def plain_volitional(dictionary_form: str, verb_class: VerbClass) -> str:
             completion = dictionary_form[:-2] + 'こよう'
         elif dictionary_form.endswith('しゃる') \
             or dictionary_form.endswith('なさる') \
-            or dictionary_form.endswith('ださる'):
+            or dictionary_form.endswith('くださる') \
+            or dictionary_form.endswith('下[くだ]さる') \
+            or dictionary_form.endswith('下さる'):
 
             completion = dictionary_form[:-1] + 'ろう'
     assert completion is not None
