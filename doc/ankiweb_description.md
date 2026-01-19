@@ -1,4 +1,4 @@
-**Version - 1.2.0**
+**Version - 1.2.1**
 
 This add-on for Anki allows you to efficiently gather verb and adjective notes from your regular study decks and use them to generate decks aimed at practicing and studying various conjugations.
 
@@ -54,7 +54,7 @@ If you find any errors, please reach out to me so that they can be corrected!
 
 ## Release Notes
 
-Please see the [Release Notes in GitHub](https://github.com/njimse/anki-jpn-conjugations/blob/v1.2.0/doc/release_notes.md) for details on changes in this version as well as previous versions.
+Please see the [Release Notes in GitHub](https://github.com/njimse/anki-jpn-conjugations/blob/v1.2.1/doc/release_notes.md) for details on changes in this version as well as previous versions.
 
 
 ## Attribution
