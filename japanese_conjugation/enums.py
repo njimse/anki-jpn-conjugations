@@ -35,6 +35,13 @@ class Form(Enum):
     POTENTIAL_PAST_NEG = ('potential indicative', 'negative', 'past')
     POTENTIAL_TE = ('potential te', 'positive', '')
 
+    # passive forms
+    PASSIVE_NON_PAST = ('passive indicative', 'positive', 'non-past')
+    PASSIVE_NON_PAST_NEG = ('passive indicative', 'negative', 'non-past')
+    PASSIVE_PAST = ('passive indicative', 'positive', 'past')
+    PASSIVE_PAST_NEG = ('passive indicative', 'negative', 'past')
+    PASSIVE_TE = ('passive te', 'positive', '')
+
     def __init__(self, simple_name: str, polarity: Optional[bool], temporality: str):
         self.simple_name = simple_name
         self.polarity = polarity
@@ -103,3 +110,140 @@ class ModelType(Enum):
     """enumeration of model (a.k.a. Note) types"""
     VERB = 'verb'
     ADJECTIVE = 'adjective'
+
+class Dan(Enum):
+    a = "あ"
+    i = "い"
+    u = "う"
+    e = "え"
+    o = "お"
+
+class Gyo(Enum):
+
+    @staticmethod
+    def identify(input_str: str):
+        """Identify the correct Gyo and return the approprite subclass"""
+        if len(input_str) != 1:
+            raise ValueError("Gyo.identify() input must be a single character")
+        
+        if input_str in ("あいうえお"):
+            return AGyo
+        elif input_str in ("かきくけこ"):
+            return KaGyo
+        elif input_str in ("がぎぐげご"):
+            return GaGyo
+        elif input_str in ("さしすせそ"):
+            return SaGyo
+        elif input_str in ("ざじずぜぞ"):
+            return ZaGyo
+        elif input_str in ("たちつてと"):
+            return TaGyo
+        elif input_str in ("だぢづでど"):
+            return DaGyo
+        elif input_str in ("なにぬねの"):
+            return NaGyo
+        elif input_str in ("はひふへほ"):
+            return HaGyo
+        elif input_str in ("ばびぶべぼ"):
+            return BaGyo
+        elif input_str in ("ぱぴぷぺぽ"):
+            return PaGyo
+        elif input_str in ("まみむめも"):
+            return MaGyo
+        elif input_str in ("らりるれろ"):
+            return RaGyo
+    
+    @classmethod
+    def dan(cls, target: Dan):
+        return getattr(cls, target.name).value
+
+class AGyo(Gyo):
+    a = "あ"
+    i = "い"
+    u = "う"
+    e = "え"
+    o = "お"
+
+class KaGyo(Gyo):
+    a = "か"
+    i = "き"
+    u = "く"
+    e = "け"
+    o = "こ"
+
+class GaGyo(Gyo):
+    a = "が"
+    i = "ぎ"
+    u = "ぐ"
+    e = "げ"
+    o = "ご"
+
+class SaGyo(Gyo):
+    a = "さ"
+    i = "し"
+    u = "す"
+    e = "せ"
+    o = "そ"
+
+class ZaGyo(Gyo):
+    a = "ざ"
+    i = "じ"
+    u = "ず"
+    e = "ぜ"
+    o = "ぞ"
+
+class TaGyo(Gyo):
+    a = "た"
+    i = "ち"
+    u = "つ"
+    e = "て"
+    o = "と"
+
+class DaGyo(Gyo):
+    a = "だ"
+    i = "ぢ"
+    u = "づ"
+    e = "で"
+    o = "ど"
+
+class NaGyo(Gyo):
+    a = "な"
+    i = "に"
+    u = "ぬ"
+    e = "ね"
+    o = "の"
+
+class HaGyo(Gyo):
+    a = "は"
+    i = "ひ"
+    u = "ふ"
+    e = "へ"
+    o = "ほ"
+
+class BaGyo(Gyo):
+    a = "ば"
+    i = "び"
+    u = "ぶ"
+    e = "べ"
+    o = "ぼ"
+
+class PaGyo(Gyo):
+    a = "ぱ"
+    i = "ぴ"
+    u = "ぷ"
+    e = "ぺ"
+    o = "ぽ"
+
+class MaGyo(Gyo):
+    a = "ま"
+    i = "み"
+    u = "む"
+    e = "め"
+    o = "も"
+
+class RaGyo(Gyo):
+    a = "ら"
+    i = "り"
+    u = "る"
+    e = "れ"
+    o = "ろ"
