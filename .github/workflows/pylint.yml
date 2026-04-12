@@ -20,8 +20,8 @@ jobs:
         pip install pylint .[test]
     - name: Analysing the main code with pylint
       run: |
-        pylint japanese_conjugation
+        python -m pylint japanese_conjugation
     - name: Analysing the test code with pylint
       run: |
-        pylint --disable duplicate-code tests
+        python -m pylint --disable duplicate-code tests
 
