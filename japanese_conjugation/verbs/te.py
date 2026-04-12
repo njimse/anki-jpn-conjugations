@@ -1,5 +1,6 @@
+"""Functions to perform Te-form conjugations"""
 from ..enums import VerbClass
-
+from .stems import looks_like_honorific
 
 godan_te_mapping = {
     "う": "って",
@@ -50,12 +51,7 @@ def te(dictionary_form: str, verb_class: VerbClass) -> str:
                 completion = "来[き]て"
             else:
                 completion = dictionary_form[:-2] + " 来[き]て"
-        elif dictionary_form.endswith('しゃる') \
-            or dictionary_form.endswith('なさる') \
-            or dictionary_form.endswith('くださる') \
-            or dictionary_form.endswith('下[くだ]さる') \
-            or dictionary_form.endswith('下さる'):
-
+        elif looks_like_honorific(dictionary_form):
             completion = dictionary_form[:-1] + "って"
 
     assert completion is not None

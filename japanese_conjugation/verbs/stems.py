@@ -1,5 +1,5 @@
+"""Functions for getting stems used for subsequent conjugations"""
 from ..enums import AGyo, Dan, Formality, Gyo, VerbClass
-
 
 def get_godan_stem(dictionary_form: str, formality: Formality) -> str:
     """Get the stem of the provided godan verb
@@ -16,14 +16,35 @@ def get_godan_stem(dictionary_form: str, formality: Formality) -> str:
     """
     ending_gyo = Gyo.identify(dictionary_form[-1])
     if formality == Formality.POLITE:
-        stem = dictionary_form[:-1] + ending_gyo.dan(Dan.i)
+        stem = dictionary_form[:-1] + ending_gyo.dan(Dan.I)
     else:
         if ending_gyo == AGyo:
             ending = "わ"
         else:
-            ending = ending_gyo.dan(Dan.a)
+            ending = ending_gyo.dan(Dan.A)
         stem = dictionary_form[:-1] + ending
     return stem
+
+def looks_like_honorific(dictionary_form: str) -> bool:
+    """Determine if the provided dictionary form appears to be an honorific verb
+    
+        Parmeters
+    ---------
+    dictionary_form : str
+        Dictionary form of the godan verb for which the stem will be determined
+
+    Returns
+    -------
+    bool
+        True if dictionary form appears to be honorific, False otherwise"""
+    if dictionary_form.endswith('しゃる') \
+        or dictionary_form.endswith('なさる') \
+        or dictionary_form.endswith('くださる') \
+        or dictionary_form.endswith('下[くだ]さる') \
+        or dictionary_form.endswith('下さる'):
+
+        return True
+    return False
 
 def masu_stem(dictionary_form: str, v_class: VerbClass, # pylint: disable=R0912
                formality: Formality = Formality.POLITE) -> str:
@@ -71,12 +92,7 @@ def masu_stem(dictionary_form: str, v_class: VerbClass, # pylint: disable=R0912
                 stem = dictionary_form[:-2] + 'き'
             else:
                 stem = dictionary_form[:-2] + 'こ'
-        elif dictionary_form.endswith('しゃる') \
-            or dictionary_form.endswith('なさる') \
-            or dictionary_form.endswith('くださる') \
-            or dictionary_form.endswith('下[くだ]さる') \
-            or dictionary_form.endswith('下さる'):
-
+        elif looks_like_honorific(dictionary_form):
             stem = dictionary_form[:-1] + 'い'
 
     assert stem is not None

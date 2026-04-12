@@ -1,3 +1,4 @@
+"""Tests covering the correctness of the potential conjugations"""
 import pytest
 from japanese_conjugation.enums import VerbClass
 from japanese_conjugation.verbs import (

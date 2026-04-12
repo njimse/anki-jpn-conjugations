@@ -1,5 +1,6 @@
 """Unit tests for the verb conjugation functions"""
 # pylint: disable=C0302
+# pylint: disable=R0801
 import pytest
 from japanese_conjugation.enums import (
     VerbClass,

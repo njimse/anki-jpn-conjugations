@@ -1,8 +1,7 @@
+"""Tests covering the correctness of the passive conjugations"""
 import pytest
 from japanese_conjugation.enums import (
-    VerbClass,
-    Formality,
-    Form,
+    VerbClass
 )
 from japanese_conjugation.verbs import (
     polite_nonpast_positive_passive,
@@ -43,7 +42,7 @@ polite_nonpast_positive_passive_data = [
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", polite_nonpast_positive_passive_data)
 def test_polite_nonpast_positive_passive(dict_form, verb_class, reference):
-    """test the Polite Non-Past Potential conjugation"""
+    """test the Polite Non-Past Passive conjugation"""
     result = polite_nonpast_positive_passive(dict_form, verb_class)
     assert result == reference
 
@@ -74,7 +73,7 @@ polite_nonpast_negative_passive_data = [
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", polite_nonpast_negative_passive_data)
 def test_polite_nonpast_negative_passive(dict_form, verb_class, reference):
-    """test the Polite Non-Past Negative Potential conjugation"""
+    """test the Polite Non-Past Negative Passive conjugation"""
     result = polite_nonpast_negative_passive(dict_form, verb_class)
     assert result == reference
 
@@ -104,7 +103,7 @@ polite_past_positive_passive_data = [
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", polite_past_positive_passive_data)
 def test_polite_past_positive_passive(dict_form, verb_class, reference):
-    """test the Polite Past Potential conjugation"""
+    """test the Polite Past Passive conjugation"""
     result = polite_past_positive_passive(dict_form, verb_class)
     assert result == reference
 
@@ -134,11 +133,11 @@ polite_past_negative_passive_data = [
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", polite_past_negative_passive_data)
 def test_polite_past_negative_passive(dict_form, verb_class, reference):
-    """test the Polite Past Negative Potential conjugation"""
+    """test the Polite Past Negative Passive conjugation"""
     result = polite_past_negative_passive(dict_form, verb_class)
     assert result == reference
 
-    
+
 te_passive_data = [
     ('来[く]る', VerbClass.IRREGULAR, '来[こ]られて'),
     ('連[つ]れて 来[く]る', VerbClass.IRREGULAR, '連[つ]れて 来[こ]られて'),
@@ -189,7 +188,7 @@ te_passive_data = [
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", te_passive_data)
 def test_te_passive(dict_form, verb_class, reference):
-    """test the Te Potential conjugation"""
+    """test the Te Passive conjugation"""
     result = te_passive(dict_form, verb_class)
     assert result == reference
 
@@ -245,7 +244,7 @@ plain_nonpast_positive_passive_data = [
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", plain_nonpast_positive_passive_data)
 def test_plain_nonpast_positive_passive(dict_form, verb_class, reference):
-    """test the Plain Non-Past Potential conjugation"""
+    """test the Plain Non-Past Passive conjugation"""
     # Note the VerbClass isn't actually used for this function, but we have the
     # parameter to keep consistency with the other conjugation functions
     result = plain_nonpast_positive_passive(dict_form, verb_class)
@@ -278,7 +277,7 @@ plain_nonpast_negative_passive_data = [
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", plain_nonpast_negative_passive_data)
 def test_plain_nonpast_negative_passive(dict_form, verb_class, reference):
-    """test the Plain Non-Past Negative Potential conjugation"""
+    """test the Plain Non-Past Negative Passive conjugation"""
     result = plain_nonpast_negative_passive(dict_form, verb_class)
     assert result == reference
 
@@ -344,6 +343,6 @@ plain_past_negative_passive_data = [
 ]
 @pytest.mark.parametrize("dict_form, verb_class, reference", plain_past_negative_passive_data)
 def test_plain_past_negative_passive(dict_form, verb_class, reference):
-    """test the Plain Past Negative Potential conjugation"""
+    """test the Plain Past Negative Passive conjugation"""
     result = plain_past_negative_passive(dict_form, verb_class)
     assert result == reference

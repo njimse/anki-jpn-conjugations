@@ -58,12 +58,12 @@ def generate_adjective_forms(dictionary_form: str, adjective_class: AdjectiveCla
 
 def classify_adjective(dictionary_form: str) -> AdjectiveClass:
     """Classify an adjective as either an i-adjective or na-adjective
-    
+
     Parameters
     ----------
     dictionary_form : str
         Dictionary form of the adjective to be classified
-        
+
     Returns
     -------
     AdjectiveClass

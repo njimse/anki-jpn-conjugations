@@ -1,4 +1,6 @@
+"""Functions for determining potential form conjugations"""
 from ..enums import Dan, Gyo, VerbClass
+from .passive import _passive_stem
 from .plain import (
     plain_nonpast_negative,
     plain_past_positive,
@@ -10,6 +12,7 @@ from .polite import (
     polite_past_positive,
     polite_past_negative
 )
+from .stems import looks_like_honorific
 from .te import te
 
 def _potential_stem(dictionary_form: str, v_class: VerbClass) -> str: # pylint: disable=R0912
@@ -32,28 +35,16 @@ def _potential_stem(dictionary_form: str, v_class: VerbClass) -> str: # pylint: 
         stem = dictionary_form[:-1] + 'られ'
     elif v_class == VerbClass.GODAN:
         ending_gyo = Gyo.identify(dictionary_form[-1])
-        stem = dictionary_form[:-1] + ending_gyo.dan(Dan.e)
+        stem = dictionary_form[:-1] + ending_gyo.dan(Dan.E)
     elif v_class == VerbClass.IRREGULAR:
         if dictionary_form.endswith('する'):
             stem = dictionary_form[:-2] + 'でき'
 
-        elif dictionary_form.endswith('来[く]る'):
-            stem = dictionary_form[:-5] + '来[こ]られ'
-        elif dictionary_form.endswith('来る'):
-            if len(dictionary_form) == 2:
-                buffer = ''
-            else:
-                buffer = ' '
-            ending = '来[こ]られ'
-            stem = dictionary_form[:-2] + buffer + ending
-        elif dictionary_form.endswith('くる'):
-            stem = dictionary_form[:-2] + 'こられ'
-        elif dictionary_form.endswith('しゃる') \
-            or dictionary_form.endswith('なさる') \
-            or dictionary_form.endswith('くださる') \
-            or dictionary_form.endswith('下[くだ]さる') \
-            or dictionary_form.endswith('下さる'):
+        elif dictionary_form.endswith('来[く]る') or dictionary_form.endswith('来る') \
+            or dictionary_form.endswith('くる'):
+            stem = _passive_stem(dictionary_form)
 
+        elif looks_like_honorific(dictionary_form):
             stem = dictionary_form[:-1] + 'れ'
     assert stem is not None
     stem = stem.replace('を', 'が')

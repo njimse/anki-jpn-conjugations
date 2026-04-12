@@ -1,6 +1,6 @@
+"""Functions for determining polite conjugations"""
 from ..enums import VerbClass
 from .stems import masu_stem
-
 
 def polite_nonpast_positive(dictionary_form: str, verb_class: VerbClass) -> str:
     """Get the Polite Non-Past conjugation

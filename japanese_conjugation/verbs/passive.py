@@ -1,3 +1,4 @@
+"""Functions for determining passive form conjugations"""
 from ..enums import AGyo, Dan, Gyo, VerbClass
 from .plain import (
     plain_nonpast_negative,
@@ -32,7 +33,7 @@ def _passive_stem(dictionary_form: str) -> str: # pylint: disable=R0912
     elif dictionary_form.endswith('来[く]る'):
         stem = dictionary_form[:-5] + '来[こ]られ'
     elif dictionary_form.endswith('来る'):
-        if len(dictionary_form) == 2:
+        if dictionary_form == '来る':
             buffer = ''
         else:
             buffer = ' '
@@ -45,7 +46,7 @@ def _passive_stem(dictionary_form: str) -> str: # pylint: disable=R0912
         if ending_gyo == AGyo:
             passive_ending = 'わ'
         else:
-            passive_ending = ending_gyo.dan(Dan.a)
+            passive_ending = ending_gyo.dan(Dan.A)
         stem = dictionary_form[:-1] + passive_ending + 'れ'
     return stem
 

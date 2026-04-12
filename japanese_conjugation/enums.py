@@ -4,7 +4,7 @@ from typing import Optional
 
 class Form(Enum):
     """Enumeration of known conjugation forms
-    
+
     Parameters
     ----------
     simple_name : str
@@ -69,7 +69,7 @@ class Form(Enum):
 
     def to_tai(self):
         """Map to the tai-form equivalent of this form
-        
+
         Returns
         -------
         Form
@@ -112,138 +112,168 @@ class ModelType(Enum):
     ADJECTIVE = 'adjective'
 
 class Dan(Enum):
-    a = "あ"
-    i = "い"
-    u = "う"
-    e = "え"
-    o = "お"
+    """Enum for the dan (vowel) columns of a gyojuon table"""
+    A = "あ"
+    I = "い"
+    U = "う"
+    E = "え"
+    O = "お"
 
 class Gyo(Enum):
+    """Base enum class for gyo rows of a gyojuon table"""
 
     @staticmethod
-    def identify(input_str: str):
+    def identify(input_str: str): # pylint: disable=R0912
         """Identify the correct Gyo and return the approprite subclass"""
         if len(input_str) != 1:
             raise ValueError("Gyo.identify() input must be a single character")
-        
+
+        return_value = None
         if input_str in ("あいうえお"):
-            return AGyo
+            return_value = AGyo
         elif input_str in ("かきくけこ"):
-            return KaGyo
+            return_value = KaGyo
         elif input_str in ("がぎぐげご"):
-            return GaGyo
+            return_value = GaGyo
         elif input_str in ("さしすせそ"):
-            return SaGyo
+            return_value = SaGyo
         elif input_str in ("ざじずぜぞ"):
-            return ZaGyo
+            return_value = ZaGyo
         elif input_str in ("たちつてと"):
-            return TaGyo
+            return_value = TaGyo
         elif input_str in ("だぢづでど"):
-            return DaGyo
+            return_value = DaGyo
         elif input_str in ("なにぬねの"):
-            return NaGyo
+            return_value = NaGyo
         elif input_str in ("はひふへほ"):
-            return HaGyo
+            return_value = HaGyo
         elif input_str in ("ばびぶべぼ"):
-            return BaGyo
+            return_value = BaGyo
         elif input_str in ("ぱぴぷぺぽ"):
-            return PaGyo
+            return_value = PaGyo
         elif input_str in ("まみむめも"):
-            return MaGyo
+            return_value = MaGyo
         elif input_str in ("らりるれろ"):
-            return RaGyo
-    
+            return_value = RaGyo
+
+        return return_value
+
     @classmethod
-    def dan(cls, target: Dan):
+    def dan(cls, target: Dan) -> str:
+        """Return the target vowel ending for this gyo
+        
+        Parameters
+        ----------
+        target: Dan
+            Dan (vowel) for the Gyo (syllable group) that should be returned
+
+        Returns
+        -------
+        str:
+            String of the specified dan for this gyo
+        """
         return getattr(cls, target.name).value
 
 class AGyo(Gyo):
-    a = "あ"
-    i = "い"
-    u = "う"
-    e = "え"
-    o = "お"
+    """A Gyo enum"""
+    A = "あ"
+    I = "い"
+    U = "う"
+    E = "え"
+    O = "お"
 
 class KaGyo(Gyo):
-    a = "か"
-    i = "き"
-    u = "く"
-    e = "け"
-    o = "こ"
+    """Ka Gyo enum"""
+    A = "か"
+    I = "き"
+    U = "く"
+    E = "け"
+    O = "こ"
 
 class GaGyo(Gyo):
-    a = "が"
-    i = "ぎ"
-    u = "ぐ"
-    e = "げ"
-    o = "ご"
+    """Ga Gyo enum"""
+    A = "が"
+    I = "ぎ"
+    U = "ぐ"
+    E = "げ"
+    O = "ご"
 
 class SaGyo(Gyo):
-    a = "さ"
-    i = "し"
-    u = "す"
-    e = "せ"
-    o = "そ"
+    """Sa Gyo enum"""
+    A = "さ"
+    I = "し"
+    U = "す"
+    E = "せ"
+    O = "そ"
 
 class ZaGyo(Gyo):
-    a = "ざ"
-    i = "じ"
-    u = "ず"
-    e = "ぜ"
-    o = "ぞ"
+    """Za Gyo enum"""
+    A = "ざ"
+    I = "じ"
+    U = "ず"
+    E = "ぜ"
+    O = "ぞ"
 
 class TaGyo(Gyo):
-    a = "た"
-    i = "ち"
-    u = "つ"
-    e = "て"
-    o = "と"
+    """Ta Gyo enum"""
+    A = "た"
+    I = "ち"
+    U = "つ"
+    E = "て"
+    O = "と"
 
 class DaGyo(Gyo):
-    a = "だ"
-    i = "ぢ"
-    u = "づ"
-    e = "で"
-    o = "ど"
+    """Da Gyo enum"""
+    A = "だ"
+    I = "ぢ"
+    U = "づ"
+    E = "で"
+    O = "ど"
 
 class NaGyo(Gyo):
-    a = "な"
-    i = "に"
-    u = "ぬ"
-    e = "ね"
-    o = "の"
+    """Na Gyo enum"""
+    A = "な"
+    I = "に"
+    U = "ぬ"
+    E = "ね"
+    O = "の"
 
 class HaGyo(Gyo):
-    a = "は"
-    i = "ひ"
-    u = "ふ"
-    e = "へ"
-    o = "ほ"
+    """Ha Gyo enum"""
+    A = "は"
+    I = "ひ"
+    U = "ふ"
+    E = "へ"
+    O = "ほ"
 
 class BaGyo(Gyo):
-    a = "ば"
-    i = "び"
-    u = "ぶ"
-    e = "べ"
-    o = "ぼ"
+    """Ba Gyo enum"""
+    A = "ば"
+    I = "び"
+    U = "ぶ"
+    E = "べ"
+    O = "ぼ"
 
 class PaGyo(Gyo):
-    a = "ぱ"
-    i = "ぴ"
-    u = "ぷ"
-    e = "ぺ"
-    o = "ぽ"
+    """Pa Gyo enum"""
+    A = "ぱ"
+    I = "ぴ"
+    U = "ぷ"
+    E = "ぺ"
+    O = "ぽ"
 
 class MaGyo(Gyo):
-    a = "ま"
-    i = "み"
-    u = "む"
-    e = "め"
-    o = "も"
+    """Ma Gyo enum"""
+    A = "ま"
+    I = "み"
+    U = "む"
+    E = "め"
+    O = "も"
 
 class RaGyo(Gyo):
-    a = "ら"
-    i = "り"
-    u = "る"
-    e = "れ"
-    o = "ろ"
+    """Ra Gyo enum"""
+    A = "ら"
+    I = "り"
+    U = "る"
+    E = "れ"
+    O = "ろ"

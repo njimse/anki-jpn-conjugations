@@ -249,7 +249,7 @@ def generate_verb_forms(dictionary_form: str, verb_class: VerbClass)\
 
 def _looks_like_ichidan(dictionary_form: str) -> bool:
     """Classify as looking like an ichidan verb or not
-    
+
     Parameters
     ----------
     dictionary_form : str
@@ -264,19 +264,19 @@ def _looks_like_ichidan(dictionary_form: str) -> bool:
         penultimate_gyo = Gyo.identify(penultimate_char)
         if penultimate_gyo is None:
             return False
-        elif penultimate_char in (penultimate_gyo.dan(Dan.i), penultimate_gyo.dan(Dan.e)):
+        if penultimate_char in (penultimate_gyo.dan(Dan.I), penultimate_gyo.dan(Dan.E)):
             return True
-    
+
     return False
 
 def classify_verb(dictionary_form: str) -> VerbClass:
     """Classify a verb as one of ichidan, godan, or irregular type
-    
+
     Parameters
     ----------
     dictionary_form : str
         Dictionary form of the verb to be classified
-        
+
     Returns
     -------
     VerbClass
@@ -298,13 +298,13 @@ def classify_verb(dictionary_form: str) -> VerbClass:
 def tai_forms(dictionary_form: str, verb_class: VerbClass) \
     -> List[Tuple[str, Form, Optional[Formality]]]:
     """Generate the -tai form conjugations for a verb
-    
+
     Parameters
     ----------
     dictionary_form : str
         Dictionary form of the verb to be conjugated
     verb_class : VerbClass
-    
+
     Returns
     -------
     List[Tuple[str, Form, Optional[Formality]]]
