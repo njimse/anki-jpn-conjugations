@@ -178,7 +178,7 @@ def update_adjectives():
             deck_updater.add_note_to_deck(note, adj_type)
 
     new_notes, modified_notes, failed_notes = deck_updater.summary()
-    showInfo(f"Added {new_notes} new note(s)\nModified {modified_notes} " 
+    showInfo(f"Added {new_notes} new note(s)\nModified {modified_notes} "
              + f"note(s)\nFailed to conjugate {failed_notes} note(s)")
 
 def update_verbs():

@@ -222,7 +222,7 @@ class ConfigManager:
 
     def get_colors(self) -> Dict[str, Dict[str, str]]:
         """Retrieve the color settings specified in the config
-        
+
         Returns
         -------
         Dict[str, Dict[str, str]]
@@ -232,7 +232,7 @@ class ConfigManager:
 
     def allow_unseen(self, deck_name: str) -> bool:
         """Retrieve the setting for allowing unseen notes/cards to be used as input
-        
+
         Parameters
         ----------
         deck_name : str

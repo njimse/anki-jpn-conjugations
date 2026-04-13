@@ -31,6 +31,15 @@ COMBO_HASHES = {
     (Formality.PLAIN, Form.POTENTIAL_NON_PAST_NEG): '0uSU',
     (Formality.PLAIN, Form.POTENTIAL_PAST): 'h8MI',
     (Formality.PLAIN, Form.POTENTIAL_PAST_NEG): 'xisC',
+    (Formality.POLITE, Form.PASSIVE_NON_PAST): 'XcKr',
+    (Formality.POLITE, Form.PASSIVE_NON_PAST_NEG): 'Jmxs',
+    (Formality.POLITE, Form.PASSIVE_PAST): 'B1Qc',
+    (Formality.POLITE, Form.PASSIVE_PAST_NEG): '4Dz5',
+    (None, Form.PASSIVE_TE): 'FWfC',
+    (Formality.PLAIN, Form.PASSIVE_NON_PAST): 'KACL',
+    (Formality.PLAIN, Form.PASSIVE_NON_PAST_NEG): 'MLXq',
+    (Formality.PLAIN, Form.PASSIVE_PAST): 'uxs7',
+    (Formality.PLAIN, Form.PASSIVE_PAST_NEG): 'AzfW',
     (Formality.POLITE, Form.TAI_NON_PAST): '9Rq6',
     (Formality.POLITE, Form.TAI_NON_PAST_NEG): 'MZD6',
     (Formality.POLITE, Form.TAI_PAST): 'F3Ve',
@@ -39,7 +48,7 @@ COMBO_HASHES = {
     (Formality.PLAIN, Form.TAI_NON_PAST): '1lct',
     (Formality.PLAIN, Form.TAI_NON_PAST_NEG): 'L0D7',
     (Formality.PLAIN, Form.TAI_PAST): 'uRpq',
-    (Formality.PLAIN, Form.TAI_PAST_NEG): 'EgRi'
+    (Formality.PLAIN, Form.TAI_PAST_NEG): 'EgRi',
 }
 
 VERB_COMBOS = [
@@ -63,6 +72,17 @@ VERB_COMBOS = [
     (Formality.PLAIN, Form.POTENTIAL_NON_PAST_NEG),
     (Formality.PLAIN, Form.POTENTIAL_PAST),
     (Formality.PLAIN, Form.POTENTIAL_PAST_NEG),
+    (Formality.POLITE, Form.PASSIVE_NON_PAST),
+    (Formality.POLITE, Form.PASSIVE_NON_PAST_NEG),
+    (Formality.POLITE, Form.PASSIVE_PAST),
+    (Formality.POLITE, Form.PASSIVE_PAST_NEG),
+    (None, Form.PASSIVE_TE),
+    (Formality.PLAIN, Form.PASSIVE_NON_PAST),
+    (Formality.PLAIN, Form.PASSIVE_NON_PAST_NEG),
+    (Formality.PLAIN, Form.PASSIVE_PAST),
+    (Formality.PLAIN, Form.PASSIVE_PAST_NEG),
+    # NB: the order of this list should match the order that they
+    # are added in the generate_verb_forms() function.
     (Formality.POLITE, Form.TAI_NON_PAST),
     (Formality.POLITE, Form.TAI_NON_PAST_NEG),
     (Formality.POLITE, Form.TAI_PAST),

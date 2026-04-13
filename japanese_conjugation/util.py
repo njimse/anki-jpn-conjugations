@@ -3,12 +3,12 @@ import re
 
 def remove_furigana(reading: str) -> str:
     """Remove the furigana markup from a reading text
-    
+
     Parameters
     ----------
     reading : str
         Input string which potentially contains furigana markup
-    
+
     Returns
     -------
     str
@@ -19,12 +19,12 @@ def remove_furigana(reading: str) -> str:
 
 def promote_furigana(reading: str) -> str:
     """Promote furigana markup such that it replaces the associated text
-    
+
     Parameters
     ----------
     reading : str
         Input string which potentially contains furigana markup
-    
+
     Returns
     -------
     str
@@ -36,12 +36,12 @@ def promote_furigana(reading: str) -> str:
 
 def escape_query(raw_input: str) -> str:
     """Escape a raw string input so that it can be included in a query
-    
+
     Parameters
     ----------
     raw_input : str
         Raw input string potentially containing characters in need of escaping
-        
+
     Returns
     -------
     str
