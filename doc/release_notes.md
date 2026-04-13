@@ -1,5 +1,11 @@
 # Release Notes
 
+## 2.0.0
+
+* Added support for passive form
+* Refactored `verbs` submodule since it had grown quite large.
+    * Added `Enum` classes to manage some of the conjugation changes rather than relying on simple/naive dictionary mappings
+
 ## 1.3.0
 
 * Added support for irregular honorific verbs
