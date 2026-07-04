@@ -25,6 +25,28 @@ def get_godan_stem(dictionary_form: str, formality: Formality) -> str:
         stem = dictionary_form[:-1] + ending
     return stem
 
+def kuru_reading_stem(dictionary_form: str, reading: str) -> str:
+    """Compose the stem for a 来る-ending verb (with no furigana), inserting a
+    separating space when the verb is a compound built on top of 来る
+
+    Parameters
+    ----------
+    dictionary_form : str
+        Dictionary form of the verb for which the stem will be determined
+    reading : str
+        Replacement reading (with furigana) for the trailing 来る
+
+    Returns
+    -------
+    str
+        Stem with the 来る ending replaced by the provided reading
+    """
+    if dictionary_form == '来る':
+        buffer = ''
+    else:
+        buffer = ' '
+    return dictionary_form[:-2] + buffer + reading
+
 def looks_like_honorific(dictionary_form: str) -> bool:
     """Determine if the provided dictionary form appears to be an honorific verb
     
