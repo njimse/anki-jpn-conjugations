@@ -57,6 +57,17 @@ from .causative import (
     plain_past_positive_causative,
     plain_past_negative_causative,
 )
+from .causative_passive import (
+    polite_nonpast_positive_causative_passive,
+    polite_nonpast_negative_causative_passive,
+    polite_past_positive_causative_passive,
+    polite_past_negative_causative_passive,
+    te_causative_passive,
+    plain_nonpast_positive_causative_passive,
+    plain_nonpast_negative_causative_passive,
+    plain_past_positive_causative_passive,
+    plain_past_negative_causative_passive,
+)
 from .te import te
 
 GODAN_STEM_ENDINGS = set(["う", "く", "す", "つ", "ぬ", "ふ", "む", "る", "ぐ", "ず", "ぶ", "ぷ"])
@@ -260,7 +271,30 @@ def generate_verb_forms(dictionary_form: str, verb_class: VerbClass)\
         [plain_past_negative_causative, Form.CAUSATIVE_PAST_NEG, Formality.PLAIN],
 
         # formality-constant
-        [te_causative, Form.CAUSATIVE_TE, None]
+        [te_causative, Form.CAUSATIVE_TE, None],
+
+        # Polite Causative-Passive
+        [polite_nonpast_positive_causative_passive,
+         Form.CAUSATIVE_PASSIVE_NON_PAST, Formality.POLITE],
+        [polite_nonpast_negative_causative_passive,
+         Form.CAUSATIVE_PASSIVE_NON_PAST_NEG, Formality.POLITE],
+        [polite_past_positive_causative_passive,
+         Form.CAUSATIVE_PASSIVE_PAST, Formality.POLITE],
+        [polite_past_negative_causative_passive,
+         Form.CAUSATIVE_PASSIVE_PAST_NEG, Formality.POLITE],
+
+        # Plain Causative-Passive
+        [plain_nonpast_positive_causative_passive,
+         Form.CAUSATIVE_PASSIVE_NON_PAST, Formality.PLAIN],
+        [plain_nonpast_negative_causative_passive,
+         Form.CAUSATIVE_PASSIVE_NON_PAST_NEG, Formality.PLAIN],
+        [plain_past_positive_causative_passive,
+         Form.CAUSATIVE_PASSIVE_PAST, Formality.PLAIN],
+        [plain_past_negative_causative_passive,
+         Form.CAUSATIVE_PASSIVE_PAST_NEG, Formality.PLAIN],
+
+        # formality-constant
+        [te_causative_passive, Form.CAUSATIVE_PASSIVE_TE, None]
     ]
 
     for conjugate, form, formality in all_forms:

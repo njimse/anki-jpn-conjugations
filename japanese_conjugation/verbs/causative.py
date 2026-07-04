@@ -1,5 +1,5 @@
 """Functions for determining causative form conjugations"""
-from ..enums import AGyo, Dan, Gyo, VerbClass
+from ..enums import VerbClass
 from .plain import (
     plain_nonpast_negative,
     plain_past_positive,
@@ -11,7 +11,7 @@ from .polite import (
     polite_past_positive,
     polite_past_negative
 )
-from .stems import kuru_reading_stem
+from .stems import godan_a_stem, kuru_reading_stem
 from .te import te
 
 def _causative_stem(dictionary_form: str, verb_class: VerbClass) -> str: # pylint: disable=R0912
@@ -40,12 +40,7 @@ def _causative_stem(dictionary_form: str, verb_class: VerbClass) -> str: # pylin
     elif verb_class == VerbClass.ICHIDAN:
         stem = dictionary_form[:-1] + 'させ'
     else:
-        ending_gyo = Gyo.identify(dictionary_form[-1])
-        if ending_gyo == AGyo:
-            causative_ending = 'わ'
-        else:
-            causative_ending = ending_gyo.dan(Dan.A)
-        stem = dictionary_form[:-1] + causative_ending + 'せ'
+        stem = godan_a_stem(dictionary_form) + 'せ'
     return stem
 
 def polite_nonpast_positive_causative(dictionary_form: str, verb_class: VerbClass) -> str:
