@@ -46,6 +46,17 @@ from .potential import (
     plain_past_positive_potential,
     plain_past_negative_potential,
 )
+from .causative import (
+    polite_nonpast_positive_causative,
+    polite_nonpast_negative_causative,
+    polite_past_positive_causative,
+    polite_past_negative_causative,
+    te_causative,
+    plain_nonpast_positive_causative,
+    plain_nonpast_negative_causative,
+    plain_past_positive_causative,
+    plain_past_negative_causative,
+)
 from .te import te
 
 GODAN_STEM_ENDINGS = set(["う", "く", "す", "つ", "ぬ", "ふ", "む", "る", "ぐ", "ず", "ぶ", "ぷ"])
@@ -234,7 +245,22 @@ def generate_verb_forms(dictionary_form: str, verb_class: VerbClass)\
         [plain_past_negative_passive, Form.PASSIVE_PAST_NEG, Formality.PLAIN],
 
         # formality-constant
-        [te_passive, Form.PASSIVE_TE, None]
+        [te_passive, Form.PASSIVE_TE, None],
+
+        # Polite Causative
+        [polite_nonpast_positive_causative, Form.CAUSATIVE_NON_PAST, Formality.POLITE],
+        [polite_nonpast_negative_causative, Form.CAUSATIVE_NON_PAST_NEG, Formality.POLITE],
+        [polite_past_positive_causative, Form.CAUSATIVE_PAST, Formality.POLITE],
+        [polite_past_negative_causative, Form.CAUSATIVE_PAST_NEG, Formality.POLITE],
+
+        # Plain Causative
+        [plain_nonpast_positive_causative, Form.CAUSATIVE_NON_PAST, Formality.PLAIN],
+        [plain_nonpast_negative_causative, Form.CAUSATIVE_NON_PAST_NEG, Formality.PLAIN],
+        [plain_past_positive_causative, Form.CAUSATIVE_PAST, Formality.PLAIN],
+        [plain_past_negative_causative, Form.CAUSATIVE_PAST_NEG, Formality.PLAIN],
+
+        # formality-constant
+        [te_causative, Form.CAUSATIVE_TE, None]
     ]
 
     for conjugate, form, formality in all_forms:
