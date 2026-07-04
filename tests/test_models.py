@@ -312,6 +312,15 @@ reference_combo_hashes = {
     'Qm8J': (Formality.PLAIN, Form.CAUSATIVE_NON_PAST_NEG),
     'Zn5C': (Formality.PLAIN, Form.CAUSATIVE_PAST),
     'Rk1V': (Formality.PLAIN, Form.CAUSATIVE_PAST_NEG),
+    'Bd4T': (Formality.POLITE, Form.CAUSATIVE_PASSIVE_NON_PAST),
+    'Gp2W': (Formality.POLITE, Form.CAUSATIVE_PASSIVE_NON_PAST_NEG),
+    'Ju7X': (Formality.POLITE, Form.CAUSATIVE_PASSIVE_PAST),
+    'Cf9M': (Formality.POLITE, Form.CAUSATIVE_PASSIVE_PAST_NEG),
+    'Ax3Q': (None, Form.CAUSATIVE_PASSIVE_TE),
+    'Vt6K': (Formality.PLAIN, Form.CAUSATIVE_PASSIVE_NON_PAST),
+    'Ns8H': (Formality.PLAIN, Form.CAUSATIVE_PASSIVE_NON_PAST_NEG),
+    'Dy1L': (Formality.PLAIN, Form.CAUSATIVE_PASSIVE_PAST),
+    'Wq5R': (Formality.PLAIN, Form.CAUSATIVE_PASSIVE_PAST_NEG),
 }
 def test_field_hashes():
     """Test that we have the expected hash per combo in the model fields"""

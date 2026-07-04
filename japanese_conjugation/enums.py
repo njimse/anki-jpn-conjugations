@@ -49,6 +49,13 @@ class Form(Enum):
     CAUSATIVE_PAST_NEG = ('causative indicative', 'negative', 'past')
     CAUSATIVE_TE = ('causative te', 'positive', '')
 
+    # causative-passive forms
+    CAUSATIVE_PASSIVE_NON_PAST = ('causative-passive indicative', 'positive', 'non-past')
+    CAUSATIVE_PASSIVE_NON_PAST_NEG = ('causative-passive indicative', 'negative', 'non-past')
+    CAUSATIVE_PASSIVE_PAST = ('causative-passive indicative', 'positive', 'past')
+    CAUSATIVE_PASSIVE_PAST_NEG = ('causative-passive indicative', 'negative', 'past')
+    CAUSATIVE_PASSIVE_TE = ('causative-passive te', 'positive', '')
+
     def __init__(self, simple_name: str, polarity: Optional[bool], temporality: str):
         self.simple_name = simple_name
         self.polarity = polarity

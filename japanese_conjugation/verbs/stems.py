@@ -1,6 +1,30 @@
 """Functions for getting stems used for subsequent conjugations"""
 from ..enums import AGyo, Dan, Formality, Gyo, VerbClass
 
+def godan_a_stem(dictionary_form: str) -> str:
+    """Get the あ-column (imperfective) stem of a godan verb
+
+    The final mora is replaced by its あ-column counterpart, with う-verbs taking
+    わ rather than あ. This stem underlies the negative, passive, causative, and
+    causative-passive conjugations.
+
+    Parameters
+    ----------
+    dictionary_form : str
+        Dictionary form of the godan verb for which the stem will be determined
+
+    Returns
+    -------
+    str
+        Stem ending in the あ-column mora of the verb's final gyo
+    """
+    ending_gyo = Gyo.identify(dictionary_form[-1])
+    if ending_gyo == AGyo:
+        ending = "わ"
+    else:
+        ending = ending_gyo.dan(Dan.A)
+    return dictionary_form[:-1] + ending
+
 def get_godan_stem(dictionary_form: str, formality: Formality) -> str:
     """Get the stem of the provided godan verb
 
@@ -14,15 +38,11 @@ def get_godan_stem(dictionary_form: str, formality: Formality) -> str:
     str
         Stem from onto which (most) conjugations can be appended
     """
-    ending_gyo = Gyo.identify(dictionary_form[-1])
     if formality == Formality.POLITE:
+        ending_gyo = Gyo.identify(dictionary_form[-1])
         stem = dictionary_form[:-1] + ending_gyo.dan(Dan.I)
     else:
-        if ending_gyo == AGyo:
-            ending = "わ"
-        else:
-            ending = ending_gyo.dan(Dan.A)
-        stem = dictionary_form[:-1] + ending
+        stem = godan_a_stem(dictionary_form)
     return stem
 
 def kuru_reading_stem(dictionary_form: str, reading: str) -> str:

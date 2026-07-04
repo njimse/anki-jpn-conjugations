@@ -448,6 +448,18 @@ generate_verb_forms_data = [
         ['来[こ]させなかった', Form.CAUSATIVE_PAST_NEG, Formality.PLAIN],
         # formality-constant Causative
         ['来[こ]させて', Form.CAUSATIVE_TE, None],
+        # Polite Causative-Passive forms
+        ['来[こ]させられます', Form.CAUSATIVE_PASSIVE_NON_PAST, Formality.POLITE],
+        ['来[こ]させられません', Form.CAUSATIVE_PASSIVE_NON_PAST_NEG, Formality.POLITE],
+        ['来[こ]させられました', Form.CAUSATIVE_PASSIVE_PAST, Formality.POLITE],
+        ['来[こ]させられませんでした', Form.CAUSATIVE_PASSIVE_PAST_NEG, Formality.POLITE],
+        # Plain Causative-Passive forms
+        ['来[こ]させられる', Form.CAUSATIVE_PASSIVE_NON_PAST, Formality.PLAIN],
+        ['来[こ]させられない', Form.CAUSATIVE_PASSIVE_NON_PAST_NEG, Formality.PLAIN],
+        ['来[こ]させられた', Form.CAUSATIVE_PASSIVE_PAST, Formality.PLAIN],
+        ['来[こ]させられなかった', Form.CAUSATIVE_PASSIVE_PAST_NEG, Formality.PLAIN],
+        # formality-constant Causative-Passive
+        ['来[こ]させられて', Form.CAUSATIVE_PASSIVE_TE, None],
         # tai forms
         # Polite forms
         ['来[き]たいです', Form.TAI_NON_PAST, Formality.POLITE],
@@ -519,6 +531,20 @@ generate_verb_forms_data = [
         ['食[た]べさせなかった', Form.CAUSATIVE_PAST_NEG, Formality.PLAIN],
         # formality-constant
         ['食[た]べさせて', Form.CAUSATIVE_TE, None],
+
+        # Causative-Passive forms
+        # Polite forms
+        ['食[た]べさせられます', Form.CAUSATIVE_PASSIVE_NON_PAST, Formality.POLITE],
+        ['食[た]べさせられません', Form.CAUSATIVE_PASSIVE_NON_PAST_NEG, Formality.POLITE],
+        ['食[た]べさせられました', Form.CAUSATIVE_PASSIVE_PAST, Formality.POLITE],
+        ['食[た]べさせられませんでした', Form.CAUSATIVE_PASSIVE_PAST_NEG, Formality.POLITE],
+        # Plain forms
+        ['食[た]べさせられる', Form.CAUSATIVE_PASSIVE_NON_PAST, Formality.PLAIN],
+        ['食[た]べさせられない', Form.CAUSATIVE_PASSIVE_NON_PAST_NEG, Formality.PLAIN],
+        ['食[た]べさせられた', Form.CAUSATIVE_PASSIVE_PAST, Formality.PLAIN],
+        ['食[た]べさせられなかった', Form.CAUSATIVE_PASSIVE_PAST_NEG, Formality.PLAIN],
+        # formality-constant
+        ['食[た]べさせられて', Form.CAUSATIVE_PASSIVE_TE, None],
 
         # tai forms
         # Polite forms
@@ -592,6 +618,20 @@ generate_verb_forms_data = [
         # formality-constant
         ['切[き]らせて', Form.CAUSATIVE_TE, None],
 
+        # Causative-Passive forms
+        # Polite forms
+        ['切[き]らされます', Form.CAUSATIVE_PASSIVE_NON_PAST, Formality.POLITE],
+        ['切[き]らされません', Form.CAUSATIVE_PASSIVE_NON_PAST_NEG, Formality.POLITE],
+        ['切[き]らされました', Form.CAUSATIVE_PASSIVE_PAST, Formality.POLITE],
+        ['切[き]らされませんでした', Form.CAUSATIVE_PASSIVE_PAST_NEG, Formality.POLITE],
+        # Plain forms
+        ['切[き]らされる', Form.CAUSATIVE_PASSIVE_NON_PAST, Formality.PLAIN],
+        ['切[き]らされない', Form.CAUSATIVE_PASSIVE_NON_PAST_NEG, Formality.PLAIN],
+        ['切[き]らされた', Form.CAUSATIVE_PASSIVE_PAST, Formality.PLAIN],
+        ['切[き]らされなかった', Form.CAUSATIVE_PASSIVE_PAST_NEG, Formality.PLAIN],
+        # formality-constant
+        ['切[き]らされて', Form.CAUSATIVE_PASSIVE_TE, None],
+
         # tai forms
         # Polite forms
         ['切[き]りたいです', Form.TAI_NON_PAST, Formality.POLITE],
@@ -663,6 +703,20 @@ generate_verb_forms_data = [
         ['下[くだ]さらせなかった', Form.CAUSATIVE_PAST_NEG, Formality.PLAIN],
         # formality-constant
         ['下[くだ]さらせて', Form.CAUSATIVE_TE, None],
+
+        # Causative-Passive forms
+        # Polite forms
+        ['下[くだ]さらされます', Form.CAUSATIVE_PASSIVE_NON_PAST, Formality.POLITE],
+        ['下[くだ]さらされません', Form.CAUSATIVE_PASSIVE_NON_PAST_NEG, Formality.POLITE],
+        ['下[くだ]さらされました', Form.CAUSATIVE_PASSIVE_PAST, Formality.POLITE],
+        ['下[くだ]さらされませんでした', Form.CAUSATIVE_PASSIVE_PAST_NEG, Formality.POLITE],
+        # Plain forms
+        ['下[くだ]さらされる', Form.CAUSATIVE_PASSIVE_NON_PAST, Formality.PLAIN],
+        ['下[くだ]さらされない', Form.CAUSATIVE_PASSIVE_NON_PAST_NEG, Formality.PLAIN],
+        ['下[くだ]さらされた', Form.CAUSATIVE_PASSIVE_PAST, Formality.PLAIN],
+        ['下[くだ]さらされなかった', Form.CAUSATIVE_PASSIVE_PAST_NEG, Formality.PLAIN],
+        # formality-constant
+        ['下[くだ]さらされて', Form.CAUSATIVE_PASSIVE_TE, None],
 
         # tai forms
         # Polite forms
@@ -736,6 +790,20 @@ generate_verb_forms_data = [
         # formality-constant
         ['なさらせて', Form.CAUSATIVE_TE, None],
 
+        # Causative-Passive forms
+        # Polite forms
+        ['なさらされます', Form.CAUSATIVE_PASSIVE_NON_PAST, Formality.POLITE],
+        ['なさらされません', Form.CAUSATIVE_PASSIVE_NON_PAST_NEG, Formality.POLITE],
+        ['なさらされました', Form.CAUSATIVE_PASSIVE_PAST, Formality.POLITE],
+        ['なさらされませんでした', Form.CAUSATIVE_PASSIVE_PAST_NEG, Formality.POLITE],
+        # Plain forms
+        ['なさらされる', Form.CAUSATIVE_PASSIVE_NON_PAST, Formality.PLAIN],
+        ['なさらされない', Form.CAUSATIVE_PASSIVE_NON_PAST_NEG, Formality.PLAIN],
+        ['なさらされた', Form.CAUSATIVE_PASSIVE_PAST, Formality.PLAIN],
+        ['なさらされなかった', Form.CAUSATIVE_PASSIVE_PAST_NEG, Formality.PLAIN],
+        # formality-constant
+        ['なさらされて', Form.CAUSATIVE_PASSIVE_TE, None],
+
         # tai forms
         # Polite forms
         ['なさいたいです', Form.TAI_NON_PAST, Formality.POLITE],
@@ -807,6 +875,20 @@ generate_verb_forms_data = [
         ['いらっしゃらせなかった', Form.CAUSATIVE_PAST_NEG, Formality.PLAIN],
         # formality-constant
         ['いらっしゃらせて', Form.CAUSATIVE_TE, None],
+
+        # Causative-Passive forms
+        # Polite forms
+        ['いらっしゃらされます', Form.CAUSATIVE_PASSIVE_NON_PAST, Formality.POLITE],
+        ['いらっしゃらされません', Form.CAUSATIVE_PASSIVE_NON_PAST_NEG, Formality.POLITE],
+        ['いらっしゃらされました', Form.CAUSATIVE_PASSIVE_PAST, Formality.POLITE],
+        ['いらっしゃらされませんでした', Form.CAUSATIVE_PASSIVE_PAST_NEG, Formality.POLITE],
+        # Plain forms
+        ['いらっしゃらされる', Form.CAUSATIVE_PASSIVE_NON_PAST, Formality.PLAIN],
+        ['いらっしゃらされない', Form.CAUSATIVE_PASSIVE_NON_PAST_NEG, Formality.PLAIN],
+        ['いらっしゃらされた', Form.CAUSATIVE_PASSIVE_PAST, Formality.PLAIN],
+        ['いらっしゃらされなかった', Form.CAUSATIVE_PASSIVE_PAST_NEG, Formality.PLAIN],
+        # formality-constant
+        ['いらっしゃらされて', Form.CAUSATIVE_PASSIVE_TE, None],
 
         # tai forms
         # Polite forms
